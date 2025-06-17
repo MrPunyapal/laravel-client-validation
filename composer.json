@@ -1,0 +1,86 @@
+{
+  "name": "mrpunyapal/laravel-client-validation",
+  "description": "Laravel validation rules for client-side with Alpine.js integration",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Punyapal Shah",
+      "email": "mrpunyapal@gmail.com"
+    }
+  ],
+  "homepage": "https://github.com/mrpunyapal/laravel-client-validation",
+  "support": {
+    "issues": "https://github.com/mrpunyapal/laravel-client-validation/issues",
+    "source": "https://github.com/mrpunyapal/laravel-client-validation"
+  },
+  "keywords": [
+    "laravel",
+    "validation",
+    "alpine.js",
+    "javascript",
+    "client-side",
+    "form-validation",
+    "livewire"
+  ],
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^12.0",
+    "illuminate/validation": "^12.0"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.0",
+    "larastan/larastan": "^3.0",
+    "nunomaduro/collision": "^8.0",
+    "orchestra/testbench": "^10.0",
+    "pestphp/pest": "^3.0",
+    "pestphp/pest-plugin-arch": "^3.0",
+    "pestphp/pest-plugin-laravel": "^3.0",
+    "phpunit/phpunit": "^11.0",
+    "spatie/laravel-package-tools": "^1.16"
+  },
+  "autoload": {
+    "psr-4": {
+      "MrPunyapal\\ClientValidation\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MrPunyapal\\ClientValidation\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "MrPunyapal\\ClientValidation\\ClientValidationServiceProvider"
+      ],
+      "aliases": {
+        "ClientValidation": "MrPunyapal\\ClientValidation\\Facades\\ClientValidation"
+      }
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": "@composer run prepare",
+    "clear": "@php vendor/bin/testbench package:purge-laravel-client-validation --ansi",
+    "prepare": "@php vendor/bin/testbench package:discover --ansi",
+    "build": "@php vendor/bin/testbench workbench:build --ansi",
+    "start": [
+      "Composer\\Config::disableProcessTimeout",
+      "@composer run build",
+      "@php vendor/bin/testbench serve"
+    ],
+    "analyse": "vendor/bin/phpstan analyse",
+    "test": "vendor/bin/pest",
+    "test-coverage": "vendor/bin/pest --coverage",
+    "format": "vendor/bin/pint"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "phpstan/extension-installer": true
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

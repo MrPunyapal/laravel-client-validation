@@ -1,0 +1,33 @@
+{
+  "name": "laravel-client-validation",
+  "version": "1.0.0",
+  "description": "Laravel validation rules for client-side with Alpine.js integration",
+  "main": "resources/js/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "lint": "eslint resources/js --ext .js",
+    "lint:fix": "eslint resources/js --ext .js --fix",
+    "format": "prettier --write resources/js/**/*.js"
+  },
+  "keywords": [
+    "laravel",
+    "validation",
+    "alpine.js",
+    "javascript",
+    "client-side"
+  ],
+  "author": "Punyapal Shah <mrpunyapal@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  },
+  "peerDependencies": {
+    "alpinejs": "^3.0.0"
+  }
+}
