@@ -6,6 +6,68 @@ return [
 
     'cdn_url' => env('CLIENT_VALIDATION_CDN_URL', null),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Common Validation Rules
+    |--------------------------------------------------------------------------
+    |
+    | Define reusable validation rule sets that can be shared between
+    | server-side validation and client-side validation.
+    |
+    */
+    'common_rules' => [
+        'user' => [
+            'name' => 'required|string|min:2|max:50',
+            'email' => 'required|email|max:100',
+            'phone' => 'nullable|regex:/^[0-9]{10,15}$/',
+        ],
+        'auth' => [
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+            'password_confirmation' => 'required|string|min:8|same:password',
+        ],
+        'contact' => [
+            'name' => 'required|string|min:2|max:100',
+            'email' => 'required|email',
+            'subject' => 'required|string|max:200',
+            'message' => 'required|string|min:10|max:1000',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Form Configurations
+    |--------------------------------------------------------------------------
+    |
+    | Define specific form configurations with their validation rules,
+    | custom messages, and attribute names.
+    |
+    */
+    'forms' => [
+        'user_profile' => [
+            'rules' => 'user', // Reference to common_rules
+            'messages' => [
+                'name.required' => 'Please enter your full name',
+                'email.email' => 'Please enter a valid email address',
+            ],
+            'attributes' => [
+                'name' => 'Full Name',
+                'email' => 'Email Address',
+            ],
+        ],
+        'registration' => [
+            'rules' => [
+                'name' => 'required|string|min:2|max:50',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+                'terms' => 'required|accepted',
+            ],
+            'messages' => [
+                'terms.required' => 'You must accept the terms and conditions',
+            ],
+        ],
+    ],
+
     'messages' => [
         'required' => 'The :attribute field is required.',
         'email' => 'The :attribute must be a valid email address.',
@@ -56,20 +118,17 @@ return [
         'starts_with' => 'The :attribute must start with one of the following: :values.',
         'ends_with' => 'The :attribute must end with one of the following: :values.',
         'contains' => 'The :attribute must contain one of the following: :values.',
-    ],    'attributes' => [
+    ],
+
+    'attributes' => [
         'email' => 'email address',
         'password' => 'password',
         'password_confirmation' => 'password confirmation',
-    ],
-
-    'forms' => [
-        // Define your form validation rules here
-        // Example:
-        // 'contact' => [
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|email',
-        //     'message' => 'required|string|min:10',
-        // ],
+        'name' => 'name',
+        'phone' => 'phone number',
+        'subject' => 'subject',
+        'message' => 'message',
+        'terms' => 'terms and conditions',
     ],
 
 ];
