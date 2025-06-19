@@ -13,46 +13,41 @@ class ClientValidation
         $this->converter = $converter;
     }
 
+    /**
+     * Generate validation JavaScript for given rules
+     */
     public function generate(array $rules, array $messages = [], array $attributes = []): string
     {
         $rulesJson = $this->converter->convert($rules);
         $messagesJson = json_encode($this->mergeMessages($messages));
-        $attributesJson = json_encode($attributes);
+        $attributesJson = json_encode($this->mergeAttributes($attributes));
 
         return "validateForm({$rulesJson}, {$messagesJson}, {$attributesJson})";
     }
 
+    /**
+     * Convert rules to JSON format
+     */
     public function rules(array $rules): string
     {
         return $this->converter->convert($rules);
     }
 
-    public function getRulesForForm(string $form): array
-    {
-        $forms = config('client-validation.forms', []);
-
-        return $forms[$form] ?? [];
-    }
-
-    public function validateData(array $data, array $rules): array
-    {
-        $validator = app('validator')->make($data, $rules);
-
-        return $validator->errors()->toArray();
-    }
-
-    public function generateInline(array $rules, array $messages = []): string
-    {
-        $rulesJson = $this->converter->convert($rules);
-        $messagesJson = json_encode($this->mergeMessages($messages));
-
-        return "validateInline({$rulesJson}, {$messagesJson})";
-    }
-
-    protected function mergeMessages(array $customMessages = []): array
+    /**
+     * Merge custom messages with default messages
+     */
+    protected function mergeMessages(array $messages): array
     {
         $defaultMessages = config('client-validation.messages', []);
+        return array_merge($defaultMessages, $messages);
+    }
 
-        return array_merge($defaultMessages, $customMessages);
+    /**
+     * Merge custom attributes with default attributes
+     */
+    protected function mergeAttributes(array $attributes): array
+    {
+        $defaultAttributes = config('client-validation.attributes', []);
+        return array_merge($defaultAttributes, $attributes);
     }
 }

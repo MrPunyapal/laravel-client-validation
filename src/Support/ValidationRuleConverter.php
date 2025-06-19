@@ -41,6 +41,12 @@ class ValidationRuleConverter
 
     protected function parseStringRule(string $rule): ?array
     {
+        // Handle regex patterns specially to avoid splitting on comma within the pattern
+        if (strpos($rule, 'regex:') === 0) {
+            $pattern = substr($rule, 6); // Remove 'regex:' prefix
+            return $this->mapRule('regex', [$pattern]);
+        }
+
         $parts = explode(':', $rule, 2);
         $ruleName = $parts[0];
         $parameters = isset($parts[1]) ? explode(',', $parts[1]) : [];

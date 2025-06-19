@@ -36,16 +36,19 @@ class ClientValidationServiceProvider extends PackageServiceProvider
 
     protected function registerBladeDirectives(): void
     {
+        // Main directive for direct validation rules
         Blade::directive('clientValidation', function ($expression) {
             return "<?php echo app('client-validation')->generate({$expression}); ?>";
         });
 
-        Blade::directive('validateWith', function ($expression) {
-            return "<?php echo app('client-validation')->generateInline({$expression}); ?>";
-        });
-
-        Blade::directive('alpineValidation', function ($expression) {
-            return "<?php echo 'x-data=\"validateForm(' . json_encode({$expression}) . ')\"'; ?>";
+        // Simple directive for common rules from config
+        Blade::directive('clientValidationCommon', function ($expression) {
+            return "<?php
+                \$rules = config('client-validation.common_rules.' . {$expression}, []);
+                \$messages = config('client-validation.messages', []);
+                \$attributes = config('client-validation.attributes', []);
+                echo app('client-validation')->generate(\$rules, \$messages, \$attributes);
+            ?>";
         });
     }
 }
