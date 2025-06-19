@@ -3,43 +3,40 @@ import Validator from '../core/validator.js';
 export default function (Alpine) {
     Alpine.directive('validate', (el, { expression }, { evaluateLater, effect }) => {
         const getRule = evaluateLater(expression);
-        
+
         effect(() => {
             getRule(rule => {
                 el.setAttribute('data-rules', rule);
             });
         });
     });
-    
-    Alpine.data('validateForm', (rules = {}, messages = {}, attributes = {}) => {
+      Alpine.data('validateForm', (rules = {}, messages = {}, attributes = {}) => {
         return {
             validator: new Validator(rules, messages, attributes),
             errors: {},
-            
+            form: {},
+
             init() {
                 this.errors = {};
+                // Initialize form with empty values for each rule
+                this.form = Object.keys(rules).reduce((acc, key) => {
+                    acc[key] = '';
+                    return acc;
+                }, {});
             },
-            
-            validate(field = null) {
+              validate(field = null) {
                 if (field) {
-                    const input = this.$el.querySelector(`[name="${field}"]`);
-                    if (input) {
-                        const isValid = this.validator.validateField(field, input.value);
-                        this.errors = { ...this.validator.errors };
-                        return isValid;
-                    }
-                    return true;
+                    const value = this.form[field] || '';
+                    const isValid = this.validator.validateField(field, value);
+                    this.errors = { ...this.validator.errors };
+                    return isValid;
                 }
-                
-                const data = Object.fromEntries(
-                    new FormData(this.$el).entries()
-                );
-                
-                const isValid = this.validator.validate(data);
+
+                const isValid = this.validator.validate(this.form);
                 this.errors = { ...this.validator.errors };
                 return isValid;
             },
-            
+
             submitForm(event) {
                 if (!this.validate()) {
                     event.preventDefault();
