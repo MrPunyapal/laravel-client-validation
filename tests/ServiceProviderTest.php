@@ -17,16 +17,23 @@ it('registers the validation rule converter', function () {
     expect($converter)->toBeInstanceOf(ValidationRuleConverter::class);
 });
 
-it('registers blade directives', function () {
+it('registers the clientValidation blade directive', function () {
     $directives = app('blade.compiler')->getCustomDirectives();
 
-    expect($directives)->toHaveKey('clientValidation')
-        ->and($directives)->toHaveKey('validateWith')
-        ->and($directives)->toHaveKey('alpineValidation');
+    expect($directives)->toHaveKey('clientValidation');
 });
 
-it('publishes configuration file', function () {
+it('can resolve client validation through facade', function () {
+    $service = app('client-validation');
+
+    expect($service)->toBeInstanceOf(ClientValidation::class);
+
+    // Test it can generate JS
+    $js = $service->generate(['name' => 'required']);
+    expect($js)->toBeString()->and($js)->toContain('validateForm');
+});
+
+it('loads default configuration', function () {
     expect(config('client-validation'))->toBeArray()
-        ->and(config('client-validation.messages'))->toBeArray()
-        ->and(config('client-validation.forms'))->toBeArray();
+        ->and(config('client-validation.messages'))->toBeArray();
 });

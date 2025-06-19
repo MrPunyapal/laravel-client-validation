@@ -2,7 +2,7 @@
 
 use MrPunyapal\ClientValidation\Livewire\WithClientValidation;
 
-it('can use the WithClientValidation trait', function () {
+it('can use the WithClientValidation trait with rules property', function () {
     $component = new class
     {
         use WithClientValidation;
@@ -17,7 +17,29 @@ it('can use the WithClientValidation trait', function () {
 
     expect($clientRules)->toBeString()
         ->and($clientRules)->toContain('name')
-        ->and($clientRules)->toContain('email');
+        ->and($clientRules)->toContain('email')
+        ->and($clientRules)->toContain('required');
+});
+
+it('can use the WithClientValidation trait with rules method', function () {
+    $component = new class
+    {
+        use WithClientValidation;
+
+        protected function rules()
+        {
+            return [
+                'title' => 'required|string|min:3',
+                'content' => 'required|string',
+            ];
+        }
+    };
+
+    $clientRules = $component->getClientRulesProperty();
+
+    expect($clientRules)->toBeString()
+        ->and($clientRules)->toContain('title')
+        ->and($clientRules)->toContain('content');
 });
 
 it('can get client messages through trait', function () {
@@ -31,8 +53,8 @@ it('can get client messages through trait', function () {
         ];
     };
 
-    $messages = $component->getClientMessagesProperty();
-    $decoded = json_decode($messages, true);
+    $clientMessages = $component->getClientMessagesProperty();
+    $decoded = json_decode($clientMessages, true);
 
     expect($decoded)->toBeArray()
         ->and($decoded)->toHaveKey('title.required')
@@ -44,19 +66,34 @@ it('can get client attributes through trait', function () {
     {
         use WithClientValidation;
 
-        public function validationAttributes()
+        protected function validationAttributes()
         {
             return [
-                'name' => 'Full Name',
-                'email' => 'Email Address',
+                'email' => 'email address',
+                'name' => 'full name',
             ];
         }
     };
 
-    $attributes = $component->getClientAttributesProperty();
-    $decoded = json_decode($attributes, true);
+    $clientAttributes = $component->getClientAttributesProperty();
+    $decoded = json_decode($clientAttributes, true);
 
     expect($decoded)->toBeArray()
-        ->and($decoded)->toHaveKey('name')
-        ->and($decoded['name'])->toBe('Full Name');
+        ->and($decoded)->toHaveKey('email')
+        ->and($decoded['email'])->toBe('email address');
+});
+
+it('handles empty rules gracefully', function () {
+    $component = new class
+    {
+        use WithClientValidation;
+    };
+
+    $clientRules = $component->getClientRulesProperty();
+    $clientMessages = $component->getClientMessagesProperty();
+    $clientAttributes = $component->getClientAttributesProperty();
+
+    expect($clientRules)->toBeString();
+    expect(json_decode($clientMessages, true))->toBeArray();
+    expect(json_decode($clientAttributes, true))->toBeArray();
 });
