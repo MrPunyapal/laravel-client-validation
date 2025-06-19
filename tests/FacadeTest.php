@@ -26,18 +26,28 @@ it('can convert rules through facade', function () {
         ->and($decoded)->toHaveKey('username');
 });
 
-it('can generate inline validation through facade', function () {
+it('can generate validation with custom messages through facade', function () {
     $rules = [
         'password' => 'required|min:8',
+        'email' => 'required|email',
     ];
 
     $messages = [
         'password.required' => 'Password is required',
+        'email.email' => 'Please enter a valid email',
     ];
 
-    $js = ClientValidation::generateInline($rules, $messages);
+    $js = ClientValidation::generate($rules, $messages);
 
     expect($js)->toBeString()
-        ->and($js)->toContain('validateInline')
-        ->and($js)->toContain('Password is required');
+        ->and($js)->toContain('validateForm')
+        ->and($js)->toContain('Password is required')
+        ->and($js)->toContain('Please enter a valid email');
+});
+
+it('facade returns same instance as app resolution', function () {
+    $fromApp = app('client-validation');
+    $fromFacade = ClientValidation::getFacadeRoot();
+
+    expect($fromFacade)->toBe($fromApp);
 });

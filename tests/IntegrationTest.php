@@ -6,7 +6,7 @@ it('can create a complete form validation example', function () {
     // Simulate a typical Laravel form validation scenario
     $rules = [
         'name' => 'required|string|max:100',
-        'email' => 'required|email|unique:users,email',
+        'email' => 'required|email',
         'password' => 'required|min:8|confirmed',
         'age' => 'nullable|integer|min:18|max:120',
         'website' => 'nullable|url',
@@ -15,7 +15,7 @@ it('can create a complete form validation example', function () {
 
     $messages = [
         'name.required' => 'Please enter your full name',
-        'email.unique' => 'This email is already taken',
+        'email.email' => 'Please enter a valid email address',
         'password.min' => 'Password must be at least 8 characters',
         'age.min' => 'You must be at least 18 years old',
     ];
@@ -52,39 +52,55 @@ it('can create a complete form validation example', function () {
         ->and($decodedRules['password'])->toContain(['rule' => 'confirmed']);
 });
 
-it('works with real Laravel validation data', function () {
-    // Test with actual validation that would fail
-    $invalidData = [
-        'name' => '',
-        'email' => 'not-an-email',
-        'password' => '123', // too short
-        'age' => 15, // too young
+it('handles edge cases and real-world scenarios', function () {
+    // Test with complex validation rules
+    $rules = [
+        'username' => 'required|alpha_dash|min:3|max:20',
+        'phone' => 'nullable|regex:/^[0-9]{10,15}$/',
+        'tags' => 'required|array|min:1|max:5',
+        'status' => 'required|in:active,inactive,pending',
+        'price' => 'required|numeric|min:0.01|max:99999.99',
     ];
+
+    $js = ClientValidation::generate($rules);
+
+    expect($js)->toBeString()
+        ->and($js)->toContain('validateForm');
+
+    // Verify the rules are converted properly
+    $rulesJS = ClientValidation::rules($rules);
+    $decodedRules = json_decode($rulesJS, true);
+
+    expect($decodedRules['username'])->toContain(['rule' => 'alphaDash'])
+        ->and($decodedRules['phone'])->toContain(['rule' => 'regex', 'parameters' => ['/^[0-9]{10,15}$/']])
+        ->and($decodedRules['status'])->toContain(['rule' => 'in', 'parameters' => ['active', 'inactive', 'pending']])
+        ->and($decodedRules['price'])->toContain(['rule' => 'numeric']);
+});
+
+it('works with configuration-based validation', function () {
+    // Set up config
+    config([
+        'client-validation.messages' => [
+            'required' => 'This field is required.',
+            'email' => 'Please enter a valid email address.',
+            'min.string' => 'This field must be at least :min characters.',
+        ],
+        'client-validation.attributes' => [
+            'email' => 'email address',
+            'password' => 'password',
+        ],
+    ]);
 
     $rules = [
-        'name' => 'required|string',
         'email' => 'required|email',
         'password' => 'required|min:8',
-        'age' => 'required|integer|min:18',
     ];
 
-    $errors = ClientValidation::validateData($invalidData, $rules);
+    $js = ClientValidation::generate($rules);
 
-    expect($errors)->toBeArray()
-        ->and($errors)->toHaveKey('name')
-        ->and($errors)->toHaveKey('email')
-        ->and($errors)->toHaveKey('password')
-        ->and($errors)->toHaveKey('age');
-
-    // Test with valid data
-    $validData = [
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-        'password' => 'secretpassword',
-        'age' => 25,
-    ];
-
-    $errors = ClientValidation::validateData($validData, $rules);
-
-    expect($errors)->toBeEmpty();
+    expect($js)->toBeString()
+        ->and($js)->toContain('validateForm')
+        ->and($js)->toContain('This field is required')
+        ->and($js)->toContain('email address')
+        ->and($js)->toContain('password');
 });
