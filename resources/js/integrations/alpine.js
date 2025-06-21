@@ -10,7 +10,7 @@ export default function (Alpine) {
             });
         });
     });
-      Alpine.data('validateForm', (rules = {}, messages = {}, attributes = {}) => {
+    Alpine.data('validateForm', (rules = {}, messages = {}, attributes = {}) => {
         return {
             validator: new Validator(rules, messages, attributes),
             errors: {},
@@ -24,7 +24,7 @@ export default function (Alpine) {
                     return acc;
                 }, {});
             },
-              validate(field = null) {
+            validate(field = null) {
                 if (field) {
                     const value = this.form[field] || '';
                     const isValid = this.validator.validateField(field, value);

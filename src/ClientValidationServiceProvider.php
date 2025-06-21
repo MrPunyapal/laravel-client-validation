@@ -8,7 +8,8 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class ClientValidationServiceProvider extends PackageServiceProvider
-{    public function configurePackage(Package $package): void
+{
+    public function configurePackage(Package $package): void
     {
         $package
             ->name('client-validation')
@@ -30,7 +31,9 @@ class ClientValidationServiceProvider extends PackageServiceProvider
         $this->app->singleton('client-validation', function ($app) {
             return new ClientValidation($app->make(ValidationRuleConverter::class));
         });
-    }    protected function registerBladeDirectives(): void
+    }
+
+    protected function registerBladeDirectives(): void
     {
         // Main directive for direct validation rules
         Blade::directive('clientValidation', function ($expression) {

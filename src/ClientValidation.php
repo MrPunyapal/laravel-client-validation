@@ -39,6 +39,7 @@ class ClientValidation
     protected function mergeMessages(array $messages): array
     {
         $defaultMessages = config('client-validation.messages', []);
+
         return array_merge($defaultMessages, $messages);
     }
 
@@ -48,6 +49,7 @@ class ClientValidation
     protected function mergeAttributes(array $attributes): array
     {
         $defaultAttributes = config('client-validation.attributes', []);
+
         return array_merge($defaultAttributes, $attributes);
     }
 }
