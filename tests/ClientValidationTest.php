@@ -91,7 +91,7 @@ it('merges with default config messages', function () {
         'client-validation.messages' => [
             'required' => 'This field is required.',
             'email' => 'Please enter a valid email address.',
-        ]
+        ],
     ]);
 
     $rules = ['email' => 'required|email'];
@@ -113,7 +113,7 @@ it('merges with default config attributes', function () {
         'client-validation.attributes' => [
             'email' => 'email address',
             'phone' => 'phone number',
-        ]
+        ],
     ]);
 
     $rules = ['email' => 'required', 'phone' => 'required'];

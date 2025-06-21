@@ -44,6 +44,7 @@ class ValidationRuleConverter
         // Handle regex patterns specially to avoid splitting on comma within the pattern
         if (strpos($rule, 'regex:') === 0) {
             $pattern = substr($rule, 6); // Remove 'regex:' prefix
+
             return $this->mapRule('regex', [$pattern]);
         }
 

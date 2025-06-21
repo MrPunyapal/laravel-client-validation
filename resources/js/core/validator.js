@@ -71,9 +71,9 @@ class Validator {
 
         params.forEach((param, i) => {
             message = message.replace(`:param${i + 1}`, param);
-            message = message.replace(`:min`, param);
-            message = message.replace(`:max`, param);
-            message = message.replace(`:size`, param);
+            message = message.replace(':min', param);
+            message = message.replace(':max', param);
+            message = message.replace(':size', param);
         });
         return message;
     }
