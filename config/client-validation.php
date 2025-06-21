@@ -15,34 +15,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Common Validation Rules
-    |--------------------------------------------------------------------------
-    |
-    | Define reusable validation rule sets that can be shared across
-    | multiple forms. Perfect for user profiles, contact forms, etc.
-    |
-    */
-    'common_rules' => [
-        'user' => [
-            'name' => 'required|string|min:2|max:50',
-            'email' => 'required|email|max:100',
-            'phone' => 'nullable|regex:/^[0-9]{10,15}$/',
-        ],
-        'auth' => [
-            'email' => 'required|email',
-            'password' => 'required|string|min:8',
-            'password_confirmation' => 'required|string|min:8|same:password',
-        ],
-        'contact' => [
-            'name' => 'required|string|min:2|max:100',
-            'email' => 'required|email',
-            'subject' => 'required|string|max:200',
-            'message' => 'required|string|min:10|max:1000',
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Default Messages
     |--------------------------------------------------------------------------
     |
