@@ -8,13 +8,11 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class ClientValidationServiceProvider extends PackageServiceProvider
-{
-    public function configurePackage(Package $package): void
+{    public function configurePackage(Package $package): void
     {
         $package
             ->name('client-validation')
             ->hasConfigFile()
-            ->hasRoute('web')
             ->publishesServiceProvider('ClientValidationServiceProvider');
     }
 
@@ -32,23 +30,11 @@ class ClientValidationServiceProvider extends PackageServiceProvider
         $this->app->singleton('client-validation', function ($app) {
             return new ClientValidation($app->make(ValidationRuleConverter::class));
         });
-    }
-
-    protected function registerBladeDirectives(): void
+    }    protected function registerBladeDirectives(): void
     {
         // Main directive for direct validation rules
         Blade::directive('clientValidation', function ($expression) {
             return "<?php echo app('client-validation')->generate({$expression}); ?>";
-        });
-
-        // Simple directive for common rules from config
-        Blade::directive('clientValidationCommon', function ($expression) {
-            return "<?php
-                \$rules = config('client-validation.common_rules.' . {$expression}, []);
-                \$messages = config('client-validation.messages', []);
-                \$attributes = config('client-validation.attributes', []);
-                echo app('client-validation')->generate(\$rules, \$messages, \$attributes);
-            ?>";
         });
     }
 }
