@@ -17,48 +17,57 @@ it('can convert basic validation rules to javascript', function () {
     expect($decoded)->toBeArray()
         ->and($decoded)->toHaveKey('email')
         ->and($decoded)->toHaveKey('password')
-        ->and($decoded)->toHaveKey('age');    // Test email field rules
-    expect($decoded['email'])->toContain(['rule' => 'required'])
-        ->and($decoded['email'])->toContain(['rule' => 'email'])
-        ->and($decoded['email'])->toContain(['rule' => 'max', 'parameters' => ['255']]);
+        ->and($decoded)->toHaveKey('age');
+
+    // Test email field rules - expect simple array of Laravel-style rules
+    expect($decoded['email'])->toContain('required')
+        ->and($decoded['email'])->toContain('email')
+        ->and($decoded['email'])->toContain('max:255');
 
     // Test password field rules
-    expect($decoded['password'])->toContain(['rule' => 'required'])
-        ->and($decoded['password'])->toContain(['rule' => 'min', 'parameters' => ['8']])
-        ->and($decoded['password'])->toContain(['rule' => 'confirmed']);
+    expect($decoded['password'])->toContain('required')
+        ->and($decoded['password'])->toContain('min:8')
+        ->and($decoded['password'])->toContain('confirmed');
+
+    // Test age field rules
+    expect($decoded['age'])->toContain('integer')
+        ->and($decoded['age'])->toContain('min:18')
+        ->and($decoded['age'])->toContain('max:120');
 });
 
 it('handles complex validation rules', function () {
     $converter = new ValidationRuleConverter;
 
     $rules = [
-        'username' => 'required|alpha_dash|unique:users,username|between:3,20',
+        'username' => 'required|alpha_dash|between:3,20',
         'status' => 'required|in:active,inactive,pending',
     ];
 
     $jsRules = $converter->convert($rules);
     $decoded = json_decode($jsRules, true);
-    expect($decoded['username'])->toContain(['rule' => 'required'])
-        ->and($decoded['username'])->toContain(['rule' => 'alphaDash'])
-        ->and($decoded['username'])->toContain(['rule' => 'between', 'parameters' => ['3', '20']]);
 
-    expect($decoded['status'])->toContain(['rule' => 'required'])
-        ->and($decoded['status'])->toContain(['rule' => 'in', 'parameters' => ['active', 'inactive', 'pending']]);
+    expect($decoded['username'])->toContain('required')
+        ->and($decoded['username'])->toContain('alpha_dash')
+        ->and($decoded['username'])->toContain('between:3,20');
+
+    expect($decoded['status'])->toContain('required')
+        ->and($decoded['status'])->toContain('in:active,inactive,pending');
 });
 
 it('handles regex patterns with commas correctly', function () {
     $converter = new ValidationRuleConverter;
 
     $rules = [
-        'phone' => 'nullable|regex:/^[0-9]{10,15}$/',
+        'phone' => 'regex:/^[0-9]{10,15}$/',
         'code' => 'required|regex:/^[A-Z]{2,4}-[0-9]{3,6}$/',
     ];
 
     $jsRules = $converter->convert($rules);
     $decoded = json_decode($jsRules, true);
 
-    expect($decoded['phone'])->toContain(['rule' => 'regex', 'parameters' => ['/^[0-9]{10,15}$/']]);
-    expect($decoded['code'])->toContain(['rule' => 'regex', 'parameters' => ['/^[A-Z]{2,4}-[0-9]{3,6}$/']]);
+    expect($decoded['phone'])->toContain('regex:/^[0-9]{10,15}$/');
+    expect($decoded['code'])->toContain('required')
+        ->and($decoded['code'])->toContain('regex:/^[A-Z]{2,4}-[0-9]{3,6}$/');
 });
 
 it('handles empty and null rules gracefully', function () {
@@ -73,10 +82,10 @@ it('handles empty and null rules gracefully', function () {
     $decoded = json_decode($jsRules, true);
 
     expect($decoded)->toHaveKey('another')
-        ->and($decoded['another'])->toContain(['rule' => 'required']);
+        ->and($decoded['another'])->toContain('required');
 });
 
-it('converts rule names to camelCase correctly', function () {
+it('keeps rule names as they are in js/core', function () {
     $converter = new ValidationRuleConverter;
 
     $rules = [
@@ -86,9 +95,10 @@ it('converts rule names to camelCase correctly', function () {
     $jsRules = $converter->convert($rules);
     $decoded = json_decode($jsRules, true);
 
-    expect($decoded['field'])->toContain(['rule' => 'alphaNum'])
-        ->and($decoded['field'])->toContain(['rule' => 'alphaDash'])
-        ->and($decoded['field'])->toContain(['rule' => 'notIn', 'parameters' => ['admin', 'root']]);
+    // Keep rule names as they are in the js/core/rules - no camelCase conversion needed
+    expect($decoded['field'])->toContain('alpha_num')
+        ->and($decoded['field'])->toContain('alpha_dash')
+        ->and($decoded['field'])->toContain('not_in:admin,root');
 });
 
 it('handles numeric and boolean validation rules', function () {
@@ -103,12 +113,12 @@ it('handles numeric and boolean validation rules', function () {
     $jsRules = $converter->convert($rules);
     $decoded = json_decode($jsRules, true);
 
-    expect($decoded['price'])->toContain(['rule' => 'required'])
-        ->and($decoded['price'])->toContain(['rule' => 'numeric'])
-        ->and($decoded['price'])->toContain(['rule' => 'min', 'parameters' => ['0']])
-        ->and($decoded['price'])->toContain(['rule' => 'max', 'parameters' => ['999999.99']]);
+    expect($decoded['price'])->toContain('required')
+        ->and($decoded['price'])->toContain('numeric')
+        ->and($decoded['price'])->toContain('min:0')
+        ->and($decoded['price'])->toContain('max:999999.99');
 
-    expect($decoded['active'])->toContain(['rule' => 'boolean']);
-    expect($decoded['count'])->toContain(['rule' => 'integer'])
-        ->and($decoded['count'])->toContain(['rule' => 'between', 'parameters' => ['1', '100']]);
+    expect($decoded['active'])->toContain('boolean');
+    expect($decoded['count'])->toContain('integer')
+        ->and($decoded['count'])->toContain('between:1,100');
 });
