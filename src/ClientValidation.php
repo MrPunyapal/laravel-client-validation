@@ -14,23 +14,27 @@ class ClientValidation
     }
 
     /**
-     * Generate validation JavaScript for given rules
-     */
-    public function generate(array $rules, array $messages = [], array $attributes = []): string
-    {
-        $rulesJson = $this->converter->convert($rules);
-        $messagesJson = json_encode($this->mergeMessages($messages));
-        $attributesJson = json_encode($this->mergeAttributes($attributes));
-
-        return "validateForm({$rulesJson}, {$messagesJson}, {$attributesJson})";
-    }
-
-    /**
-     * Convert rules to JSON format
+     * Convert rules to JSON format for client-side use
      */
     public function rules(array $rules): string
     {
         return $this->converter->convert($rules);
+    }
+
+    /**
+     * Get merged messages for client-side use
+     */
+    public function messages(array $messages = []): string
+    {
+        return json_encode($this->mergeMessages($messages));
+    }
+
+    /**
+     * Get merged attributes for client-side use
+     */
+    public function attributes(array $attributes = []): string
+    {
+        return json_encode($this->mergeAttributes($attributes));
     }
 
     /**
