@@ -25,32 +25,34 @@ class ValidationRuleConverter
 
         foreach ($rules as $rule) {
             if (is_string($rule)) {
-                $jsRules[] = $this->parseStringRule($rule);
+                $convertedRule = $this->parseStringRule($rule);
+                if ($convertedRule) {
+                    $jsRules[] = $convertedRule;
+                }
             } elseif (is_object($rule)) {
-                $jsRules[] = $this->parseObjectRule($rule);
+                $convertedRule = $this->parseObjectRule($rule);
+                if ($convertedRule) {
+                    $jsRules[] = $convertedRule;
+                }
             }
         }
 
-        return array_filter($jsRules);
+        return $jsRules;
     }
 
-    protected function parseStringRule(string $rule): ?array
+    protected function parseStringRule(string $rule): ?string
     {
         // Handle regex patterns specially to avoid splitting on comma within the pattern
         if (strpos($rule, 'regex:') === 0) {
-            $pattern = substr($rule, 6); // Remove 'regex:' prefix
-
-            return $this->mapRule('regex', [$pattern]);
+            return $rule; // Keep the full regex rule as-is
         }
 
-        $parts = explode(':', $rule, 2);
-        $ruleName = $parts[0];
-        $parameters = isset($parts[1]) ? explode(',', $parts[1]) : [];
-
-        return $this->mapRule($ruleName, $parameters);
+        // For rules with parameters, keep them in Laravel format
+        // The JS validator will handle parsing them
+        return $this->isValidJsRule($rule) ? $rule : null;
     }
 
-    protected function parseObjectRule(object $rule): ?array
+    protected function parseObjectRule(object $rule): ?string
     {
         if (method_exists($rule, '__toString')) {
             return $this->parseStringRule((string) $rule);
@@ -59,44 +61,20 @@ class ValidationRuleConverter
         return null;
     }
 
-    protected function mapRule(string $rule, array $parameters = []): ?array
+    protected function isValidJsRule(string $rule): bool
     {
-        $mappings = [
-            'required' => ['rule' => 'required'],
-            'email' => ['rule' => 'email'],
-            'numeric' => ['rule' => 'numeric'],
-            'integer' => ['rule' => 'integer'],
-            'string' => ['rule' => 'string'],
-            'boolean' => ['rule' => 'boolean'],
-            'alpha' => ['rule' => 'alpha'],
-            'alpha_num' => ['rule' => 'alphaNum'],
-            'alpha_dash' => ['rule' => 'alphaDash'],
-            'url' => ['rule' => 'url'],
-            'uuid' => ['rule' => 'uuid'],
-            'json' => ['rule' => 'json'],
-            'date' => ['rule' => 'date'],
-            'min' => ['rule' => 'min', 'parameters' => $parameters],
-            'max' => ['rule' => 'max', 'parameters' => $parameters],
-            'between' => ['rule' => 'between', 'parameters' => $parameters],
-            'size' => ['rule' => 'size', 'parameters' => $parameters],
-            'in' => ['rule' => 'in', 'parameters' => $parameters],
-            'not_in' => ['rule' => 'notIn', 'parameters' => $parameters],
-            'confirmed' => ['rule' => 'confirmed'],
-            'same' => ['rule' => 'same', 'parameters' => $parameters],
-            'different' => ['rule' => 'different', 'parameters' => $parameters],
-            'regex' => ['rule' => 'regex', 'parameters' => $parameters],
-            'accepted' => ['rule' => 'accepted'],
-            'after' => ['rule' => 'after', 'parameters' => $parameters],
-            'before' => ['rule' => 'before', 'parameters' => $parameters],
-            'date_format' => ['rule' => 'dateFormat', 'parameters' => $parameters],
-            'ip' => ['rule' => 'ip'],
-            'ipv4' => ['rule' => 'ipv4'],
-            'ipv6' => ['rule' => 'ipv6'],
-            'starts_with' => ['rule' => 'startsWith', 'parameters' => $parameters],
-            'ends_with' => ['rule' => 'endsWith', 'parameters' => $parameters],
-            'contains' => ['rule' => 'contains', 'parameters' => $parameters],
+        // Extract rule name (before any colon)
+        $ruleName = explode(':', $rule, 2)[0];
+
+        // List of rules that are supported in js/core/rules
+        $supportedRules = [
+            'required', 'email', 'min', 'max', 'numeric', 'integer',
+            'alpha', 'alpha_num', 'alpha_dash', 'url', 'between',
+            'confirmed', 'size', 'in', 'not_in', 'boolean', 'date',
+            'after', 'before', 'regex', 'same', 'different', 'digits',
+            'digits_between', 'string', 'nullable'
         ];
 
-        return $mappings[$rule] ?? null;
+        return in_array($ruleName, $supportedRules);
     }
 }
