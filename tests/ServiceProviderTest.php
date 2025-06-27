@@ -28,9 +28,13 @@ it('can resolve client validation through facade', function () {
 
     expect($service)->toBeInstanceOf(ClientValidation::class);
 
-    // Test it can generate JS
-    $js = $service->generate(['name' => 'required']);
-    expect($js)->toBeString()->and($js)->toContain('validateForm');
+    // Test it can convert rules
+    $rulesJson = $service->rules(['name' => 'required']);
+    $decoded = json_decode($rulesJson, true);
+
+    expect($rulesJson)->toBeString()
+        ->and($decoded)->toBeArray()
+        ->and($decoded['name'])->toContain('required');
 });
 
 it('loads default configuration', function () {
