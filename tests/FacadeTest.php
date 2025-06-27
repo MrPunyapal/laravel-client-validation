@@ -8,10 +8,15 @@ it('can access client validation through facade', function () {
         'email' => 'required|email',
     ];
 
-    $js = ClientValidation::generate($rules);
+    $rulesJson = ClientValidation::rules($rules);
+    $decoded = json_decode($rulesJson, true);
 
-    expect($js)->toBeString()
-        ->and($js)->toContain('validateForm');
+    expect($rulesJson)->toBeString()
+        ->and($decoded)->toBeArray()
+        ->and($decoded['name'])->toContain('required')
+        ->and($decoded['name'])->toContain('string')
+        ->and($decoded['email'])->toContain('required')
+        ->and($decoded['email'])->toContain('email');
 });
 
 it('can convert rules through facade', function () {
