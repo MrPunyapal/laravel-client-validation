@@ -10,14 +10,7 @@ export default function (Alpine) {
             getRule(rule => {
                 if (rule) {
                     validator = new Validator({ [fieldName]: rule });
-
-                    if (modifiers.includes('live')) {
-                        setupLiveValidation(el, validator, fieldName);
-                    } else if (modifiers.includes('form')) {
-                        setupFormValidation(el, validator, fieldName);
-                    } else {
-                        setupBasicValidation(el, validator, fieldName);
-                    }
+                    setupValidation(el, validator, fieldName, modifiers);
                 }
             });
         });
@@ -29,66 +22,48 @@ export default function (Alpine) {
         });
     });
 
-    function setupLiveValidation(el, validator, fieldName) {
+    function setupValidation(el, validator, fieldName, modifiers) {
         const validateField = () => {
-            const value = el.value;
-            const isValid = validator.validateField(fieldName, value);
-            updateFieldValidation(el, validator, fieldName, isValid);
-        };
-
-        const inputHandler = () => validateField();
-        const changeHandler = () => validateField();
-
-        el.addEventListener('input', inputHandler);
-        el.addEventListener('change', changeHandler);
-
-        el._validateCleanup = [
-            () => el.removeEventListener('input', inputHandler),
-            () => el.removeEventListener('change', changeHandler)
-        ];
-    }
-
-    function setupFormValidation(el, validator, fieldName) {
-        const form = el.closest('form');
-        if (!form) return;
-
-        const validateOnSubmit = (e) => {
-            const value = el.value;
-            const isValid = validator.validateField(fieldName, value);
-            updateFieldValidation(el, validator, fieldName, isValid);
-
-            if (!isValid) {
-                e.preventDefault();
-                return false;
-            }
-        };
-
-        form.addEventListener('submit', validateOnSubmit);
-
-        el._validateCleanup = [
-            () => form.removeEventListener('submit', validateOnSubmit)
-        ];
-    }
-
-    function setupBasicValidation(el, validator, fieldName) {
-        el.validate = () => {
             const value = el.value;
             const isValid = validator.validateField(fieldName, value);
             updateFieldValidation(el, validator, fieldName, isValid);
             return isValid;
         };
+
+        if (modifiers.includes('live')) {
+            const handler = () => validateField();
+            el.addEventListener('input', handler);
+            el.addEventListener('change', handler);
+            el._validateCleanup = [
+                () => el.removeEventListener('input', handler),
+                () => el.removeEventListener('change', handler)
+            ];
+        } else if (modifiers.includes('form')) {
+            const form = el.closest('form');
+            if (form) {
+                const submitHandler = (e) => {
+                    if (!validateField()) {
+                        e.preventDefault();
+                        return false;
+                    }
+                };
+                form.addEventListener('submit', submitHandler);
+                el._validateCleanup = [() => form.removeEventListener('submit', submitHandler)];
+            }
+        } else {
+            el.validate = validateField;
+        }
     }
 
     function updateFieldValidation(el, validator, fieldName, isValid) {
         el.classList.remove('is-valid', 'is-invalid');
-
         el.classList.add(isValid ? 'is-valid' : 'is-invalid');
 
         const errorId = `${fieldName}-error`;
         let errorEl = document.getElementById(errorId);
 
         if (!isValid) {
-            const errorMessage = validator.errors[fieldName] ? validator.errors[fieldName][0] : '';
+            const errorMessage = validator.errors[fieldName]?.[0] || '';
 
             if (!errorEl) {
                 errorEl = document.createElement('div');
@@ -124,42 +99,38 @@ export default function (Alpine) {
                 this.$el.addEventListener('validation', (e) => {
                     const fieldName = e.target.name || e.target.getAttribute('name');
                     if (fieldName) {
-                        if (e.detail.isValid) {
-                            delete this.errors[fieldName];
-                        } else {
-                            this.errors[fieldName] = e.detail.errors;
-                        }
+                        this.updateErrors(fieldName, e.detail.isValid, e.detail.errors);
                     }
                 });
             },
 
+            updateErrors(fieldName, isValid, errors) {
+                if (isValid) {
+                    delete this.errors[fieldName];
+                } else {
+                    this.errors[fieldName] = errors;
+                }
+            },
+
             validate(field = null) {
                 this.isValidating = true;
+                let isValid;
 
                 if (field) {
-                    const value = this.form[field] || '';
-                    const isValid = this.validator.validateField(field, value);
+                    isValid = this.validateSingleField(field);
+                } else {
+                    isValid = this.validator.validate(this.form);
                     this.errors = { ...this.validator.errors };
-                    this.isValidating = false;
-                    return isValid;
                 }
 
-                const isValid = this.validator.validate(this.form);
-                this.errors = { ...this.validator.errors };
                 this.isValidating = false;
                 return isValid;
             },
 
-            validateField(field) {
+            validateSingleField(field) {
                 const value = this.form[field] || '';
                 const isValid = this.validator.validateField(field, value);
-
-                if (isValid) {
-                    delete this.errors[field];
-                } else {
-                    this.errors[field] = this.validator.errors[field] || [];
-                }
-
+                this.updateErrors(field, isValid, this.validator.errors[field] || []);
                 return isValid;
             },
 
@@ -172,15 +143,11 @@ export default function (Alpine) {
             },
 
             hasError(field) {
-                return this.errors[field] && this.errors[field].length > 0;
+                return this.errors[field]?.length > 0;
             },
 
             getError(field) {
                 return this.hasError(field) ? this.errors[field][0] : '';
-            },
-
-            getAllErrors() {
-                return this.errors;
             },
 
             clearErrors(field = null) {

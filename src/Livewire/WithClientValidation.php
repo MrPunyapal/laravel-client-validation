@@ -8,22 +8,40 @@ trait WithClientValidation
 {
     public function getClientRulesProperty()
     {
-        $rules = method_exists($this, 'rules') ? $this->rules() : (property_exists($this, 'rules') ? $this->rules : []);
-
+        $rules = $this->extractRules();
         return ClientValidation::rules($rules);
     }
 
     public function getClientMessagesProperty()
     {
-        $messages = method_exists($this, 'messages') ? $this->messages() : (property_exists($this, 'messages') ? $this->messages : []);
-
-        return json_encode($messages);
+        $messages = $this->extractMessages();
+        return ClientValidation::messages($messages);
     }
 
     public function getClientAttributesProperty()
     {
-        $attributes = method_exists($this, 'validationAttributes') ? $this->validationAttributes() : [];
+        $attributes = $this->extractValidationAttributes();
+        return ClientValidation::attributes($attributes);
+    }
 
-        return json_encode($attributes);
+    protected function extractRules(): array
+    {
+        return method_exists($this, 'rules')
+            ? $this->rules()
+            : (property_exists($this, 'rules') ? $this->rules : []);
+    }
+
+    protected function extractMessages(): array
+    {
+        return method_exists($this, 'messages')
+            ? $this->messages()
+            : (property_exists($this, 'messages') ? $this->messages : []);
+    }
+
+    protected function extractValidationAttributes(): array
+    {
+        return method_exists($this, 'validationAttributes')
+            ? $this->validationAttributes()
+            : [];
     }
 }

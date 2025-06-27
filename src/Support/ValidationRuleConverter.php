@@ -15,11 +15,6 @@ class ValidationRuleConverter
         return json_encode($jsRules, JSON_UNESCAPED_SLASHES);
     }
 
-    public function convertToJson(array $rules): string
-    {
-        return $this->convert($rules);
-    }
-
     protected function convertFieldRules($rules): array
     {
         if (is_string($rules)) {
