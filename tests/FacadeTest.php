@@ -31,23 +31,19 @@ it('can convert rules through facade', function () {
         ->and($decoded)->toHaveKey('username');
 });
 
-it('can generate validation with custom messages through facade', function () {
-    $rules = [
-        'password' => 'required|min:8',
-        'email' => 'required|email',
-    ];
-
+it('can handle custom messages through facade', function () {
     $messages = [
         'password.required' => 'Password is required',
         'email.email' => 'Please enter a valid email',
     ];
 
-    $js = ClientValidation::generate($rules, $messages);
+    $messagesJson = ClientValidation::messages($messages);
+    $decoded = json_decode($messagesJson, true);
 
-    expect($js)->toBeString()
-        ->and($js)->toContain('validateForm')
-        ->and($js)->toContain('Password is required')
-        ->and($js)->toContain('Please enter a valid email');
+    expect($messagesJson)->toBeString()
+        ->and($decoded)->toBeArray()
+        ->and($decoded['password.required'])->toBe('Password is required')
+        ->and($decoded['email.email'])->toBe('Please enter a valid email');
 });
 
 it('facade returns same instance as app resolution', function () {
