@@ -15,7 +15,9 @@ class Validator {
 
         const rulesList = this._parseRules(fieldRules);
         let isValid = true;
-        this.errors[field] = [];        for (const rule of rulesList) {
+        this.errors[field] = [];
+
+        for (const rule of rulesList) {
             const [ruleName, ...paramsParts] = rule.split(':');
             // Handle comma-separated parameters for rules like 'in:active,inactive,pending'
             // but NOT for regex patterns
@@ -25,7 +27,10 @@ class Validator {
                 params = paramsParts[0].split(',');
             }
 
-            if (!this._testRule(ruleName, value, params, field, this.allData || {})) {
+            // Pass the full rules list as context to individual rules
+            const ruleContext = { rules: rulesList, allData: this.allData || {} };
+
+            if (!this._testRule(ruleName, value, params, field, ruleContext)) {
                 isValid = false;
                 this.errors[field].push(this._formatMessage(ruleName, field, params));
             }
@@ -54,14 +59,14 @@ class Validator {
         return rules.split('|').filter(rule => rule.trim() !== '');
     }
 
-    _testRule(rule, value, params, field, data = {}) {
+    _testRule(rule, value, params, field, context = {}) {
         if (this.validationRules[rule]) {
-            return this.validationRules[rule](value, params, field, data);
+            return this.validationRules[rule](value, params, field, context);
         }
 
         const method = `_${rule}Rule`;
         if (typeof this[method] === 'function') {
-            return this[method](value, params, field, data);
+            return this[method](value, params, field, context);
         }
 
         console.warn(`Validation rule '${rule}' not implemented`);

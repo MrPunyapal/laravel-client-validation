@@ -19,7 +19,38 @@ describe('Validator Core', () => {
     expect(validator.validateField('email', '')).toBe(true) // email rule allows empty
   })
 
-  it('should validate multiple rules', () => {
+  it('should validate min rule', () => {
+    const validator = new Validator({
+      password: 'min:8'
+    })
+
+    expect(validator.validateField('password', '123')).toBe(false)
+    expect(validator.validateField('password', 'password123')).toBe(true)
+    expect(validator.validateField('password', '')).toBe(true) // min allows empty
+  })
+
+  it('should validate max rule', () => {
+    const validator = new Validator({
+      password: 'max:20'
+    })
+
+    expect(validator.validateField('password', 'password123')).toBe(true)
+    expect(validator.validateField('password', 'verylongpasswordthatexceedsmaxlength')).toBe(false)
+    expect(validator.validateField('password', '')).toBe(true) // max allows empty
+  })
+
+  it('should validate numeric rule', () => {
+    const validator = new Validator({
+      age: 'numeric'
+    })
+
+    expect(validator.validateField('age', 'abc')).toBe(false)
+    expect(validator.validateField('age', '25')).toBe(true)
+    expect(validator.validateField('age', 25)).toBe(true)
+    expect(validator.validateField('age', '')).toBe(true) // numeric allows empty
+  })
+
+  it('should validate multiple rules together', () => {
     const validator = new Validator({
       password: 'required|min:8|max:20'
     })
@@ -30,7 +61,7 @@ describe('Validator Core', () => {
     expect(validator.validateField('password', 'verylongpasswordthatexceedsmaxlength')).toBe(false)
   })
 
-  it('should validate numeric fields', () => {
+  it('should validate numeric fields with constraints', () => {
     const validator = new Validator({
       age: 'required|numeric|min:18|max:120'
     })
@@ -76,7 +107,31 @@ describe('Validator Core', () => {
     expect(validator.validateField('phone', 'abc123')).toBe(false)
   })
 
-  it('should validate array rules like in/not_in', () => {
+  it('should validate in rule', () => {
+    const validator = new Validator({
+      status: 'in:active,inactive,pending'
+    })
+
+    expect(validator.validateField('status', 'active')).toBe(true)
+    expect(validator.validateField('status', 'inactive')).toBe(true)
+    expect(validator.validateField('status', 'pending')).toBe(true)
+    expect(validator.validateField('status', 'deleted')).toBe(false)
+    expect(validator.validateField('status', '')).toBe(true) // in allows empty
+  })
+
+  it('should validate not_in rule', () => {
+    const validator = new Validator({
+      role: 'not_in:admin,super_admin'
+    })
+
+    expect(validator.validateField('role', 'user')).toBe(true)
+    expect(validator.validateField('role', 'moderator')).toBe(true)
+    expect(validator.validateField('role', 'admin')).toBe(false)
+    expect(validator.validateField('role', 'super_admin')).toBe(false)
+    expect(validator.validateField('role', '')).toBe(true) // not_in allows empty
+  })
+
+  it('should validate array rules with required', () => {
     const validator = new Validator({
       status: 'required|in:active,inactive,pending',
       role: 'not_in:admin,super_admin'
@@ -84,11 +139,30 @@ describe('Validator Core', () => {
 
     expect(validator.validateField('status', 'active')).toBe(true)
     expect(validator.validateField('status', 'deleted')).toBe(false)
+    expect(validator.validateField('status', '')).toBe(false) // required makes empty invalid
     expect(validator.validateField('role', 'user')).toBe(true)
     expect(validator.validateField('role', 'admin')).toBe(false)
   })
 
-  it('should validate boolean fields', () => {
+  it('should validate boolean rule', () => {
+    const validator = new Validator({
+      terms: 'boolean'
+    })
+
+    expect(validator.validateField('terms', true)).toBe(true)
+    expect(validator.validateField('terms', false)).toBe(true)
+    expect(validator.validateField('terms', 'true')).toBe(true)
+    expect(validator.validateField('terms', 'false')).toBe(true)
+    expect(validator.validateField('terms', '1')).toBe(true)
+    expect(validator.validateField('terms', '0')).toBe(true)
+    expect(validator.validateField('terms', 1)).toBe(true)
+    expect(validator.validateField('terms', 0)).toBe(true)
+    expect(validator.validateField('terms', 'on')).toBe(true)
+    expect(validator.validateField('terms', 'invalid')).toBe(false)
+    expect(validator.validateField('terms', '')).toBe(true) // boolean allows empty
+  })
+
+  it('should validate boolean rule with required', () => {
     const validator = new Validator({
       terms: 'required|boolean'
     })
@@ -98,6 +172,7 @@ describe('Validator Core', () => {
     expect(validator.validateField('terms', 'true')).toBe(true)
     expect(validator.validateField('terms', '1')).toBe(true)
     expect(validator.validateField('terms', 'invalid')).toBe(false)
+    expect(validator.validateField('terms', '')).toBe(false) // required makes empty invalid
   })
 
   it('should clear errors correctly', () => {
