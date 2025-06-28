@@ -4,6 +4,12 @@ export default function max(value, [maximum]) {
     const max = Number(maximum);
 
     if (typeof value === 'string') {
+        // If the string is numeric, treat it as a number for validation
+        const numValue = Number(value);
+        if (!isNaN(numValue)) {
+            return numValue <= max;
+        }
+        // Otherwise validate string length
         return value.length <= max;
     }
 

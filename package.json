@@ -22,10 +22,11 @@
   "author": "Punyapal Shah <mrpunyapal@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "vite": "^5.0.0",
-    "vitest": "^1.0.0",
     "eslint": "^8.0.0",
-    "prettier": "^3.0.0"
+    "jsdom": "^26.1.0",
+    "prettier": "^3.0.0",
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0"
   },
   "peerDependencies": {
     "alpinejs": "^3.0.0"
