@@ -4,6 +4,12 @@ export default function min(value, [minimum]) {
     const min = Number(minimum);
 
     if (typeof value === 'string') {
+        // If the string is numeric, treat it as a number for validation
+        const numValue = Number(value);
+        if (!isNaN(numValue)) {
+            return numValue >= min;
+        }
+        // Otherwise validate string length
         return value.length >= min;
     }
 

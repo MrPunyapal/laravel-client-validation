@@ -18,6 +18,16 @@ export default defineConfig({
       }
     }
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    include: ['tests/js/**/*.test.js'],
+    exclude: [
+      '**/node_modules/**',
+      '**/vendor/**',
+      '**/demo/**'
+    ]
+  },
   server: {
     open: true
   }

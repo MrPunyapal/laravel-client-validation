@@ -15,10 +15,16 @@ class Validator {
 
         const rulesList = this._parseRules(fieldRules);
         let isValid = true;
-        this.errors[field] = [];
+        this.errors[field] = [];        for (const rule of rulesList) {
+            const [ruleName, ...paramsParts] = rule.split(':');
+            // Handle comma-separated parameters for rules like 'in:active,inactive,pending'
+            // but NOT for regex patterns
+            let params = paramsParts;
+            if (paramsParts.length === 1 && paramsParts[0] &&
+                paramsParts[0].includes(',') && ruleName !== 'regex') {
+                params = paramsParts[0].split(',');
+            }
 
-        for (const rule of rulesList) {
-            const [ruleName, ...params] = rule.split(':');
             if (!this._testRule(ruleName, value, params, field, this.allData || {})) {
                 isValid = false;
                 this.errors[field].push(this._formatMessage(ruleName, field, params));
