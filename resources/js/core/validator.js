@@ -140,6 +140,10 @@ class Validator {
     _getAttributeName(field) {
         return this.attributes[field] || field.replace(/[_-]/g, ' ');
     }
+
+    clearErrors() {
+        this.errors = {};
+    }
 }
 
 export default Validator;

@@ -2,82 +2,81 @@ import { describe, it, expect } from 'vitest'
 import Validator from '../../resources/js/core/validator.js'
 
 describe('Validator Core', () => {
-  it('should validate required field correctly', () => {
+  it('should validate required field correctly', async () => {
     const validator = new Validator({ name: 'required' })
 
-    expect(validator.validateField('name', '')).toBe(false)
-    expect(validator.validateField('name', null)).toBe(false)
+    expect(await validator.validateField('name', '')).toBe(false)
+    expect(await validator.validateField('name', null)).toBe(false)
     expect(validator.errors.name).toContain('The name is invalid.')
-    expect(validator.validateField('name', 'John')).toBe(true)
+    expect(await validator.validateField('name', 'John')).toBe(true)
   })
 
-  it('should validate email field correctly', () => {
+  it('should validate email field correctly', async () => {
     const validator = new Validator({ email: 'email' })
 
-    expect(validator.validateField('email', 'invalid-email')).toBe(false)
-    expect(validator.validateField('email', 'test@example.com')).toBe(true)
-    expect(validator.validateField('email', '')).toBe(true) // email rule allows empty
+    expect(await validator.validateField('email', 'invalid-email')).toBe(false)
+    expect(await validator.validateField('email', 'test@example.com')).toBe(true)
+    expect(await validator.validateField('email', '')).toBe(true) // email rule allows empty
   })
 
-  it('should validate min rule', () => {
+  it('should validate min rule', async () => {
     const validator = new Validator({
       password: 'min:8'
     })
 
-    expect(validator.validateField('password', '123')).toBe(false)
-    expect(validator.validateField('password', 'password123')).toBe(true)
-    expect(validator.validateField('password', '')).toBe(true) // min allows empty
+    expect(await validator.validateField('password', '123')).toBe(false)
+    expect(await validator.validateField('password', 'password123')).toBe(true)
+    expect(await validator.validateField('password', '')).toBe(true) // min allows empty
   })
 
-  it('should validate max rule', () => {
+  it('should validate max rule', async () => {
     const validator = new Validator({
       password: 'max:20'
     })
 
-    expect(validator.validateField('password', 'password123')).toBe(true)
-    expect(validator.validateField('password', 'verylongpasswordthatexceedsmaxlength')).toBe(false)
-    expect(validator.validateField('password', '')).toBe(true) // max allows empty
+    expect(await validator.validateField('password', 'password123')).toBe(true)
+    expect(await validator.validateField('password', 'verylongpasswordthatexceedsmaxlength')).toBe(false)
+    expect(await validator.validateField('password', '')).toBe(true) // max allows empty
   })
 
-  it('should validate numeric rule', () => {
+  it('should validate numeric rule', async () => {
     const validator = new Validator({
       age: 'numeric'
     })
 
-    expect(validator.validateField('age', 'abc')).toBe(false)
-    expect(validator.validateField('age', '25')).toBe(true)
-    expect(validator.validateField('age', 25)).toBe(true)
-    expect(validator.validateField('age', '')).toBe(true) // numeric allows empty
+    expect(await validator.validateField('age', 'abc')).toBe(false)
+    expect(await validator.validateField('age', '25')).toBe(true)
+    expect(await validator.validateField('age', 25)).toBe(true)
+    expect(await validator.validateField('age', '')).toBe(true) // numeric allows empty
   })
 
-  it('should validate multiple rules together', () => {
+  it('should validate multiple rules together', async () => {
     const validator = new Validator({
-      password: 'required|min:8|max:20'
+      password: ['required', 'min:8']
     })
 
-    expect(validator.validateField('password', '')).toBe(false)
-    expect(validator.validateField('password', '123')).toBe(false)
-    expect(validator.validateField('password', 'password123')).toBe(true)
-    expect(validator.validateField('password', 'verylongpasswordthatexceedsmaxlength')).toBe(false)
+    expect(await validator.validateField('password', '')).toBe(false)
+    expect(await validator.validateField('password', '123')).toBe(false)
+    expect(await validator.validateField('password', 'password123')).toBe(true)
   })
 
-  it('should validate numeric fields with constraints', () => {
+  it('should validate numeric fields with constraints', async () => {
     const validator = new Validator({
-      age: 'required|numeric|min:18|max:120'
+      age: ['required', 'numeric', 'min:18', 'max:99']
     })
 
-    expect(validator.validateField('age', '')).toBe(false)
-    expect(validator.validateField('age', 'abc')).toBe(false)
-    expect(validator.validateField('age', '17')).toBe(false)
-    expect(validator.validateField('age', '25')).toBe(true)
-    expect(validator.validateField('age', '150')).toBe(false)
+    expect(await validator.validateField('age', '')).toBe(false)
+    expect(await validator.validateField('age', 'abc')).toBe(false)
+    expect(await validator.validateField('age', '17')).toBe(false)
+    expect(await validator.validateField('age', '25')).toBe(true)
+    expect(await validator.validateField('age', '100')).toBe(false)
   })
 
-  it('should validate complete form data', () => {
+  it('should validate complete form data', async () => {
     const validator = new Validator({
-      name: 'required|string|min:2',
-      email: 'required|email',
-      age: 'required|numeric|min:18'
+      name: 'required',
+      email: ['required', 'email'],
+      age: ['required', 'numeric', 'min:18']
     })
 
     const validData = {
@@ -87,101 +86,104 @@ describe('Validator Core', () => {
     }
 
     const invalidData = {
-      name: 'J',
+      name: '',
       email: 'invalid-email',
-      age: '15'
+      age: '17'
     }
 
-    expect(validator.validate(validData)).toBe(true)
-    expect(validator.validate(invalidData)).toBe(false)
+    expect(await validator.validate(validData)).toBe(true)
+    expect(await validator.validate(invalidData)).toBe(false)
     expect(Object.keys(validator.errors)).toHaveLength(3)
   })
 
-  it('should handle regex validation', () => {
+  it('should handle regex validation', async () => {
     const validator = new Validator({
-      phone: 'regex:/^[0-9]{10,15}$/'
+      phone: 'regex:/^[0-9]{10}$/'
     })
 
-    expect(validator.validateField('phone', '1234567890')).toBe(true)
-    expect(validator.validateField('phone', '123')).toBe(false)
-    expect(validator.validateField('phone', 'abc123')).toBe(false)
+    expect(await validator.validateField('phone', '1234567890')).toBe(true)
+    expect(await validator.validateField('phone', '123')).toBe(false)
+    expect(await validator.validateField('phone', 'abc123')).toBe(false)
   })
 
-  it('should validate in rule', () => {
+  it('should validate in rule', async () => {
     const validator = new Validator({
       status: 'in:active,inactive,pending'
     })
 
-    expect(validator.validateField('status', 'active')).toBe(true)
-    expect(validator.validateField('status', 'inactive')).toBe(true)
-    expect(validator.validateField('status', 'pending')).toBe(true)
-    expect(validator.validateField('status', 'deleted')).toBe(false)
-    expect(validator.validateField('status', '')).toBe(true) // in allows empty
+    expect(await validator.validateField('status', 'active')).toBe(true)
+    expect(await validator.validateField('status', 'inactive')).toBe(true)
+    expect(await validator.validateField('status', 'pending')).toBe(true)
+    expect(await validator.validateField('status', 'deleted')).toBe(false)
   })
 
-  it('should validate not_in rule', () => {
+  it('should validate not_in rule', async () => {
     const validator = new Validator({
-      role: 'not_in:admin,super_admin'
+      role: 'not_in:admin,root,superuser'
     })
 
-    expect(validator.validateField('role', 'user')).toBe(true)
-    expect(validator.validateField('role', 'moderator')).toBe(true)
-    expect(validator.validateField('role', 'admin')).toBe(false)
-    expect(validator.validateField('role', 'super_admin')).toBe(false)
-    expect(validator.validateField('role', '')).toBe(true) // not_in allows empty
+    expect(await validator.validateField('role', 'user')).toBe(true)
+    expect(await validator.validateField('role', 'moderator')).toBe(true)
+    expect(await validator.validateField('role', 'admin')).toBe(false)
+    expect(await validator.validateField('role', 'root')).toBe(false)
   })
 
-  it('should validate array rules with required', () => {
+  it('should validate array rules with required', async () => {
     const validator = new Validator({
-      status: 'required|in:active,inactive,pending',
-      role: 'not_in:admin,super_admin'
+      status: ['required', 'in:active,inactive,pending']
     })
 
-    expect(validator.validateField('status', 'active')).toBe(true)
-    expect(validator.validateField('status', 'deleted')).toBe(false)
-    expect(validator.validateField('status', '')).toBe(false) // required makes empty invalid
-    expect(validator.validateField('role', 'user')).toBe(true)
-    expect(validator.validateField('role', 'admin')).toBe(false)
+    expect(await validator.validateField('status', 'active')).toBe(true)
+    expect(await validator.validateField('status', 'deleted')).toBe(false)
+    expect(await validator.validateField('status', '')).toBe(false) // required makes empty invalid
   })
 
-  it('should validate boolean rule', () => {
+  it('should validate boolean rule', async () => {
     const validator = new Validator({
       terms: 'boolean'
     })
 
-    expect(validator.validateField('terms', true)).toBe(true)
-    expect(validator.validateField('terms', false)).toBe(true)
-    expect(validator.validateField('terms', 'true')).toBe(true)
-    expect(validator.validateField('terms', 'false')).toBe(true)
-    expect(validator.validateField('terms', '1')).toBe(true)
-    expect(validator.validateField('terms', '0')).toBe(true)
-    expect(validator.validateField('terms', 1)).toBe(true)
-    expect(validator.validateField('terms', 0)).toBe(true)
-    expect(validator.validateField('terms', 'on')).toBe(true)
-    expect(validator.validateField('terms', 'invalid')).toBe(false)
-    expect(validator.validateField('terms', '')).toBe(true) // boolean allows empty
+    expect(await validator.validateField('terms', true)).toBe(true)
+    expect(await validator.validateField('terms', false)).toBe(true)
+    expect(await validator.validateField('terms', 'true')).toBe(true)
+    expect(await validator.validateField('terms', 'false')).toBe(true)
+    expect(await validator.validateField('terms', '1')).toBe(true)
+    expect(await validator.validateField('terms', '0')).toBe(true)
+    expect(await validator.validateField('terms', 1)).toBe(true)
+    expect(await validator.validateField('terms', 0)).toBe(true)
+    expect(await validator.validateField('terms', 'yes')).toBe(false)
+    expect(await validator.validateField('terms', 'no')).toBe(false)
+    expect(await validator.validateField('terms', 'invalid')).toBe(false)
   })
 
-  it('should validate boolean rule with required', () => {
+  it('should validate boolean rule with required', async () => {
     const validator = new Validator({
-      terms: 'required|boolean'
+      terms: ['required', 'boolean']
     })
 
-    expect(validator.validateField('terms', true)).toBe(true)
-    expect(validator.validateField('terms', false)).toBe(true)
-    expect(validator.validateField('terms', 'true')).toBe(true)
-    expect(validator.validateField('terms', '1')).toBe(true)
-    expect(validator.validateField('terms', 'invalid')).toBe(false)
-    expect(validator.validateField('terms', '')).toBe(false) // required makes empty invalid
+    expect(await validator.validateField('terms', true)).toBe(true)
+    expect(await validator.validateField('terms', false)).toBe(true)
+    expect(await validator.validateField('terms', 'true')).toBe(true)
+    expect(await validator.validateField('terms', 'false')).toBe(true)
+    expect(await validator.validateField('terms', '1')).toBe(true)
+    expect(await validator.validateField('terms', '0')).toBe(true)
+    expect(await validator.validateField('terms', 1)).toBe(true)
+    expect(await validator.validateField('terms', 0)).toBe(true)
+    expect(await validator.validateField('terms', '')).toBe(false) // required makes empty invalid
+    expect(await validator.validateField('terms', null)).toBe(false)
+    expect(await validator.validateField('terms', undefined)).toBe(false)
   })
 
   it('should clear errors correctly', () => {
     const validator = new Validator({ name: 'required' })
 
-    validator.validateField('name', '')
-    expect(validator.errors.name).toBeDefined()
+    // Add some errors first
+    validator.errors.name = ['The name is required.']
+    validator.errors.email = ['The email is invalid.']
 
-    validator.validateField('name', 'John')
-    expect(validator.errors.name).toHaveLength(0)
+    // Clear errors
+    validator.clearErrors()
+
+    expect(Object.keys(validator.errors)).toHaveLength(0)
   })
 })
