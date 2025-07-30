@@ -9,7 +9,7 @@ class ValidationRuleConverter
         'alpha', 'alpha_num', 'alpha_dash', 'url', 'between',
         'confirmed', 'size', 'in', 'not_in', 'boolean', 'date',
         'after', 'before', 'regex', 'same', 'different', 'digits',
-        'digits_between', 'string', 'nullable'
+        'digits_between', 'string', 'nullable', 'accepted'
     ];
 
     protected array $ajaxRules = [

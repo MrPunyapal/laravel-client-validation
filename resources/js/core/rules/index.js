@@ -20,6 +20,7 @@ import before from './before.js';
 import regex from './regex.js';
 import same from './same.js';
 import different from './different.js';
+import accepted from './accepted.js';
 
 export default {
     required,
@@ -44,6 +45,7 @@ export default {
     regex,
     same,
     different,
+    accepted,
 
     digits: integer,
     digits_between: between,
