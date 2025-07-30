@@ -3,3 +3,6 @@ parameters:
         -
             message: '#Trait .* is used zero times and is not analysed#'
             path: src/Livewire/WithClientValidation.php
+        -
+            message: '#Call to an undefined method Illuminate\\Foundation\\Http\\FormRequest::rules\(\)#'
+            path: src/ClientValidation.php
