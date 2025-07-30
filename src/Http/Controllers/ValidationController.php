@@ -15,13 +15,13 @@ class ValidationController extends Controller
         $rule = $request->input('rule');
         $parameters = $request->input('parameters', []);
 
-        if (!$field || !$rule) {
+        if (! $field || ! $rule) {
             return response()->json(['valid' => false, 'message' => 'Invalid request']);
         }
 
         $fullRule = $rule;
-        if (!empty($parameters)) {
-            $fullRule .= ':' . implode(',', $parameters);
+        if (! empty($parameters)) {
+            $fullRule .= ':'.implode(',', $parameters);
         }
 
         $validator = Validator::make(
@@ -34,7 +34,7 @@ class ValidationController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'valid' => false,
-                'message' => $validator->errors()->first($field)
+                'message' => $validator->errors()->first($field),
             ]);
         }
 

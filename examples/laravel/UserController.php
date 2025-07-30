@@ -37,7 +37,7 @@ class UserController extends Controller
     {
         // For API endpoints, you can return validation rules as JSON
         return response()->json([
-            'validation' => ClientValidation::fromRequest(CreateUserRequest::class)
+            'validation' => ClientValidation::fromRequest(CreateUserRequest::class),
         ]);
     }
 }

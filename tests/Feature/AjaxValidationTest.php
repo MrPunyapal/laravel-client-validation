@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use MrPunyapal\ClientValidation\Http\Controllers\ValidationController;
 
 it('validates field successfully with valid data', function () {
-    $controller = new ValidationController();
+    $controller = new ValidationController;
 
     $request = Request::create('/validate', 'POST', [
         'field' => 'email',
@@ -12,7 +12,7 @@ it('validates field successfully with valid data', function () {
         'rule' => 'email',
         'parameters' => [],
         'messages' => [],
-        'attributes' => []
+        'attributes' => [],
     ]);
 
     $response = $controller->validate($request);
@@ -24,7 +24,7 @@ it('validates field successfully with valid data', function () {
 });
 
 it('validates field and returns error for invalid data', function () {
-    $controller = new ValidationController();
+    $controller = new ValidationController;
 
     $request = Request::create('/validate', 'POST', [
         'field' => 'email',
@@ -32,7 +32,7 @@ it('validates field and returns error for invalid data', function () {
         'rule' => 'email',
         'parameters' => [],
         'messages' => [],
-        'attributes' => []
+        'attributes' => [],
     ]);
 
     $response = $controller->validate($request);
@@ -45,7 +45,7 @@ it('validates field and returns error for invalid data', function () {
 });
 
 it('validates field with parameters', function () {
-    $controller = new ValidationController();
+    $controller = new ValidationController;
 
     $request = Request::create('/validate', 'POST', [
         'field' => 'name',
@@ -53,7 +53,7 @@ it('validates field with parameters', function () {
         'rule' => 'min',
         'parameters' => ['3'],
         'messages' => [],
-        'attributes' => []
+        'attributes' => [],
     ]);
 
     $response = $controller->validate($request);
@@ -64,7 +64,7 @@ it('validates field with parameters', function () {
 });
 
 it('handles custom messages', function () {
-    $controller = new ValidationController();
+    $controller = new ValidationController;
 
     $request = Request::create('/validate', 'POST', [
         'field' => 'email',
@@ -72,7 +72,7 @@ it('handles custom messages', function () {
         'rule' => 'email',
         'parameters' => [],
         'messages' => ['email' => 'Custom email error message'],
-        'attributes' => []
+        'attributes' => [],
     ]);
 
     $response = $controller->validate($request);
@@ -83,7 +83,7 @@ it('handles custom messages', function () {
 });
 
 it('handles custom attributes', function () {
-    $controller = new ValidationController();
+    $controller = new ValidationController;
 
     $request = Request::create('/validate', 'POST', [
         'field' => 'user_email',
@@ -91,7 +91,7 @@ it('handles custom attributes', function () {
         'rule' => 'email',
         'parameters' => [],
         'messages' => [],
-        'attributes' => ['user_email' => 'Email Address']
+        'attributes' => ['user_email' => 'Email Address'],
     ]);
 
     $response = $controller->validate($request);
@@ -102,7 +102,7 @@ it('handles custom attributes', function () {
 });
 
 it('returns error for missing required parameters', function () {
-    $controller = new ValidationController();
+    $controller = new ValidationController;
 
     $request = Request::create('/validate', 'POST', [
         'value' => 'test@example.com',
@@ -117,7 +117,7 @@ it('returns error for missing required parameters', function () {
 });
 
 it('handles complex validation rules', function () {
-    $controller = new ValidationController();
+    $controller = new ValidationController;
 
     $request = Request::create('/validate', 'POST', [
         'field' => 'status',
@@ -125,7 +125,7 @@ it('handles complex validation rules', function () {
         'rule' => 'in',
         'parameters' => ['active', 'inactive', 'pending'],
         'messages' => [],
-        'attributes' => []
+        'attributes' => [],
     ]);
 
     $response = $controller->validate($request);

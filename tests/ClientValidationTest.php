@@ -138,4 +138,3 @@ it('filters out unsupported validation rules', function () {
         ->and($decoded['name'])->toContain('string')
         ->and($decoded['name'])->not->toContain('exists:categories,name');
 });
-

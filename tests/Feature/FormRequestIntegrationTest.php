@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Foundation\Http\FormRequest;
-use MrPunyapal\ClientValidation\Facades\ClientValidation;
 
 // Simple test FormRequest that doesn't auto-validate
 class SimpleTestFormRequest extends FormRequest
@@ -43,7 +42,7 @@ it('can extract validation data from FormRequest class string', function () {
     $clientValidation = new \MrPunyapal\ClientValidation\ClientValidation($converter);
 
     // Manually create instance and extract data
-    $request = new SimpleTestFormRequest();
+    $request = new SimpleTestFormRequest;
     $rules = $request->rules();
     $messages = $request->messages();
     $attributes = $request->attributes();
@@ -75,7 +74,7 @@ it('can extract validation data from FormRequest class string', function () {
 });
 
 it('handles FormRequest methods correctly', function () {
-    $request = new SimpleTestFormRequest();
+    $request = new SimpleTestFormRequest;
 
     expect($request->rules())->toBeArray()
         ->and($request->rules())->toHaveKey('name')
@@ -84,14 +83,14 @@ it('handles FormRequest methods correctly', function () {
 });
 
 it('throws exception for invalid class string', function () {
-    expect(fn() => app('InvalidClass'))->toThrow(\Illuminate\Contracts\Container\BindingResolutionException::class);
+    expect(fn () => app('InvalidClass'))->toThrow(\Illuminate\Contracts\Container\BindingResolutionException::class);
 });
 
 it('merges FormRequest data with defaults', function () {
     config(['client-validation.messages.required' => 'Default required message']);
     config(['client-validation.attributes.email' => 'default email']);
 
-    $request = new SimpleTestFormRequest();
+    $request = new SimpleTestFormRequest;
     $messages = $request->messages();
     $attributes = $request->attributes();
 
@@ -109,11 +108,27 @@ it('merges FormRequest data with defaults', function () {
 });
 
 it('handles FormRequest with empty methods gracefully', function () {
-    $request = new class extends FormRequest {
-        public function authorize(): bool { return true; }
-        public function rules(): array { return ['name' => 'required']; }
-        public function messages(): array { return []; }
-        public function attributes(): array { return []; }
+    $request = new class extends FormRequest
+    {
+        public function authorize(): bool
+        {
+            return true;
+        }
+
+        public function rules(): array
+        {
+            return ['name' => 'required'];
+        }
+
+        public function messages(): array
+        {
+            return [];
+        }
+
+        public function attributes(): array
+        {
+            return [];
+        }
     };
 
     expect($request->rules())->toHaveKey('name')

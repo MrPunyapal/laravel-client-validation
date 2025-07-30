@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Route;
 use MrPunyapal\ClientValidation\Facades\ClientValidation;
-use MrPunyapal\ClientValidation\Http\Controllers\ValidationController;
 
 class CompleteFormRequest extends FormRequest
 {
@@ -117,7 +115,8 @@ it('handles complete real-world form validation workflow', function () {
     // Test attributes are included
     expect($convertedAttributes['name'])->toBe('full name')
         ->and($convertedAttributes['email'])->toBe('email address');
-});it('integrates validation workflow end-to-end', function () {
+});
+it('integrates validation workflow end-to-end', function () {
     // Test that rules, messages, and attributes work together
     $rules = [
         'email' => 'required|email',

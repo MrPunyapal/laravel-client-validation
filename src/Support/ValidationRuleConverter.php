@@ -9,11 +9,11 @@ class ValidationRuleConverter
         'alpha', 'alpha_num', 'alpha_dash', 'url', 'between',
         'confirmed', 'size', 'in', 'not_in', 'boolean', 'date',
         'after', 'before', 'regex', 'same', 'different', 'digits',
-        'digits_between', 'string', 'nullable', 'accepted'
+        'digits_between', 'string', 'nullable', 'accepted',
     ];
 
     protected array $ajaxRules = [
-        'unique', 'exists', 'password', 'current_password'
+        'unique', 'exists', 'password', 'current_password',
     ];
 
     public function convert(array $rules): string
@@ -22,7 +22,7 @@ class ValidationRuleConverter
 
         foreach ($rules as $field => $fieldRules) {
             $convertedRules = $this->convertFieldRules($fieldRules);
-            if (!empty($convertedRules)) {
+            if (! empty($convertedRules)) {
                 $jsRules[$field] = $convertedRules;
             }
         }
@@ -82,6 +82,7 @@ class ValidationRuleConverter
     protected function isValidJsRule(string $rule): bool
     {
         $ruleName = explode(':', $rule, 2)[0];
+
         return in_array($ruleName, $this->clientOnlyRules);
     }
 }

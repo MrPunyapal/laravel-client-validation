@@ -9,18 +9,21 @@ trait WithClientValidation
     public function getClientRulesProperty()
     {
         $rules = $this->extractRules();
+
         return ClientValidation::rules($rules);
     }
 
     public function getClientMessagesProperty()
     {
         $messages = $this->extractMessages();
+
         return ClientValidation::messages($messages);
     }
 
     public function getClientAttributesProperty()
     {
         $attributes = $this->extractValidationAttributes();
+
         return ClientValidation::attributes($attributes);
     }
 

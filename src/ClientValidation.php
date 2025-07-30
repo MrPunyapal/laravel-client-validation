@@ -20,7 +20,7 @@ class ClientValidation
             $request = app($request);
         }
 
-        if (!$request instanceof FormRequest) {
+        if (! $request instanceof FormRequest) {
             throw new \InvalidArgumentException('Must be a FormRequest class or instance');
         }
 
@@ -59,7 +59,7 @@ class ClientValidation
 
     public function renderAssets(): string
     {
-        if (!config('client-validation.auto_include_assets', true)) {
+        if (! config('client-validation.auto_include_assets', true)) {
             return '';
         }
 
@@ -80,12 +80,14 @@ class ClientValidation
     protected function mergeMessages(array $messages): array
     {
         $defaultMessages = config('client-validation.messages', []);
+
         return array_merge($defaultMessages, $messages);
     }
 
     protected function mergeAttributes(array $attributes): array
     {
         $defaultAttributes = config('client-validation.attributes', []);
+
         return array_merge($defaultAttributes, $attributes);
     }
 }

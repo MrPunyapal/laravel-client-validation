@@ -62,7 +62,8 @@ it('handles mixed client and AJAX rules', function () {
 it('handles object rules correctly', function () {
     $converter = new ValidationRuleConverter;
 
-    $ruleObject = new class {
+    $ruleObject = new class
+    {
         public function __toString()
         {
             return 'required|email';
