@@ -1,60 +1,36 @@
 # Dependencies
 node_modules/
 vendor/
-packages/*/node_modules/
-packages/*/vendor/
 
 # Build outputs
-dist/
 build/
-packages/*/dist/
-packages/*/build/
+resources/js/dist/
 
 # Environment files
 .env
-.env.local
-.env.*.local
-.env.testing
+.env.*
 
 # Logs
-logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
 # Runtime data
-pids
 *.pid
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
+# Coverage directory
 coverage/
 *.lcov
 
-# Dependency directories
-jspm_packages/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Optional npm cache directory
+# Cache directories
 .npm
-
-# ESLint cache
 .eslintcache
-
-# StyleLint cache
 .stylelintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
+.cache
+.parcel-cache
 
 # Optional REPL history
 .node_repl_history
@@ -65,63 +41,13 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Storybook build outputs
-.out
-.storybook-out
-
-# Vuepress build output
-.vuepress/dist
-
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# Yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
-
 # PHP specific
 composer.phar
-/vendor/
 .env.backup
-
-# Laravel specific
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
-.phpunit.result.cache
-storage/
-bootstrap/cache/
 
 # PHPUnit
 .phpunit.cache
-phpunit.xml
+.phpunit.result.cache
 
 # IDE files
 .vscode/*
@@ -140,25 +66,10 @@ phpunit.xml
 .Trashes
 ehthumbs.db
 Thumbs.db
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
 
 # Temporary files
 *.tmp
 *.temp
-
-# Package files
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
 
 # Backup files
 *.bak
