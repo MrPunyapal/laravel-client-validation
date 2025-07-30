@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Laravel Client Validation - Complete Demo</title>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .validation-error { color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem; }
+        .is-valid { border-color: #10b981; background-color: #f0fdf4; }
+        .is-invalid { border-color: #dc2626; background-color: #fef2f2; }
+        input, textarea, select {
+            border: 1px solid #d1d5db;
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            width: 100%;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+        }
+        .form-group { margin-bottom: 1rem; }
+        .btn {
+            background: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+        .btn:hover { background: #2563eb; }
+        .btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        .container { max-width: 800px; margin: 2rem auto; padding: 1rem; }
+        .demo-section { margin-bottom: 3rem; padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; }
+        .demo-section h2 { margin-top: 0; color: #374151; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+        .success-message { color: #059669; background: #ecfdf5; padding: 0.5rem; border-radius: 0.375rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Laravel Client Validation - Complete Demo</h1>
+        <p>This demo showcases all features of the Laravel Client Validation package with Alpine.js integration.</p>
+
+        <!-- Demo 1: Basic Validation -->
+        <div class="demo-section">
+            <h2>1. Basic Field Validation</h2>
+            <p>Manual validation trigger with basic rules</p>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="basic_email" x-validate="'required|email'" placeholder="Enter your email">
+                <button class="btn" onclick="document.querySelector('[name=basic_email]').validate()">Validate Email</button>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="basic_password" x-validate="'required|min:8'" placeholder="Enter password (min 8 chars)">
+                <button class="btn" onclick="document.querySelector('[name=basic_password]').validate()">Validate Password</button>
+            </div>
+        </div>
+
+        <!-- Demo 2: Live Validation -->
+        <div class="demo-section">
+            <h2>2. Live Validation (validates as you type)</h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" x-validate.live="'required|alpha_dash|min:3|max:20'" placeholder="Enter username">
+                    <small>Only letters, numbers, dashes, and underscores allowed</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" name="age" x-validate.live="'required|integer|min:18|max:120'" placeholder="Enter your age">
+                </div>
+
+                <div class="form-group">
+                    <label>Website URL</label>
+                    <input type="url" name="website" x-validate.live="'nullable|url'" placeholder="https://example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Pattern</label>
+                    <input type="tel" name="phone" x-validate.live="'required|regex:/^[0-9]{10,15}$/'" placeholder="1234567890">
+                    <small>10-15 digits only</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 3: Form Validation -->
+        <div class="demo-section">
+            <h2>3. Form Validation (validates on submit)</h2>
+            <form onsubmit="return handleFormSubmit(event)">
+                <div class="grid">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" x-validate.form="'required|string|min:2'" placeholder="John">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" x-validate.form="'required|string|min:2'" placeholder="Doe">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status" x-validate.form="'required|in:active,inactive,pending'">
+                            <option value="">Select status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea name="bio" x-validate.form="'nullable|string|max:500'" placeholder="Tell us about yourself" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Submit Form</button>
+                <div id="form-result"></div>
+            </form>
+        </div>
+
+        <!-- Demo 4: Advanced Alpine.js Data Validation -->
+        <div class="demo-section">
+            <h2>4. Advanced Alpine.js Form with Data Binding</h2>
+            <div x-data="validateForm({
+                email: 'required|email',
+                password: 'required|min:8',
+                password_confirmation: 'required|same:password',
+                terms: 'required|boolean'
+            }, {
+                'same': 'The :attribute and :other must match.',
+                'boolean': 'You must accept the terms and conditions.'
+            }, {
+                email: 'email address',
+                password_confirmation: 'password confirmation'
+            })">
+                <form @submit.prevent="submitForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" x-model="form.email" @blur="validate('email')" placeholder="user@example.com">
+                        <div x-show="hasError('email')" x-text="getError('email')" class="validation-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" x-model="form.password" @blur="validate('password')" placeholder="Enter password">
+                        <div x-show="hasError('password')" x-text="getError('password')" class="validation-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="password_confirmation" x-model="form.password_confirmation" @blur="validate('password_confirmation')" placeholder="Confirm password">
+                        <div x-show="hasError('password_confirmation')" x-text="getError('password_confirmation')" class="validation-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="terms" x-model="form.terms" @change="validate('terms')" value="1">
+                            I accept the terms and conditions
+                        </label>
+                        <div x-show="hasError('terms')" x-text="getError('terms')" class="validation-error"></div>
+                    </div>
+
+                    <button type="submit" class="btn" :disabled="isValidating || !isValid()">
+                        <span x-show="isValidating">Validating...</span>
+                        <span x-show="!isValidating">Create Account</span>
+                    </button>
+
+                    <div x-show="isValid() && Object.keys(form).some(key => form[key])" class="success-message">
+                        All fields are valid! ✓
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Demo 5: Complex Validation Rules -->
+        <div class="demo-section">
+            <h2>5. Complex Validation Scenarios</h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label>Credit Card Format</label>
+                    <input type="text" name="credit_card" x-validate.live="'required|regex:/^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/'" placeholder="1234-5678-9012-3456">
+                </div>
+
+                <div class="form-group">
+                    <label>Alphanumeric Code</label>
+                    <input type="text" name="code" x-validate.live="'required|alpha_num|size:6'" placeholder="ABC123">
+                    <small>Exactly 6 alphanumeric characters</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" name="tags" x-validate.live="'nullable|regex:/^[a-zA-Z0-9,\s]+$/'" placeholder="tag1, tag2, tag3">
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" name="dob" x-validate.live="'required|date|before:today'" placeholder="YYYY-MM-DD">
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 6: Real-time Feedback -->
+        <div class="demo-section">
+            <h2>6. Real-time Validation Feedback</h2>
+            <div x-data="{
+                fieldValue: '',
+                validationResult: null,
+                async validateOnType() {
+                    if (!this.fieldValue) {
+                        this.validationResult = null;
+                        return;
+                    }
+                    const input = this.$refs.realTimeInput;
+                    const isValid = await input.validate();
+                    this.validationResult = isValid ? 'valid' : 'invalid';
+                }
+            }">
+                <div class="form-group">
+                    <label>Real-time Email Validation</label>
+                    <input
+                        type="email"
+                        name="realtime_email"
+                        x-model="fieldValue"
+                        x-ref="realTimeInput"
+                        x-validate.live="'required|email'"
+                        @input.debounce.500ms="validateOnType()"
+                        placeholder="Type email to see real-time validation"
+                    >
+                    <div x-show="validationResult === 'valid'" class="success-message">✓ Valid email address</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Include the validation JavaScript with configuration
+        window.clientValidationConfig = {
+            ajaxUrl: '/client-validation/validate',
+            enableAjax: true,
+            fieldStyling: {
+                enabled: true,
+                validClass: 'is-valid',
+                invalidClass: 'is-invalid',
+                removeClasses: ['is-valid', 'is-invalid']
+            },
+            errorTemplate: {
+                enabled: true,
+                containerClass: 'validation-error',
+                position: 'after',
+                showOn: ['fail']
+            }
+        };
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const resultDiv = document.getElementById('form-result');
+            resultDiv.innerHTML = '<div class="success-message">Form submitted successfully! (This is just a demo)</div>';
+            return false;
+        }
+    </script>
+
+    <!-- Include client validation assets -->
+    <script src="../resources/js/index.js" type="module"></script>
+</body>
+</html>

@@ -4,12 +4,27 @@ namespace MrPunyapal\ClientValidation\Support;
 
 class ValidationRuleConverter
 {
+    protected array $clientOnlyRules = [
+        'required', 'email', 'min', 'max', 'numeric', 'integer',
+        'alpha', 'alpha_num', 'alpha_dash', 'url', 'between',
+        'confirmed', 'size', 'in', 'not_in', 'boolean', 'date',
+        'after', 'before', 'regex', 'same', 'different', 'digits',
+        'digits_between', 'string', 'nullable'
+    ];
+
+    protected array $ajaxRules = [
+        'unique', 'exists', 'password', 'current_password'
+    ];
+
     public function convert(array $rules): string
     {
         $jsRules = [];
 
         foreach ($rules as $field => $fieldRules) {
-            $jsRules[$field] = $this->convertFieldRules($fieldRules);
+            $convertedRules = $this->convertFieldRules($fieldRules);
+            if (!empty($convertedRules)) {
+                $jsRules[$field] = $convertedRules;
+            }
         }
 
         return json_encode($jsRules, JSON_UNESCAPED_SLASHES);
@@ -42,13 +57,16 @@ class ValidationRuleConverter
 
     protected function parseStringRule(string $rule): ?string
     {
-        // Handle regex patterns specially to avoid splitting on comma within the pattern
         if (strpos($rule, 'regex:') === 0) {
-            return $rule; // Keep the full regex rule as-is
+            return $rule;
         }
 
-        // For rules with parameters, keep them in Laravel format
-        // The JS validator will handle parsing them
+        $ruleName = explode(':', $rule, 2)[0];
+
+        if (in_array($ruleName, $this->ajaxRules)) {
+            return "ajax:{$rule}";
+        }
+
         return $this->isValidJsRule($rule) ? $rule : null;
     }
 
@@ -63,18 +81,7 @@ class ValidationRuleConverter
 
     protected function isValidJsRule(string $rule): bool
     {
-        // Extract rule name (before any colon)
         $ruleName = explode(':', $rule, 2)[0];
-
-        // List of rules that are supported in js/core/rules
-        $supportedRules = [
-            'required', 'email', 'min', 'max', 'numeric', 'integer',
-            'alpha', 'alpha_num', 'alpha_dash', 'url', 'between',
-            'confirmed', 'size', 'in', 'not_in', 'boolean', 'date',
-            'after', 'before', 'regex', 'same', 'different', 'digits',
-            'digits_between', 'string', 'nullable'
-        ];
-
-        return in_array($ruleName, $supportedRules);
+        return in_array($ruleName, $this->clientOnlyRules);
     }
 }

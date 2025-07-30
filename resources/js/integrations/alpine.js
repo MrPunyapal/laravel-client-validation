@@ -9,7 +9,12 @@ export default function (Alpine) {
         effect(() => {
             getRule(rule => {
                 if (rule) {
-                    validator = new Validator({ [fieldName]: rule });
+                    const options = {
+                        ajaxUrl: window.clientValidationConfig?.ajaxUrl || '/client-validation/validate',
+                        enableAjax: window.clientValidationConfig?.enableAjax !== false,
+                        ...window.clientValidationConfig?.options || {}
+                    };
+                    validator = new Validator({ [fieldName]: rule }, {}, {}, options);
                     setupValidation(el, validator, fieldName, modifiers);
                 }
             });
@@ -23,9 +28,9 @@ export default function (Alpine) {
     });
 
     function setupValidation(el, validator, fieldName, modifiers) {
-        const validateField = () => {
+        const validateField = async () => {
             const value = el.value;
-            const isValid = validator.validateField(fieldName, value);
+            const isValid = await validator.validateField(fieldName, value);
             updateFieldValidation(el, validator, fieldName, isValid);
             return isValid;
         };
@@ -41,8 +46,8 @@ export default function (Alpine) {
         } else if (modifiers.includes('form')) {
             const form = el.closest('form');
             if (form) {
-                const submitHandler = (e) => {
-                    if (!validateField()) {
+                const submitHandler = async (e) => {
+                    if (!(await validateField())) {
                         e.preventDefault();
                         return false;
                     }
@@ -56,35 +61,74 @@ export default function (Alpine) {
     }
 
     function updateFieldValidation(el, validator, fieldName, isValid) {
-        el.classList.remove('is-valid', 'is-invalid');
-        el.classList.add(isValid ? 'is-valid' : 'is-invalid');
+        const config = window.clientValidationConfig || {};
+        const fieldConfig = config.fieldStyling || {};
+        const errorConfig = config.errorTemplate || {};
 
+        // Update field styling
+        if (fieldConfig.enabled !== false) {
+            const removeClasses = fieldConfig.removeClasses || ['is-valid', 'is-invalid'];
+            const validClass = fieldConfig.validClass || 'is-valid';
+            const invalidClass = fieldConfig.invalidClass || 'is-invalid';
+
+            el.classList.remove(...removeClasses);
+            el.classList.add(isValid ? validClass : invalidClass);
+        }
+
+        // Handle error display
         const errorId = `${fieldName}-error`;
         let errorEl = document.getElementById(errorId);
 
-        if (!isValid) {
+        if (!isValid && errorConfig.enabled !== false) {
             const errorMessage = validator.errors[fieldName]?.[0] || '';
+            const template = errorConfig.template || '<div class="{class}" id="{id}" style="display: {display}">{message}</div>';
+            const containerClass = errorConfig.containerClass || 'validation-error text-red-500 text-sm mt-1';
 
             if (!errorEl) {
-                errorEl = document.createElement('div');
-                errorEl.id = errorId;
-                errorEl.className = 'validation-error text-red-500 text-sm mt-1';
-                el.parentNode.insertBefore(errorEl, el.nextSibling);
-            }
+                const templateHtml = template
+                    .replace('{class}', containerClass)
+                    .replace('{id}', errorId)
+                    .replace('{display}', 'block')
+                    .replace('{message}', errorMessage);
 
-            errorEl.textContent = errorMessage;
-            errorEl.style.display = 'block';
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = templateHtml;
+                errorEl = tempDiv.firstElementChild;
+
+                const position = errorConfig.position || 'after';
+                if (position === 'before') {
+                    el.parentNode.insertBefore(errorEl, el);
+                } else {
+                    el.parentNode.insertBefore(errorEl, el.nextSibling);
+                }
+            } else {
+                errorEl.textContent = errorMessage;
+                errorEl.style.display = 'block';
+            }
         } else if (errorEl) {
-            errorEl.style.display = 'none';
+            const showOn = errorConfig.showOn || ['fail'];
+            if (isValid && !showOn.includes('pass')) {
+                errorEl.style.display = 'none';
+            } else if (isValid) {
+                errorEl.textContent = '';
+                errorEl.style.display = 'block';
+            }
         }
 
         el.dispatchEvent(new CustomEvent('validation', {
             detail: { isValid, errors: validator.errors[fieldName] || [] }
         }));
     }
-    Alpine.data('validateForm', (rules = {}, messages = {}, attributes = {}) => {
+    Alpine.data('validateForm', (rules = {}, messages = {}, attributes = {}, options = {}) => {
+        const config = {
+            ajaxUrl: window.clientValidationConfig?.ajaxUrl || '/client-validation/validate',
+            enableAjax: window.clientValidationConfig?.enableAjax !== false,
+            ...window.clientValidationConfig?.options || {},
+            ...options
+        };
+
         return {
-            validator: new Validator(rules, messages, attributes),
+            validator: new Validator(rules, messages, attributes, config),
             errors: {},
             form: {},
             isValidating: false,
@@ -112,14 +156,14 @@ export default function (Alpine) {
                 }
             },
 
-            validate(field = null) {
+            async validate(field = null) {
                 this.isValidating = true;
                 let isValid;
 
                 if (field) {
-                    isValid = this.validateSingleField(field);
+                    isValid = await this.validateSingleField(field);
                 } else {
-                    isValid = this.validator.validate(this.form);
+                    isValid = await this.validator.validate(this.form);
                     this.errors = { ...this.validator.errors };
                 }
 
@@ -127,15 +171,15 @@ export default function (Alpine) {
                 return isValid;
             },
 
-            validateSingleField(field) {
+            async validateSingleField(field) {
                 const value = this.form[field] || '';
-                const isValid = this.validator.validateField(field, value);
+                const isValid = await this.validator.validateField(field, value);
                 this.updateErrors(field, isValid, this.validator.errors[field] || []);
                 return isValid;
             },
 
-            submitForm(event) {
-                if (!this.validate()) {
+            async submitForm(event) {
+                if (!(await this.validate())) {
                     event.preventDefault();
                     return false;
                 }

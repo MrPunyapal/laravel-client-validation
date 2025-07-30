@@ -1,15 +1,21 @@
 import validationRules from './rules/index.js';
 
 class Validator {
-    constructor(rules = {}, messages = {}, attributes = {}) {
+    constructor(rules = {}, messages = {}, attributes = {}, options = {}) {
         this.rules = rules;
         this.messages = messages;
         this.attributes = attributes;
         this.errors = {};
         this.validationRules = validationRules;
+        this.options = {
+            ajaxUrl: '/client-validation/validate',
+            ajaxTimeout: 5000,
+            enableAjax: true,
+            ...options
+        };
     }
 
-    validateField(field, value, rules) {
+    async validateField(field, value, rules) {
         const fieldRules = rules || this.rules[field] || '';
         if (!fieldRules) return true;
 
@@ -19,18 +25,23 @@ class Validator {
 
         for (const rule of rulesList) {
             const [ruleName, ...paramsParts] = rule.split(':');
-            // Handle comma-separated parameters for rules like 'in:active,inactive,pending'
-            // but NOT for regex patterns
             let params = paramsParts;
             if (paramsParts.length === 1 && paramsParts[0] &&
                 paramsParts[0].includes(',') && ruleName !== 'regex') {
                 params = paramsParts[0].split(',');
             }
 
-            // Pass the full rules list as context to individual rules
             const ruleContext = { rules: rulesList, allData: this.allData || {} };
 
-            if (!this._testRule(ruleName, value, params, field, ruleContext)) {
+            // Handle AJAX rules
+            if (rule.startsWith('ajax:')) {
+                const ajaxRule = rule.substring(5); // Remove 'ajax:' prefix
+                const ajaxResult = await this._testAjaxRule(ajaxRule, value, field);
+                if (!ajaxResult.valid) {
+                    isValid = false;
+                    this.errors[field].push(ajaxResult.message || this._formatMessage(ruleName, field, params));
+                }
+            } else if (!this._testRule(ruleName, value, params, field, ruleContext)) {
                 isValid = false;
                 this.errors[field].push(this._formatMessage(ruleName, field, params));
             }
@@ -39,19 +50,56 @@ class Validator {
         return isValid;
     }
 
-    validate(data = {}) {
+    async validate(data = {}) {
         this.errors = {};
         this.allData = data;
         let isValid = true;
 
         for (const field in this.rules) {
             const value = data[field] !== undefined ? data[field] : '';
-            if (!this.validateField(field, value)) {
+            if (!(await this.validateField(field, value))) {
                 isValid = false;
             }
         }
 
         return isValid;
+    }
+
+    async _testAjaxRule(rule, value, field) {
+        if (!this.options.enableAjax) {
+            console.warn(`AJAX validation disabled but rule '${rule}' requires server validation`);
+            return { valid: true };
+        }
+
+        try {
+            const [ruleName, ...paramsParts] = rule.split(':');
+            const response = await fetch(this.options.ajaxUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                },
+                body: JSON.stringify({
+                    field,
+                    value,
+                    rule: ruleName,
+                    parameters: paramsParts.length > 0 ? paramsParts[0].split(',') : [],
+                    messages: this.messages,
+                    attributes: this.attributes
+                }),
+                signal: AbortSignal.timeout(this.options.ajaxTimeout)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('AJAX validation error:', error);
+            return { valid: true, message: 'Validation temporarily unavailable' };
+        }
     }
 
     _parseRules(rules) {
