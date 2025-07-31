@@ -1,11 +1,23 @@
 <?php
 
 use MrPunyapal\ClientValidation\ClientValidation;
+use MrPunyapal\ClientValidation\Core\ValidationManager;
+use MrPunyapal\ClientValidation\Core\RuleParser;
+use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
 use MrPunyapal\ClientValidation\Support\ValidationRuleConverter;
 
+function createClientValidation(): ClientValidation {
+    $ruleParser = new RuleParser();
+    $hooks = new ValidationHooks();
+    // Use the actual Laravel config instead of empty array
+    $config = config('client-validation', []);
+    $manager = new ValidationManager($ruleParser, $hooks, $config);
+    $converter = new ValidationRuleConverter();
+    return new ClientValidation($manager, $converter);
+}
+
 it('can generate complete validation configuration', function () {
-    $converter = new ValidationRuleConverter;
-    $clientValidation = new ClientValidation($converter);
+    $clientValidation = createClientValidation();
 
     $rules = [
         'name' => 'required|string|min:2',
@@ -47,8 +59,7 @@ it('merges custom data with configuration defaults', function () {
     config(['client-validation.messages.required' => 'Default required message']);
     config(['client-validation.attributes.email' => 'default email']);
 
-    $converter = new ValidationRuleConverter;
-    $clientValidation = new ClientValidation($converter);
+    $clientValidation = createClientValidation();
 
     $result = $clientValidation->generate(
         ['name' => 'required'],
@@ -72,8 +83,7 @@ it('merges custom data with configuration defaults', function () {
 });
 
 it('handles empty inputs gracefully', function () {
-    $converter = new ValidationRuleConverter;
-    $clientValidation = new ClientValidation($converter);
+    $clientValidation = createClientValidation();
 
     $result = $clientValidation->generate([], [], []);
     $decoded = json_decode($result, true);
@@ -84,8 +94,7 @@ it('handles empty inputs gracefully', function () {
 });
 
 it('preserves JSON encoding format for complex data', function () {
-    $converter = new ValidationRuleConverter;
-    $clientValidation = new ClientValidation($converter);
+    $clientValidation = createClientValidation();
 
     $rules = [
         'tags' => 'required|regex:/^[a-zA-Z0-9,\s]+$/',
@@ -108,8 +117,7 @@ it('handles nested message structures correctly', function () {
         'client-validation.messages.min.numeric' => 'Number must be at least :min',
     ]);
 
-    $converter = new ValidationRuleConverter;
-    $clientValidation = new ClientValidation($converter);
+    $clientValidation = createClientValidation();
 
     $result = $clientValidation->generate(['name' => 'required|min:3']);
     $decoded = json_decode($result, true);

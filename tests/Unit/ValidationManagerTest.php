@@ -7,6 +7,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class TestFormRequest extends FormRequest
 {
+    public function authorize()
+    {
+        return true;
+    }
+
     public function rules()
     {
         return [
@@ -42,7 +47,10 @@ describe('Validation Manager', function () {
     });
 
     it('can create context from FormRequest', function () {
-        $context = $this->manager->fromRequest(TestFormRequest::class);
+        // Create a FormRequest instance directly to avoid the validation lifecycle
+        $request = new TestFormRequest();
+
+        $context = $this->manager->fromRequest($request);
 
         expect($context)->toBeInstanceOf(\MrPunyapal\ClientValidation\Core\ValidationContext::class);
         expect($context->getRules()->getFields())->toContain('name', 'email', 'password', 'age');
@@ -86,11 +94,12 @@ describe('Validation Manager', function () {
         expect($decoded)->toHaveKey('rules');
         expect($decoded)->toHaveKey('ajax_rules');
         expect($decoded)->toHaveKey('config');
-        expect($decoded['rules'])->toHaveKey('title', 'content');
+        expect($decoded['rules'])->toHaveKey('title');
+        expect($decoded['rules'])->toHaveKey('content');
     });
 
     it('can extend with custom rules', function () {
-        $this->manager->extend('custom_rule', function ($value) {
+        $this->manager->extend('custom_rule', function ($attribute, $value, $parameters) {
             return strlen($value) > 5;
         }, 'The :attribute must be more than 5 characters.');
 
@@ -112,7 +121,9 @@ describe('Validation Manager', function () {
         $context = $this->manager->fromRules($rules);
         $payload = $context->toClientPayload();
 
-        expect($payload['rules'])->toHaveKey('name', 'email', 'password');
+        expect($payload['rules'])->toHaveKey('name');
+        expect($payload['rules'])->toHaveKey('email');
+        expect($payload['rules'])->toHaveKey('password');
         expect($payload['ajax_rules'])->toHaveKey('email');
         expect($payload['ajax_rules'])->not->toHaveKey('name');
         expect($payload['ajax_rules'])->not->toHaveKey('password');

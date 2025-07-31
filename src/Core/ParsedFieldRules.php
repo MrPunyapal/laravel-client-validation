@@ -64,7 +64,12 @@ class ParsedFieldRules
 
     public function toClientRuleStrings(): array
     {
-        return array_map(fn(RuleData $rule) => $rule->getString(), $this->clientRules);
+        $rules = array_map(fn(RuleData $rule) => $rule->getString(), $this->clientRules);
+
+        // Add server rules prefixed with 'ajax:'
+        $serverRules = array_map(fn(RuleData $rule) => 'ajax:' . $rule->getString(), $this->serverRules);
+
+        return array_merge($rules, $serverRules);
     }
 
     public function toServerRuleStrings(): array

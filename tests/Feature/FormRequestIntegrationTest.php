@@ -38,8 +38,9 @@ class SimpleTestFormRequest extends FormRequest
 
 it('can extract validation data from FormRequest class string', function () {
     // Test using class string to avoid instantiation issues
+    $manager = app(\MrPunyapal\ClientValidation\Core\ValidationManager::class);
     $converter = app(\MrPunyapal\ClientValidation\Support\ValidationRuleConverter::class);
-    $clientValidation = new \MrPunyapal\ClientValidation\ClientValidation($converter);
+    $clientValidation = new \MrPunyapal\ClientValidation\ClientValidation($manager, $converter);
 
     // Manually create instance and extract data
     $request = new SimpleTestFormRequest;

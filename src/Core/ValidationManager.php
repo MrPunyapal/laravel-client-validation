@@ -122,10 +122,17 @@ class ValidationManager
     {
         $parsedRules = $this->parser->parse($rules);
 
+        // Merge with default messages and attributes from config
+        $defaultMessages = $this->config['messages'] ?? [];
+        $defaultAttributes = $this->config['attributes'] ?? [];
+
+        $mergedMessages = array_merge($defaultMessages, $messages);
+        $mergedAttributes = array_merge($defaultAttributes, $attributes);
+
         return new ValidationContext(
             rules: $parsedRules,
-            messages: $messages,
-            attributes: $attributes,
+            messages: $mergedMessages,
+            attributes: $mergedAttributes,
             config: $this->config,
             hooks: $this->hooks
         );

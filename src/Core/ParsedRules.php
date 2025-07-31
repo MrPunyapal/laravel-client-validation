@@ -47,7 +47,7 @@ class ParsedRules
         $clientRules = [];
 
         foreach ($this->rules as $field => $fieldRules) {
-            if ($fieldRules->hasClientRules()) {
+            if ($fieldRules->hasClientRules() || $fieldRules->hasServerRules()) {
                 $clientRules[$field] = $fieldRules->toClientRuleStrings();
             }
         }
