@@ -128,12 +128,25 @@ class Validator {
 
         message = message.replace(':attribute', this._getAttributeName(field));
 
-        params.forEach((param, i) => {
-            message = message.replace(`:param${i + 1}`, param);
-            message = message.replace(':min', param);
-            message = message.replace(':max', param);
-            message = message.replace(':size', param);
-        });
+        if (params && params.length > 0) {
+            params.forEach((param, i) => {
+                message = message.replace(`:param${i + 1}`, param);
+                message = message.replace(':min', param);
+                message = message.replace(':max', param);
+                message = message.replace(':size', param);
+                message = message.replace(':length', param);
+                message = message.replace(':other', param);
+            });
+
+            // Handle specific rule replacements
+            if (rule === 'between' && params.length >= 2) {
+                message = message.replace(':min', params[0]).replace(':max', params[1]);
+            }
+            if (rule === 'digits_between' && params.length >= 2) {
+                message = message.replace(':min', params[0]).replace(':max', params[1]);
+            }
+        }
+
         return message;
     }
 

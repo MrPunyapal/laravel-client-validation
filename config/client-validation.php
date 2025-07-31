@@ -48,6 +48,7 @@ return [
         'show_on' => ['fail'], // 'fail', 'pass', 'both'
         'position' => 'after', // 'before', 'after'
         'template' => '<div class="{class}" id="{id}" style="display: {display}">{message}</div>',
+        'hide_on_success' => true,
     ],
 
     /*
@@ -63,6 +64,21 @@ return [
         'valid_class' => 'is-valid',
         'invalid_class' => 'is-invalid',
         'remove_classes' => ['is-valid', 'is-invalid'], // Classes to remove before applying new ones
+        'apply_on_success' => true,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Live Validation Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure behavior for live validation (x-validate.live).
+    |
+    */
+    'live_validation' => [
+        'debounce' => 300, // milliseconds
+        'trigger_on' => ['input', 'change'], // DOM events
+        'validate_on_focus_lost' => true,
     ],
 
     /*
@@ -98,17 +114,22 @@ return [
         'different' => 'The :attribute and :other must be different.',
         'in' => 'The selected :attribute is invalid.',
         'not_in' => 'The selected :attribute is invalid.',
-        'between' => [
-            'string' => 'The :attribute must be between :min and :max characters.',
-            'numeric' => 'The :attribute must be between :min and :max.',
-        ],
-        'size' => [
-            'string' => 'The :attribute must be :size characters.',
-            'numeric' => 'The :attribute must be :size.',
-        ],
+        'accepted' => 'The :attribute must be accepted.',
         'date' => 'The :attribute is not a valid date.',
         'after' => 'The :attribute must be a date after :date.',
         'before' => 'The :attribute must be a date before :date.',
+        'between' => [
+            'numeric' => 'The :attribute must be between :min and :max.',
+            'string' => 'The :attribute must be between :min and :max characters.',
+        ],
+        'size' => [
+            'numeric' => 'The :attribute must be :size.',
+            'string' => 'The :attribute must be :size characters.',
+        ],
+        'digits' => 'The :attribute must be :digits digits.',
+        'digits_between' => 'The :attribute must be between :min and :max digits.',
+        'string' => 'The :attribute must be a string.',
+        'array' => 'The :attribute must be an array.',
     ],
 
     /*

@@ -5,48 +5,59 @@
 
 A powerful Laravel package that brings server-side validation rules to the client-side using Alpine.js. Validate forms in real-time with the same rules you use in your Laravel backend, including support for FormRequest classes and AJAX fallbacks for complex validation rules.
 
-## Features
+## ✨ Features
 
 - 🚀 **Real-time validation** with Alpine.js integration
-- 📝 **FormRequest support** - Extract rules, messages, and attributes automatically
+- 📝 **FormRequest support** - Extract rules, messages, and attributes automatically  
 - ⚡ **AJAX fallback** for complex rules (unique, exists, etc.)
-- 🎨 **Customizable error templates** and styling
-- 🔧 **Configurable** - Control every aspect of validation behavior
-- 🖼️ **Livewire ready** - Works seamlessly with Livewire components
+- 🎨 **Customizable templates** and styling
+- 🔧 **Zero configuration** - Works out of the box
+- 🖼️ **Livewire ready** - Seamless integration
 - 📱 **Mobile friendly** - Responsive validation UX
-- 🎯 **Zero configuration** - Works out of the box with sensible defaults
+- 🎯 **Elegant DX** - Expressive, clean code
 
-## Installation
+## 🚀 Quick Start
 
-Install via Composer:
+### 1. Install & Setup
 
 ```bash
 composer require mrpunyapal/laravel-client-validation
 ```
 
-Publish the configuration file:
+### 2. Include Assets
 
-```bash
-php artisan vendor:publish --tag="client-validation-config"
-```
-
-Publish the JavaScript assets (optional):
-
-```bash
-php artisan vendor:publish --tag="client-validation-assets"
-```
-
-## Quick Start
-
-### 1. Include Assets
-
-Add the validation assets to your layout:
+Add to your layout:
 
 ```blade
 @clientValidationAssets
 ```
 
-### 2. Basic Usage
+### 3. Start Validating
+
+**Basic field validation:**
+```html
+<input x-validate="'required|email'" placeholder="Email">
+<input x-validate.live="'required|min:3'" placeholder="Username">
+```
+
+**Complete form with FormRequest:**
+```php
+// Controller
+$validation = ClientValidation::fromRequest(CreateUserRequest::class);
+return view('users.create', compact('validation'));
+```
+
+```blade
+{{-- Blade Template --}}
+<div x-data="validateForm(@json($validation['rules']), @json($validation['messages']), @json($validation['attributes']))">
+    <form @submit.prevent="submitForm">
+        <input x-model="form.name" @blur="validate('name')">
+        <div x-show="hasError('name')" x-text="getError('name')"></div>
+        
+        <button :disabled="!isValid()">Submit</button>
+    </form>
+</div>
+```
 
 #### Direct Rule Validation
 

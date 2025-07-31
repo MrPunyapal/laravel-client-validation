@@ -21,6 +21,11 @@ import regex from './regex.js';
 import same from './same.js';
 import different from './different.js';
 import accepted from './accepted.js';
+import digits from './digits.js';
+import digitsBetween from './digits_between.js';
+import string from './string.js';
+import nullable from './nullable.js';
+import array from './array.js';
 
 export default {
     required,
@@ -46,9 +51,9 @@ export default {
     same,
     different,
     accepted,
-
-    digits: integer,
-    digits_between: between,
-    string: (value) => typeof value === 'string' || !value,
-    nullable: () => true,
+    digits,
+    digits_between: digitsBetween,
+    string,
+    nullable,
+    array,
 };
