@@ -3,39 +3,66 @@
 namespace MrPunyapal\ClientValidation;
 
 use Illuminate\Foundation\Http\FormRequest;
+use MrPunyapal\ClientValidation\Core\ValidationManager;
 use MrPunyapal\ClientValidation\Support\ValidationRuleConverter;
 
 class ClientValidation
 {
-    protected ValidationRuleConverter $converter;
+    protected ValidationManager $manager;
+    protected ValidationRuleConverter $converter; // Keep for backward compatibility
 
-    public function __construct(ValidationRuleConverter $converter)
+    public function __construct(ValidationManager $manager, ValidationRuleConverter $converter)
     {
+        $this->manager = $manager;
         $this->converter = $converter;
     }
 
     public function fromRequest(string|FormRequest $request): array
     {
-        if (is_string($request)) {
-            $request = app($request);
-        }
-
-        if (! $request instanceof FormRequest) {
-            throw new \InvalidArgumentException('Must be a FormRequest class or instance');
-        }
+        $context = $this->manager->fromRequest($request);
 
         return [
-            'rules' => $this->converter->convert($request->rules()),
-            'messages' => json_encode($this->mergeMessages($request->messages())),
-            'attributes' => json_encode($this->mergeAttributes($request->attributes())),
+            'rules' => json_encode($context->getRules()->toClientRules()),
+            'ajax_rules' => json_encode($context->getRules()->toAjaxRules()),
+            'messages' => json_encode($context->getMessages()),
+            'attributes' => json_encode($context->getAttributes()),
+            'config' => json_encode($context->getClientConfig()),
+        ];
+    }
+
+    public function fromLivewire($component): array
+    {
+        $context = $this->manager->fromLivewireComponent($component);
+
+        return [
+            'rules' => json_encode($context->getRules()->toClientRules()),
+            'ajax_rules' => json_encode($context->getRules()->toAjaxRules()),
+            'messages' => json_encode($context->getMessages()),
+            'attributes' => json_encode($context->getAttributes()),
+            'config' => json_encode($context->getClientConfig()),
         ];
     }
 
     public function rules(array $rules): string
     {
-        return $this->converter->convert($rules);
+        $context = $this->manager->fromRules($rules);
+        return json_encode($context->getRules()->toClientRules());
     }
 
+    public function directive(string $field, string $rules, array $options = []): string
+    {
+        $directive = $this->manager->createDirective($field, $rules, $options);
+        $mode = $options['mode'] ?? 'blur';
+        return $directive->toDirectiveString($mode);
+    }
+
+    public function alpineData(array $rules, array $messages = [], array $attributes = [], array $options = []): string
+    {
+        $context = $this->manager->fromRules($rules, $messages, $attributes);
+        return $context->toAlpineData();
+    }
+
+    // Backward compatibility methods
     public function messages(array $messages = []): string
     {
         return json_encode($this->mergeMessages($messages));
@@ -48,13 +75,8 @@ class ClientValidation
 
     public function generate(array $rules, array $messages = [], array $attributes = []): string
     {
-        $data = [
-            'rules' => json_decode($this->converter->convert($rules), true),
-            'messages' => $this->mergeMessages($messages),
-            'attributes' => $this->mergeAttributes($attributes),
-        ];
-
-        return json_encode($data);
+        $context = $this->manager->fromRules($rules, $messages, $attributes);
+        return $context->toAlpineData();
     }
 
     public function renderAssets(): string
@@ -77,17 +99,25 @@ class ClientValidation
         );
     }
 
+    public function extend(string $rule, callable $validator, string $message = null): void
+    {
+        $this->manager->extend($rule, $validator, $message);
+    }
+
+    public function extendClientSide(string $rule, string $jsValidator): void
+    {
+        $this->manager->extendClientSide($rule, $jsValidator);
+    }
+
     protected function mergeMessages(array $messages): array
     {
         $defaultMessages = config('client-validation.messages', []);
-
         return array_merge($defaultMessages, $messages);
     }
 
     protected function mergeAttributes(array $attributes): array
     {
         $defaultAttributes = config('client-validation.attributes', []);
-
         return array_merge($defaultAttributes, $attributes);
     }
 }

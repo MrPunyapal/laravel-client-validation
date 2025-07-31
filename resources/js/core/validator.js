@@ -1,162 +1,286 @@
-import validationRules from './rules/index.js';
+import RuleEngine from './rule-engine.js';
+import AjaxValidator from './ajax-validator.js';
+import ErrorManager from './error-manager.js';
+import EventManager from './event-manager.js';
 
-class Validator {
+/**
+ * Validator class with hook support and better architecture
+ */
+class ClientValidator {
     constructor(rules = {}, messages = {}, attributes = {}, options = {}) {
         this.rules = rules;
         this.messages = messages;
         this.attributes = attributes;
-        this.errors = {};
-        this.validationRules = validationRules;
         this.options = {
             ajaxUrl: '/client-validation/validate',
             ajaxTimeout: 5000,
             enableAjax: true,
+            debounceMs: 300,
             ...options
         };
+
+        this.ruleEngine = new RuleEngine(rules, messages, attributes);
+        this.ajaxValidator = new AjaxValidator(this.options);
+        this.errorManager = new ErrorManager(this.options);
+        this.eventManager = new EventManager();
+
+        this.validationState = new Map();
+        this.isValidating = false;
+        this.validationPromises = new Map();
     }
 
-    async validateField(field, value, rules) {
+    // Hook management
+    beforeValidate(callback) {
+        this.eventManager.on('before:validate', callback);
+        return this;
+    }
+
+    afterValidate(callback) {
+        this.eventManager.on('after:validate', callback);
+        return this;
+    }
+
+    onPasses(callback) {
+        this.eventManager.on('validation:passes', callback);
+        return this;
+    }
+
+    onFails(callback) {
+        this.eventManager.on('validation:fails', callback);
+        return this;
+    }
+
+    beforeFieldValidate(callback) {
+        this.eventManager.on('before:field-validate', callback);
+        return this;
+    }
+
+    afterFieldValidate(callback) {
+        this.eventManager.on('after:field-validate', callback);
+        return this;
+    }
+
+    // Field validation with debouncing and promise management
+    async validateField(field, value, rules = null, options = {}) {
         const fieldRules = rules || this.rules[field] || '';
-        if (!fieldRules) return true;
+        if (!fieldRules) return { valid: true, errors: [] };
 
-        const rulesList = this._parseRules(fieldRules);
-        let isValid = true;
-        this.errors[field] = [];
-
-        for (const rule of rulesList) {
-            const [ruleName, ...paramsParts] = rule.split(':');
-            let params = paramsParts;
-            if (paramsParts.length === 1 && paramsParts[0] &&
-                paramsParts[0].includes(',') && ruleName !== 'regex') {
-                params = paramsParts[0].split(',');
-            }
-
-            const ruleContext = { rules: rulesList, allData: this.allData || {} };
-
-            // Handle AJAX rules
-            if (rule.startsWith('ajax:')) {
-                const ajaxRule = rule.substring(5); // Remove 'ajax:' prefix
-                const ajaxResult = await this._testAjaxRule(ajaxRule, value, field);
-                if (!ajaxResult.valid) {
-                    isValid = false;
-                    this.errors[field].push(ajaxResult.message || this._formatMessage(ruleName, field, params));
-                }
-            } else if (!this._testRule(ruleName, value, params, field, ruleContext)) {
-                isValid = false;
-                this.errors[field].push(this._formatMessage(ruleName, field, params));
-            }
+        // Cancel any pending validation for this field
+        if (this.validationPromises.has(field)) {
+            this.validationPromises.get(field).cancel();
         }
 
-        return isValid;
+        const validationId = Date.now();
+        let cancelled = false;
+
+        const promise = new Promise(async (resolve) => {
+            if (options.debounce !== false) {
+                await this.debounce(field, this.options.debounceMs);
+            }
+
+            if (cancelled) return resolve({ valid: true, errors: [], cancelled: true });
+
+            const context = {
+                field,
+                value,
+                rules: fieldRules,
+                validationId,
+                options
+            };
+
+            await this.eventManager.emit('before:field-validate', context);
+
+            const result = await this._performFieldValidation(field, value, fieldRules, context);
+
+            if (!cancelled) {
+                this.validationState.set(field, result);
+                await this.eventManager.emit('after:field-validate', { ...context, result });
+            }
+
+            resolve(result);
+        });
+
+        promise.cancel = () => { cancelled = true; };
+        this.validationPromises.set(field, promise);
+
+        return promise;
     }
 
-    async validate(data = {}) {
-        this.errors = {};
-        this.allData = data;
+    // Form validation
+    async validate(data = {}, options = {}) {
+        this.isValidating = true;
+        const context = { data, options, startTime: Date.now() };
+
+        await this.eventManager.emit('before:validate', context);
+
         let isValid = true;
+        const results = {};
+        const validationPromises = [];
 
         for (const field in this.rules) {
             const value = data[field] !== undefined ? data[field] : '';
-            if (!(await this.validateField(field, value))) {
-                isValid = false;
-            }
+            const promise = this.validateField(field, value, null, { debounce: false });
+            validationPromises.push(promise.then(result => {
+                results[field] = result;
+                if (!result.valid) isValid = false;
+            }));
         }
 
-        return isValid;
+        await Promise.all(validationPromises);
+
+        const finalResult = {
+            valid: isValid,
+            results,
+            duration: Date.now() - context.startTime
+        };
+
+        context.result = finalResult;
+        await this.eventManager.emit('after:validate', context);
+
+        if (isValid) {
+            await this.eventManager.emit('validation:passes', context);
+        } else {
+            await this.eventManager.emit('validation:fails', context);
+        }
+
+        this.isValidating = false;
+        return finalResult;
     }
 
-    async _testAjaxRule(rule, value, field) {
-        if (!this.options.enableAjax) {
-            console.warn(`AJAX validation disabled but rule '${rule}' requires server validation`);
-            return { valid: true };
-        }
-
-        try {
-            const [ruleName, ...paramsParts] = rule.split(':');
-            const response = await fetch(this.options.ajaxUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-                },
-                body: JSON.stringify({
-                    field,
-                    value,
-                    rule: ruleName,
-                    parameters: paramsParts.length > 0 ? paramsParts[0].split(',') : [],
-                    messages: this.messages,
-                    attributes: this.attributes
-                }),
-                signal: AbortSignal.timeout(this.options.ajaxTimeout)
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('AJAX validation error:', error);
-            return { valid: true, message: 'Validation temporarily unavailable' };
-        }
+    // Get validation state
+    getFieldState(field) {
+        return this.validationState.get(field) || { valid: true, errors: [] };
     }
 
-    _parseRules(rules) {
-        if (Array.isArray(rules)) return rules;
-        return rules.split('|').filter(rule => rule.trim() !== '');
+    isFieldValid(field) {
+        return this.getFieldState(field).valid;
     }
 
-    _testRule(rule, value, params, field, context = {}) {
-        if (this.validationRules[rule]) {
-            return this.validationRules[rule](value, params, field, context);
-        }
+    getFieldErrors(field) {
+        return this.getFieldState(field).errors || [];
+    }
 
-        const method = `_${rule}Rule`;
-        if (typeof this[method] === 'function') {
-            return this[method](value, params, field, context);
-        }
+    getFirstFieldError(field) {
+        const errors = this.getFieldErrors(field);
+        return errors.length > 0 ? errors[0] : null;
+    }
 
-        console.warn(`Validation rule '${rule}' not implemented`);
+    hasError(field) {
+        return !this.isFieldValid(field);
+    }
+
+    hasAnyErrors() {
+        for (const [field, state] of this.validationState) {
+            if (!state.valid) return true;
+        }
+        return false;
+    }
+
+    isValid() {
+        if (this.validationState.size === 0) return false;
+
+        for (const field in this.rules) {
+            if (!this.isFieldValid(field)) return false;
+        }
         return true;
     }
 
-    _formatMessage(rule, field, params) {
-        let message = this.messages[`${field}.${rule}`] ||
-            this.messages[rule] ||
-            `The ${this._getAttributeName(field)} is invalid.`;
+    clearErrors(field = null) {
+        if (field) {
+            this.validationState.delete(field);
+            this.errorManager.clearFieldErrors(field);
+        } else {
+            this.validationState.clear();
+            this.errorManager.clearAllErrors();
+        }
+    }
 
-        message = message.replace(':attribute', this._getAttributeName(field));
+    // Error management
+    displayError(field, errors, options = {}) {
+        this.errorManager.displayFieldError(field, errors, options);
+    }
 
-        if (params && params.length > 0) {
-            params.forEach((param, i) => {
-                message = message.replace(`:param${i + 1}`, param);
-                message = message.replace(':min', param);
-                message = message.replace(':max', param);
-                message = message.replace(':size', param);
-                message = message.replace(':length', param);
-                message = message.replace(':other', param);
-            });
+    hideError(field) {
+        this.errorManager.hideFieldError(field);
+    }
 
-            // Handle specific rule replacements
-            if (rule === 'between' && params.length >= 2) {
-                message = message.replace(':min', params[0]).replace(':max', params[1]);
-            }
-            if (rule === 'digits_between' && params.length >= 2) {
-                message = message.replace(':min', params[0]).replace(':max', params[1]);
+    // Internal validation logic
+    async _performFieldValidation(field, value, fieldRules, context) {
+        const rulesList = this._parseRules(fieldRules);
+        const errors = [];
+        let valid = true;
+
+        for (const rule of rulesList) {
+            const result = await this._validateSingleRule(field, value, rule, context);
+            if (!result.valid) {
+                valid = false;
+                errors.push(result.message);
+                // Stop on first error unless configured otherwise
+                if (this.options.stopOnFirstError !== false) break;
             }
         }
 
-        return message;
+        return { valid, errors, field, value };
     }
 
-    _getAttributeName(field) {
-        return this.attributes[field] || field.replace(/[_-]/g, ' ');
+    async _validateSingleRule(field, value, rule, context) {
+        if (rule.startsWith('ajax:')) {
+            return await this.ajaxValidator.validateRule(field, value, rule.substring(5), {
+                messages: this.messages,
+                attributes: this.attributes,
+                context
+            });
+        }
+
+        return this.ruleEngine.validateRule(field, value, rule, context);
     }
 
-    clearErrors() {
-        this.errors = {};
+    _parseRules(rules) {
+        if (typeof rules === 'string') {
+            return rules.split('|').filter(rule => rule.trim());
+        }
+        if (Array.isArray(rules)) {
+            return rules;
+        }
+        return [];
+    }
+
+    async debounce(field, ms) {
+        return new Promise(resolve => {
+            const key = `debounce_${field}`;
+            if (this[key]) clearTimeout(this[key]);
+            this[key] = setTimeout(resolve, ms);
+        });
+    }
+
+    // Utility methods
+    setRules(rules) {
+        this.rules = { ...this.rules, ...rules };
+        this.ruleEngine.updateRules(this.rules);
+    }
+
+    setMessages(messages) {
+        this.messages = { ...this.messages, ...messages };
+        this.ruleEngine.updateMessages(this.messages);
+    }
+
+    setAttributes(attributes) {
+        this.attributes = { ...this.attributes, ...attributes };
+        this.ruleEngine.updateAttributes(this.attributes);
+    }
+
+    updateOptions(options) {
+        this.options = { ...this.options, ...options };
+        this.ajaxValidator.updateOptions(this.options);
+        this.errorManager.updateOptions(this.options);
+    }
+
+    destroy() {
+        this.clearErrors();
+        this.eventManager.removeAllListeners();
+        this.validationPromises.clear();
+        this.validationState.clear();
     }
 }
 
-export default Validator;
+export default ClientValidator;

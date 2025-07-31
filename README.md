@@ -15,6 +15,8 @@ A powerful Laravel package that brings server-side validation rules to the clien
 - 🖼️ **Livewire ready** - Seamless integration
 - 📱 **Mobile friendly** - Responsive validation UX
 - 🎯 **Elegant DX** - Expressive, clean code
+- 🎪 **Validation Hooks** - beforeValidate, afterValidate, onPasses, onFails
+- ⚡ **High Performance** - Debouncing, caching, batching
 
 ## 🚀 Quick Start
 
@@ -34,29 +36,120 @@ Add to your layout:
 
 ### 3. Start Validating
 
-**Basic field validation:**
+**Validation modes:**
 ```html
-<input x-validate="'required|email'" placeholder="Email">
-<input x-validate.live="'required|min:3'" placeholder="Username">
+<!-- Live validation (validates as you type) -->
+<input x-validate.live="'required|email|unique:users,email'">
+
+<!-- Form validation (validates on submit) -->
+<input x-validate.form="'required|min:8|confirmed'">
+
+<!-- Blur validation (validates when field loses focus) -->
+<input x-validate="'required|alpha_dash|min:3'">
 ```
 
 **Complete form with FormRequest:**
 ```php
 // Controller
+use MrPunyapal\ClientValidation\Facades\ClientValidation;
+
 $validation = ClientValidation::fromRequest(CreateUserRequest::class);
 return view('users.create', compact('validation'));
 ```
 
 ```blade
 {{-- Blade Template --}}
-<div x-data="validateForm(@json($validation['rules']), @json($validation['messages']), @json($validation['attributes']))">
+<div x-data="@alpineValidation($validation)">
     <form @submit.prevent="submitForm">
         <input x-model="form.name" @blur="validate('name')">
         <div x-show="hasError('name')" x-text="getError('name')"></div>
         
-        <button :disabled="!isValid()">Submit</button>
+        <input x-model="form.email" @blur="validate('email')">
+        <div x-show="hasError('email')" x-text="getError('email')"></div>
+        
+        <button :disabled="!isValid()">Create User</button>
     </form>
 </div>
+```
+
+#### Alpine.js Form Component
+
+```html
+<div x-data="validateForm({
+    email: 'required|email|unique:users,email',
+    password: 'required|min:8|confirmed',
+    terms: 'required|accepted'
+}, {
+    'email.unique': 'This email is already registered',
+    'password.confirmed': 'Passwords do not match'
+})">
+    <form @submit.prevent="submitForm(async (data) => {
+        // Your submission logic
+        console.log('Form data:', data);
+    })">
+        <input type="email" x-model="form.email" @blur="validate('email')">
+        <div x-show="hasError('email')" x-text="getError('email')"></div>
+        
+        <input type="password" x-model="form.password" @blur="validate('password')">
+        <input type="password" x-model="form.password_confirmation">
+        
+        <input type="checkbox" x-model="form.terms" value="1">
+        
+        <button :disabled="!isValid() || validating">
+            <span x-show="!validating">Submit</span>
+            <span x-show="validating">Validating...</span>
+## 🎯 Advanced Features
+
+### Validation Hooks
+
+```javascript
+validator
+    .beforeValidate(ctx => console.log('Starting validation...'))
+    .afterValidate(ctx => console.log('Validation complete'))
+    .onPasses(ctx => enableSubmitButton())
+    .onFails(ctx => showValidationErrors());
+```
+
+### Blade Directives
+
+```blade
+{{-- Quick validation directives --}}
+@validate('email', 'required|email')
+@validateLive('username', 'required|alpha_dash|min:3')
+@validateForm('password', 'required|min:8')
+
+{{-- Alpine.js data generation --}}
+<div x-data="@alpineValidation($rules, $messages, $attributes)">
+    <!-- Your form -->
+</div>
+```
+
+### Custom Rules
+
+```php
+// Register custom server-side rule
+ClientValidation::extend('strong_password', function ($value) {
+    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/', $value);
+}, 'Password must contain uppercase, lowercase, number and special character.');
+
+// Make it client-side capable
+ClientValidation::extendClientSide('strong_password', `
+    (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(value)
+`);
+```
+
+### Smart AJAX Fallback
+
+The package automatically detects which rules require server-side validation:
+
+- **Client-side**: `required`, `email`, `min`, `max`, `regex`, etc.
+- **Server-side**: `unique`, `exists`, `password`, etc.
+- **Conditional**: `required_if`, `required_unless`, etc.
+
+```html
+<!-- This will automatically use AJAX for the 'unique' rule -->
+<input x-validate.live="'required|email|unique:users,email'">
+```
 ```
 
 #### Direct Rule Validation

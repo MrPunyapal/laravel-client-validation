@@ -1,9 +1,13 @@
-import Validator from './core/validator.js';
+import ClientValidator from './core/validator.js';
 import alpineIntegration from './integrations/alpine.js';
 
 if (typeof window !== 'undefined') {
-    window.LaravelValidator = Validator;
-    
+    window.LaravelValidator = {
+        ClientValidator,
+        // Legacy alias for backward compatibility
+        Validator: ClientValidator
+    };
+
     if (window.Alpine) {
         alpineIntegration(window.Alpine);
     } else {
@@ -13,5 +17,5 @@ if (typeof window !== 'undefined') {
     }
 }
 
-export { Validator, alpineIntegration };
-export default Validator;
+export { ClientValidator, alpineIntegration };
+export default ClientValidator;

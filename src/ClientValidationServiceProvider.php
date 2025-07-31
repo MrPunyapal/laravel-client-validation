@@ -33,8 +33,27 @@ class ClientValidationServiceProvider extends PackageServiceProvider
             return new ValidationRuleConverter;
         });
 
+        $this->app->singleton(\MrPunyapal\ClientValidation\Contracts\RuleParserInterface::class, function ($app) {
+            return new \MrPunyapal\ClientValidation\Core\RuleParser;
+        });
+
+        $this->app->singleton(\MrPunyapal\ClientValidation\Hooks\ValidationHooks::class, function ($app) {
+            return new \MrPunyapal\ClientValidation\Hooks\ValidationHooks;
+        });
+
+        $this->app->singleton(\MrPunyapal\ClientValidation\Core\ValidationManager::class, function ($app) {
+            return new \MrPunyapal\ClientValidation\Core\ValidationManager(
+                $app->make(\MrPunyapal\ClientValidation\Contracts\RuleParserInterface::class),
+                $app->make(\MrPunyapal\ClientValidation\Hooks\ValidationHooks::class),
+                config('client-validation', [])
+            );
+        });
+
         $this->app->singleton('client-validation', function ($app) {
-            return new ClientValidation($app->make(ValidationRuleConverter::class));
+            return new ClientValidation(
+                $app->make(\MrPunyapal\ClientValidation\Core\ValidationManager::class),
+                $app->make(ValidationRuleConverter::class)
+            );
         });
     }
 
@@ -46,6 +65,28 @@ class ClientValidationServiceProvider extends PackageServiceProvider
 
         Blade::directive('clientValidationAssets', function () {
             return "<?php echo view('client-validation::assets')->render(); ?>";
+        });
+
+        Blade::directive('validate', function ($expression) {
+            $params = str_replace(['(', ')'], '', $expression);
+            [$field, $rules, $options] = array_pad(explode(',', $params, 3), 3, '[]');
+            return "<?php echo app('client-validation')->directive({$field}, {$rules}, {$options}); ?>";
+        });
+
+        Blade::directive('validateLive', function ($expression) {
+            $params = str_replace(['(', ')'], '', $expression);
+            [$field, $rules] = array_pad(explode(',', $params, 2), 2, '""');
+            return "<?php echo app('client-validation')->directive({$field}, {$rules}, ['mode' => 'live']); ?>";
+        });
+
+        Blade::directive('validateForm', function ($expression) {
+            $params = str_replace(['(', ')'], '', $expression);
+            [$field, $rules] = array_pad(explode(',', $params, 2), 2, '""');
+            return "<?php echo app('client-validation')->directive({$field}, {$rules}, ['mode' => 'form']); ?>";
+        });
+
+        Blade::directive('alpineValidation', function ($expression) {
+            return "<?php echo app('client-validation')->alpineData({$expression}); ?>";
         });
     }
 
