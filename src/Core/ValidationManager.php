@@ -1,22 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MrPunyapal\ClientValidation\Core;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
 use MrPunyapal\ClientValidation\Contracts\RuleParserInterface;
+use MrPunyapal\ClientValidation\Contracts\ValidationManagerInterface;
 use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
 
-class ValidationManager
+/**
+ * Central orchestrator for client-side validation.
+ *
+ * This manager handles the conversion of Laravel validation rules to a format
+ * that can be used for client-side validation with Alpine.js.
+ */
+class ValidationManager implements ValidationManagerInterface
 {
-    protected RuleParserInterface $parser;
-    protected ValidationHooks $hooks;
+    /** @var array<string, mixed> */
     protected array $config;
 
-    public function __construct(RuleParserInterface $parser, ValidationHooks $hooks, array $config = [])
-    {
-        $this->parser = $parser;
-        $this->hooks = $hooks;
+    /**
+     * @param array<string, mixed> $config Configuration options
+     */
+    public function __construct(
+        protected readonly RuleParserInterface $parser,
+        protected readonly ValidationHooks $hooks,
+        array $config = []
+    ) {
         $this->config = array_merge($this->getDefaultConfig(), $config);
     }
 

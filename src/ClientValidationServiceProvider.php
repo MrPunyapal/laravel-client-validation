@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MrPunyapal\ClientValidation;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
+use MrPunyapal\ClientValidation\Contracts\RuleParserInterface;
+use MrPunyapal\ClientValidation\Contracts\ValidationManagerInterface;
 use MrPunyapal\ClientValidation\Core\RuleParser;
 use MrPunyapal\ClientValidation\Core\ValidationManager;
-use MrPunyapal\ClientValidation\Contracts\RuleParserInterface;
 use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
 use MrPunyapal\ClientValidation\Http\Controllers\ValidationController;
 use Spatie\LaravelPackageTools\Package;
