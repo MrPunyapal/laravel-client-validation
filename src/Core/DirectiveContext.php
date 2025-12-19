@@ -1,25 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MrPunyapal\ClientValidation\Core;
 
 use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
 
-class DirectiveContext
+/**
+ * Context object for a single field validation directive.
+ *
+ * Used when generating x-validate directives for individual form fields.
+ */
+readonly class DirectiveContext
 {
-    protected string $field;
-    protected ParsedFieldRules $rules;
-    protected array $options;
-    protected ValidationHooks $hooks;
+    private ValidationHooks $hooks;
 
+    /**
+     * @param string $field The field name
+     * @param ParsedFieldRules $rules Parsed validation rules for the field
+     * @param array<string, mixed> $options Validation options
+     * @param ValidationHooks|null $hooks Validation lifecycle hooks
+     */
     public function __construct(
-        string $field,
-        ParsedFieldRules $rules,
-        array $options = [],
-        ValidationHooks $hooks = null
+        private string $field,
+        private ParsedFieldRules $rules,
+        private array $options = [],
+        ?ValidationHooks $hooks = null
     ) {
-        $this->field = $field;
-        $this->rules = $rules;
-        $this->options = $options;
         $this->hooks = $hooks ?? new ValidationHooks();
     }
 
@@ -33,6 +40,9 @@ class DirectiveContext
         return $this->rules;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOptions(): array
     {
         return $this->options;
@@ -43,6 +53,11 @@ class DirectiveContext
         return $this->hooks;
     }
 
+    /**
+     * Generate the x-validate directive string.
+     *
+     * @param string $mode Validation mode: 'blur', 'live', 'input', 'form', 'submit'
+     */
     public function toDirectiveString(string $mode = 'blur'): string
     {
         $rules = $this->rules->toClientRuleStrings();
@@ -53,13 +68,18 @@ class DirectiveContext
 
         $ruleString = implode('|', $rules);
 
-        return match($mode) {
+        return match ($mode) {
             'live', 'input' => "x-validate.live=\"'{$ruleString}'\"",
             'form', 'submit' => "x-validate.form=\"'{$ruleString}'\"",
             default => "x-validate=\"'{$ruleString}'\"",
         };
     }
 
+    /**
+     * Get the client payload for this field.
+     *
+     * @return array{field: string, client_rules: array<int, string>, server_rules: array<int, string>, requires_ajax: bool, options: array<string, mixed>}
+     */
     public function toClientPayload(): array
     {
         return [
@@ -71,11 +91,17 @@ class DirectiveContext
         ];
     }
 
+    /**
+     * Check if this field has client-side rules.
+     */
     public function hasClientRules(): bool
     {
         return $this->rules->hasClientRules();
     }
 
+    /**
+     * Check if this field requires AJAX validation.
+     */
     public function requiresAjax(): bool
     {
         return $this->rules->requiresAjax();

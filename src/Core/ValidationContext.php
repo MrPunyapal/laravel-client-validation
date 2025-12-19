@@ -1,28 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MrPunyapal\ClientValidation\Core;
 
 use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
 
-class ValidationContext
+/**
+ * Context object containing all validation data for a set of fields.
+ *
+ * This encapsulates parsed rules, custom messages, field attributes,
+ * configuration, and validation hooks for a complete validation setup.
+ */
+readonly class ValidationContext
 {
-    protected ParsedRules $rules;
-    protected array $messages;
-    protected array $attributes;
-    protected array $config;
-    protected ValidationHooks $hooks;
+    private ValidationHooks $hooks;
 
+    /**
+     * @param ParsedRules $rules Parsed validation rules
+     * @param array<string, string> $messages Custom validation messages
+     * @param array<string, string> $attributes Custom attribute names
+     * @param array<string, mixed> $config Validation configuration
+     * @param ValidationHooks|null $hooks Validation lifecycle hooks
+     */
     public function __construct(
-        ParsedRules $rules,
-        array $messages = [],
-        array $attributes = [],
-        array $config = [],
-        ValidationHooks $hooks = null
+        private ParsedRules $rules,
+        private array $messages = [],
+        private array $attributes = [],
+        private array $config = [],
+        ?ValidationHooks $hooks = null
     ) {
-        $this->rules = $rules;
-        $this->messages = $messages;
-        $this->attributes = $attributes;
-        $this->config = $config;
         $this->hooks = $hooks ?? new ValidationHooks();
     }
 
@@ -31,16 +38,25 @@ class ValidationContext
         return $this->rules;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getMessages(): array
     {
         return $this->messages;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getAttributes(): array
     {
         return $this->attributes;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getConfig(): array
     {
         return $this->config;
@@ -51,6 +67,11 @@ class ValidationContext
         return $this->hooks;
     }
 
+    /**
+     * Get complete payload for client-side validation.
+     *
+     * @return array{rules: array<string, array<int, string>>, ajax_rules: array<string, array{server: array<int, string>, client: array<int, string>}>, messages: array<string, string>, attributes: array<string, string>, config: array<string, mixed>}
+     */
     public function toClientPayload(): array
     {
         return [
@@ -62,15 +83,23 @@ class ValidationContext
         ];
     }
 
+    /**
+     * Convert to JSON string for Alpine.js x-data attribute.
+     */
     public function toAlpineData(): string
     {
-        return json_encode($this->toClientPayload(), JSON_UNESCAPED_SLASHES);
+        return json_encode($this->toClientPayload(), JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
     }
 
+    /**
+     * Render an x-validate directive for a specific field.
+     *
+     * @param array<string, mixed> $options Additional options (e.g., mode)
+     */
     public function renderDirective(string $field, array $options = []): string
     {
         $fieldRules = $this->rules->getField($field);
-        if (!$fieldRules) {
+        if ($fieldRules === null) {
             return '';
         }
 
@@ -78,20 +107,23 @@ class ValidationContext
         $rules = $fieldRules->toClientRuleStrings();
 
         if ($fieldRules->requiresAjax()) {
-            // Add ajax indicator to rules
             $rules[] = 'ajax:' . implode('|', $fieldRules->toServerRuleStrings());
         }
 
         $ruleString = implode('|', $rules);
-        $directive = match($mode) {
+
+        return match ($mode) {
             'live', 'input' => "x-validate.live=\"'{$ruleString}'\"",
             'form', 'submit' => "x-validate.form=\"'{$ruleString}'\"",
             default => "x-validate=\"'{$ruleString}'\"",
         };
-
-        return $directive;
     }
 
+    /**
+     * Get configuration for the client-side validator.
+     *
+     * @return array<string, mixed>
+     */
     public function getClientConfig(): array
     {
         return [
@@ -105,21 +137,37 @@ class ValidationContext
         ];
     }
 
+    /**
+     * Check if any client-only rules exist.
+     */
     public function hasClientRules(): bool
     {
-        return !empty($this->rules->getClientOnlyFields());
+        return $this->rules->getClientOnlyFields() !== [];
     }
 
+    /**
+     * Check if any AJAX rules exist.
+     */
     public function hasAjaxRules(): bool
     {
-        return !empty($this->rules->getAjaxFields());
+        return $this->rules->getAjaxFields() !== [];
     }
 
+    /**
+     * Get field names that require AJAX validation.
+     *
+     * @return array<int, string>
+     */
     public function getFieldsRequiringAjax(): array
     {
         return array_keys($this->rules->getAjaxFields());
     }
 
+    /**
+     * Get field names that only need client-side validation.
+     *
+     * @return array<int, string>
+     */
     public function getClientOnlyFields(): array
     {
         return array_keys($this->rules->getClientOnlyFields());

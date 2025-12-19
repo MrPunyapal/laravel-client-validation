@@ -112,8 +112,9 @@ it('returns error for missing required parameters', function () {
     $response = $controller->validate($request);
     $data = $response->getData(true);
 
-    expect($data['valid'])->toBeFalse()
-        ->and($data['message'])->toBe('Invalid request');
+    expect($response->getStatusCode())->toBe(400)
+        ->and($data['valid'])->toBeFalse()
+        ->and($data['message'])->toContain('field and rule are required');
 });
 
 it('handles complex validation rules', function () {
