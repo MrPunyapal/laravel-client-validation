@@ -1,20 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MrPunyapal\ClientValidation\Core;
 
-class RuleData
+/**
+ * Represents a parsed validation rule with its name, parameters, and metadata.
+ */
+readonly class RuleData
 {
-    protected string $name;
-    protected array $parameters;
-    protected string $string;
-    protected $original;
+    private string $string;
 
-    public function __construct(string $name, array $parameters = [], string $string = '', $original = null)
-    {
-        $this->name = $name;
-        $this->parameters = $parameters;
-        $this->string = $string ?: $this->buildString();
-        $this->original = $original ?? $string;
+    /**
+     * @param string $name The rule name (e.g., 'required', 'min', 'email')
+     * @param array<int, string> $parameters The rule parameters (e.g., ['8'] for min:8)
+     * @param string $originalString The original rule string
+     * @param mixed $original The original rule object (if any)
+     */
+    public function __construct(
+        private string $name,
+        private array $parameters = [],
+        string $originalString = '',
+        private mixed $original = null
+    ) {
+        $this->string = $originalString !== '' ? $originalString : $this->buildString();
     }
 
     public function getName(): string
@@ -22,19 +31,22 @@ class RuleData
         return $this->name;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    public function getParameter(int $index, $default = null)
+    public function getParameter(int $index, mixed $default = null): mixed
     {
         return $this->parameters[$index] ?? $default;
     }
 
     public function hasParameters(): bool
     {
-        return !empty($this->parameters);
+        return $this->parameters !== [];
     }
 
     public function getString(): string
@@ -42,28 +54,33 @@ class RuleData
         return $this->string;
     }
 
-    public function getOriginal()
+    public function getOriginal(): mixed
     {
         return $this->original;
     }
 
-    public function setOriginal($original): void
+    /**
+     * Create a new instance with a different original value.
+     */
+    public function withOriginal(mixed $original): self
     {
-        $this->original = $original;
+        return new self($this->name, $this->parameters, $this->string, $original);
     }
 
     public function isConditional(): bool
     {
-        return str_starts_with($this->name, 'required_') ||
-               str_starts_with($this->name, 'nullable_');
+        return str_starts_with($this->name, 'required_')
+            || str_starts_with($this->name, 'nullable_');
     }
 
     public function requiresServer(): bool
     {
-        $serverRules = ['unique', 'exists', 'password', 'current_password'];
-        return in_array($this->name, $serverRules);
+        return in_array($this->name, ['unique', 'exists', 'password', 'current_password'], true);
     }
 
+    /**
+     * @return array{name: string, parameters: array<int, string>, string: string}
+     */
     public function toArray(): array
     {
         return [
@@ -78,9 +95,9 @@ class RuleData
         return $this->string;
     }
 
-    protected function buildString(): string
+    private function buildString(): string
     {
-        if (empty($this->parameters)) {
+        if ($this->parameters === []) {
             return $this->name;
         }
 
