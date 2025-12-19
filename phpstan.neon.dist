@@ -1,9 +1,11 @@
-includes:
-    - phpstan-baseline.neon
-
 parameters:
-    level: 4
+    level: 5
     paths:
         - src
         - config
     tmpDir: build/phpstan
+    ignoreErrors:
+        # Trait analyzed separately
+        - '#Trait .* is used zero times and is not analysed#'
+        # FormRequest::rules(), messages(), attributes() are defined in concrete classes, not base class
+        - '#Call to an undefined method Illuminate\\Foundation\\Http\\FormRequest::(rules|messages|attributes)\(\)#'

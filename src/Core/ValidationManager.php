@@ -112,7 +112,7 @@ class ValidationManager implements ValidationManagerInterface
         );
     }
 
-    public function extend(string $rule, callable $validator, string $message = null): void
+    public function extend(string $rule, callable $validator, ?string $message = null): void
     {
         // Register custom rule with Laravel validator
         Validator::extend($rule, $validator, $message);

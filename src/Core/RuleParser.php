@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MrPunyapal\ClientValidation\Core;
 
 use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
 use MrPunyapal\ClientValidation\Contracts\RuleParserInterface;
 
 /**
@@ -104,8 +103,8 @@ class RuleParser implements RuleParserInterface
 
             match ($category) {
                 'client' => $clientRules[] = $ruleData,
-                'server' => $serverRules[] = $ruleData,
                 'conditional' => $conditionalRules[] = $ruleData,
+                default => $serverRules[] = $ruleData,
             };
         }
 
@@ -267,14 +266,12 @@ class RuleParser implements RuleParserInterface
      */
     protected function objectToString(object $rule): string
     {
-        if ($rule instanceof Rule) {
-            return (string) $rule;
-        }
-
+        // Check if the object has __toString method (most rule objects do)
         if (method_exists($rule, '__toString')) {
             return (string) $rule;
         }
 
+        // Fallback to class name for non-stringable objects
         return $rule::class;
     }
 }
