@@ -1,8 +1,55 @@
 parameters:
-    ignoreErrors:
-        -
-            message: '#Trait .* is used zero times and is not analysed#'
-            path: src/Livewire/WithClientValidation.php
-        -
-            message: '#Call to an undefined method Illuminate\\Foundation\\Http\\FormRequest::rules\(\)#'
-            path: src/ClientValidation.php
+	ignoreErrors:
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#3 \$message \(string\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: src/ClientValidation.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#4 \$hooks \(MrPunyapal\\ClientValidation\\Hooks\\ValidationHooks\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: src/Core/DirectiveContext.php
+
+		-
+			message: '#^Cannot cast Illuminate\\Validation\\Rule to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Core/RuleParser.php
+
+		-
+			message: '#^Match expression does not handle remaining value\: string$#'
+			identifier: match.unhandled
+			count: 1
+			path: src/Core/RuleParser.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#5 \$hooks \(MrPunyapal\\ClientValidation\\Hooks\\ValidationHooks\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: src/Core/ValidationContext.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Http\\FormRequest\:\:rules\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Core/ValidationManager.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#3 \$message \(string\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: src/Core/ValidationManager.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$event \(string\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: src/Hooks/ValidationHooks.php
+
+		-
+			message: '#^Trait MrPunyapal\\ClientValidation\\Livewire\\WithClientValidation is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Livewire/WithClientValidation.php
