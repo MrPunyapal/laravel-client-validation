@@ -4,18 +4,13 @@ namespace MrPunyapal\ClientValidation;
 
 use Illuminate\Foundation\Http\FormRequest;
 use MrPunyapal\ClientValidation\Core\ValidationManager;
-use MrPunyapal\ClientValidation\Support\ValidationRuleConverter;
 
 class ClientValidation
 {
-    protected ValidationManager $manager;
-    protected ValidationRuleConverter $converter; // Keep for backward compatibility
+    public function __construct(
+        protected readonly ValidationManager $manager
+    ) {}
 
-    public function __construct(ValidationManager $manager, ValidationRuleConverter $converter)
-    {
-        $this->manager = $manager;
-        $this->converter = $converter;
-    }
 
     public function fromRequest(string|FormRequest $request): array
     {

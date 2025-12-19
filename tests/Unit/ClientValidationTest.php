@@ -4,17 +4,15 @@ use MrPunyapal\ClientValidation\ClientValidation;
 use MrPunyapal\ClientValidation\Core\ValidationManager;
 use MrPunyapal\ClientValidation\Core\RuleParser;
 use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
-use MrPunyapal\ClientValidation\Support\ValidationRuleConverter;
 
 function createClientValidation(): ClientValidation {
     $ruleParser = new RuleParser();
     $hooks = new ValidationHooks();
-    // Use the actual Laravel config instead of empty array
     $config = config('client-validation', []);
     $manager = new ValidationManager($ruleParser, $hooks, $config);
-    $converter = new ValidationRuleConverter();
-    return new ClientValidation($manager, $converter);
+    return new ClientValidation($manager);
 }
+
 
 it('can generate complete validation configuration', function () {
     $clientValidation = createClientValidation();

@@ -1,7 +1,9 @@
 <?php
 
 use MrPunyapal\ClientValidation\ClientValidation;
-use MrPunyapal\ClientValidation\Support\ValidationRuleConverter;
+use MrPunyapal\ClientValidation\Core\ValidationManager;
+use MrPunyapal\ClientValidation\Contracts\RuleParserInterface;
+use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
 
 it('registers the client validation service', function () {
     expect(app()->has('client-validation'))->toBeTrue();
@@ -10,11 +12,22 @@ it('registers the client validation service', function () {
     expect($service)->toBeInstanceOf(ClientValidation::class);
 });
 
-it('registers the validation rule converter', function () {
-    expect(app()->has(ValidationRuleConverter::class))->toBeTrue();
+it('registers the validation manager', function () {
+    expect(app()->has(ValidationManager::class))->toBeTrue();
 
-    $converter = app(ValidationRuleConverter::class);
-    expect($converter)->toBeInstanceOf(ValidationRuleConverter::class);
+    $manager = app(ValidationManager::class);
+    expect($manager)->toBeInstanceOf(ValidationManager::class);
+});
+
+it('registers the rule parser interface', function () {
+    expect(app()->has(RuleParserInterface::class))->toBeTrue();
+});
+
+it('registers the validation hooks', function () {
+    expect(app()->has(ValidationHooks::class))->toBeTrue();
+
+    $hooks = app(ValidationHooks::class);
+    expect($hooks)->toBeInstanceOf(ValidationHooks::class);
 });
 
 it('registers the clientValidation blade directive', function () {

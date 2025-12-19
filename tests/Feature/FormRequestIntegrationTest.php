@@ -37,10 +37,9 @@ class SimpleTestFormRequest extends FormRequest
 }
 
 it('can extract validation data from FormRequest class string', function () {
-    // Test using class string to avoid instantiation issues
+    // Test using ValidationManager and RuleParser directly
     $manager = app(\MrPunyapal\ClientValidation\Core\ValidationManager::class);
-    $converter = app(\MrPunyapal\ClientValidation\Support\ValidationRuleConverter::class);
-    $clientValidation = new \MrPunyapal\ClientValidation\ClientValidation($manager, $converter);
+    $clientValidation = new \MrPunyapal\ClientValidation\ClientValidation($manager);
 
     // Manually create instance and extract data
     $request = new SimpleTestFormRequest;
@@ -48,11 +47,13 @@ it('can extract validation data from FormRequest class string', function () {
     $messages = $request->messages();
     $attributes = $request->attributes();
 
-    $convertedRules = $converter->convert($rules);
+    // Use RuleParser to parse rules
+    $ruleParser = app(\MrPunyapal\ClientValidation\Contracts\RuleParserInterface::class);
+    $parsedRules = $ruleParser->parse($rules);
+    $decodedRules = $parsedRules->toClientRules();
+
     $mergedMessages = array_merge(config('client-validation.messages', []), $messages);
     $mergedAttributes = array_merge(config('client-validation.attributes', []), $attributes);
-
-    $decodedRules = json_decode($convertedRules, true);
 
     // Test rules extraction
     expect($decodedRules)->toHaveKey('name')
@@ -60,7 +61,7 @@ it('can extract validation data from FormRequest class string', function () {
         ->and($decodedRules['name'])->toContain('string')
         ->and($decodedRules['name'])->toContain('min:2');
 
-    // Test AJAX rule conversion
+    // Test AJAX rule conversion (server rules now have ajax: prefix)
     expect($decodedRules['email'])->toContain('required')
         ->and($decodedRules['email'])->toContain('email')
         ->and($decodedRules['email'])->toContain('ajax:unique:users,email');

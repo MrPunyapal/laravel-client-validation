@@ -4,8 +4,11 @@ namespace MrPunyapal\ClientValidation;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
+use MrPunyapal\ClientValidation\Core\RuleParser;
+use MrPunyapal\ClientValidation\Core\ValidationManager;
+use MrPunyapal\ClientValidation\Contracts\RuleParserInterface;
+use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
 use MrPunyapal\ClientValidation\Http\Controllers\ValidationController;
-use MrPunyapal\ClientValidation\Support\ValidationRuleConverter;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -29,32 +32,19 @@ class ClientValidationServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->singleton(ValidationRuleConverter::class, function ($app) {
-            return new ValidationRuleConverter;
-        });
+        $this->app->singleton(RuleParserInterface::class, fn ($app) => new RuleParser());
 
-        $this->app->singleton(\MrPunyapal\ClientValidation\Contracts\RuleParserInterface::class, function ($app) {
-            return new \MrPunyapal\ClientValidation\Core\RuleParser;
-        });
+        $this->app->singleton(ValidationHooks::class, fn ($app) => new ValidationHooks());
 
-        $this->app->singleton(\MrPunyapal\ClientValidation\Hooks\ValidationHooks::class, function ($app) {
-            return new \MrPunyapal\ClientValidation\Hooks\ValidationHooks;
-        });
+        $this->app->singleton(ValidationManager::class, fn ($app) => new ValidationManager(
+            $app->make(RuleParserInterface::class),
+            $app->make(ValidationHooks::class),
+            config('client-validation', [])
+        ));
 
-        $this->app->singleton(\MrPunyapal\ClientValidation\Core\ValidationManager::class, function ($app) {
-            return new \MrPunyapal\ClientValidation\Core\ValidationManager(
-                $app->make(\MrPunyapal\ClientValidation\Contracts\RuleParserInterface::class),
-                $app->make(\MrPunyapal\ClientValidation\Hooks\ValidationHooks::class),
-                config('client-validation', [])
-            );
-        });
-
-        $this->app->singleton('client-validation', function ($app) {
-            return new ClientValidation(
-                $app->make(\MrPunyapal\ClientValidation\Core\ValidationManager::class),
-                $app->make(ValidationRuleConverter::class)
-            );
-        });
+        $this->app->singleton('client-validation', fn ($app) => new ClientValidation(
+            $app->make(ValidationManager::class)
+        ));
     }
 
     protected function registerBladeDirectives(): void
