@@ -330,3 +330,200 @@ describe('Validation Rules', () => {
         });
     });
 });
+
+// New rules tests
+import requiredIf from '../../resources/js/core/rules/required_if.js';
+import requiredUnless from '../../resources/js/core/rules/required_unless.js';
+import requiredWith from '../../resources/js/core/rules/required_with.js';
+import requiredWithout from '../../resources/js/core/rules/required_without.js';
+import afterOrEqual from '../../resources/js/core/rules/after_or_equal.js';
+import beforeOrEqual from '../../resources/js/core/rules/before_or_equal.js';
+import multipleOf from '../../resources/js/core/rules/multiple_of.js';
+import decimal from '../../resources/js/core/rules/decimal.js';
+import distinct from '../../resources/js/core/rules/distinct.js';
+import macAddress from '../../resources/js/core/rules/mac_address.js';
+import ascii from '../../resources/js/core/rules/ascii.js';
+import prohibited from '../../resources/js/core/rules/prohibited.js';
+import prohibitedIf from '../../resources/js/core/rules/prohibited_if.js';
+import acceptedIf from '../../resources/js/core/rules/accepted_if.js';
+import declined from '../../resources/js/core/rules/declined.js';
+import declinedIf from '../../resources/js/core/rules/declined_if.js';
+import dateEquals from '../../resources/js/core/rules/date_equals.js';
+import doesntStartWith from '../../resources/js/core/rules/doesnt_start_with.js';
+import doesntEndWith from '../../resources/js/core/rules/doesnt_end_with.js';
+
+describe('New Validation Rules', () => {
+    describe('required_if', () => {
+        it('requires field when other field matches value', () => {
+            const context = { allData: { role: 'admin' } };
+            expect(requiredIf('', ['role', 'admin'], 'permissions', context)).toBe(false);
+            expect(requiredIf('some-permission', ['role', 'admin'], 'permissions', context)).toBe(true);
+        });
+
+        it('does not require when other field does not match', () => {
+            const context = { allData: { role: 'user' } };
+            expect(requiredIf('', ['role', 'admin'], 'permissions', context)).toBe(true);
+        });
+    });
+
+    describe('required_unless', () => {
+        it('requires field unless other field matches value', () => {
+            const context = { allData: { role: 'user' } };
+            expect(requiredUnless('', ['role', 'admin'], 'field', context)).toBe(false);
+        });
+
+        it('does not require when other field matches', () => {
+            const context = { allData: { role: 'admin' } };
+            expect(requiredUnless('', ['role', 'admin'], 'field', context)).toBe(true);
+        });
+    });
+
+    describe('required_with', () => {
+        it('requires field when other field is present', () => {
+            const context = { allData: { first_name: 'John' } };
+            expect(requiredWith('', ['first_name'], 'last_name', context)).toBe(false);
+            expect(requiredWith('Doe', ['first_name'], 'last_name', context)).toBe(true);
+        });
+
+        it('does not require when other field is empty', () => {
+            const context = { allData: { first_name: '' } };
+            expect(requiredWith('', ['first_name'], 'last_name', context)).toBe(true);
+        });
+    });
+
+    describe('required_without', () => {
+        it('requires field when other field is absent', () => {
+            const context = { allData: { phone: '' } };
+            expect(requiredWithout('', ['phone'], 'email', context)).toBe(false);
+            expect(requiredWithout('test@test.com', ['phone'], 'email', context)).toBe(true);
+        });
+
+        it('does not require when other field is present', () => {
+            const context = { allData: { phone: '1234567890' } };
+            expect(requiredWithout('', ['phone'], 'email', context)).toBe(true);
+        });
+    });
+
+    describe('after_or_equal', () => {
+        it('validates date is after or equal', () => {
+            expect(afterOrEqual('2024-12-31', ['2024-01-01'])).toBe(true);
+            expect(afterOrEqual('2024-01-01', ['2024-01-01'])).toBe(true);
+            expect(afterOrEqual('2023-12-31', ['2024-01-01'])).toBe(false);
+        });
+    });
+
+    describe('before_or_equal', () => {
+        it('validates date is before or equal', () => {
+            expect(beforeOrEqual('2024-01-01', ['2024-12-31'])).toBe(true);
+            expect(beforeOrEqual('2024-12-31', ['2024-12-31'])).toBe(true);
+            expect(beforeOrEqual('2025-01-01', ['2024-12-31'])).toBe(false);
+        });
+    });
+
+    describe('multiple_of', () => {
+        it('validates value is multiple of divisor', () => {
+            expect(multipleOf(10, ['5'])).toBe(true);
+            expect(multipleOf(15, ['5'])).toBe(true);
+            expect(multipleOf(7, ['5'])).toBe(false);
+            expect(multipleOf(0, ['5'])).toBe(true);
+        });
+    });
+
+    describe('decimal', () => {
+        it('validates decimal places', () => {
+            expect(decimal('10.50', ['2'])).toBe(true);
+            expect(decimal('10.5', ['1'])).toBe(true);
+            expect(decimal('10.555', ['2', '4'])).toBe(true);
+            expect(decimal('10.5', ['2'])).toBe(false);
+        });
+    });
+
+    describe('distinct', () => {
+        it('validates array has no duplicates', () => {
+            expect(distinct([1, 2, 3])).toBe(true);
+            expect(distinct([1, 2, 2])).toBe(false);
+            expect(distinct(['a', 'b', 'c'])).toBe(true);
+            expect(distinct(['a', 'a'])).toBe(false);
+        });
+    });
+
+    describe('mac_address', () => {
+        it('validates MAC address format', () => {
+            expect(macAddress('00:1A:2B:3C:4D:5E')).toBe(true);
+            expect(macAddress('00-1A-2B-3C-4D-5E')).toBe(true);
+            expect(macAddress('001A2B3C4D5E')).toBe(true);
+            expect(macAddress('invalid')).toBe(false);
+        });
+    });
+
+    describe('ascii', () => {
+        it('validates ASCII characters only', () => {
+            expect(ascii('hello world')).toBe(true);
+            expect(ascii('hello123')).toBe(true);
+            expect(ascii('héllo')).toBe(false);
+            expect(ascii('日本語')).toBe(false);
+        });
+    });
+
+    describe('prohibited', () => {
+        it('always fails', () => {
+            expect(prohibited()).toBe(false);
+            expect(prohibited('value')).toBe(false);
+        });
+    });
+
+    describe('prohibited_if', () => {
+        it('prohibits field when condition is met', () => {
+            const context = { allData: { type: 'guest' } };
+            expect(prohibitedIf('some-value', ['type', 'guest'], 'field', context)).toBe(false);
+            expect(prohibitedIf('', ['type', 'guest'], 'field', context)).toBe(true);
+        });
+    });
+
+    describe('accepted_if', () => {
+        it('requires acceptance when condition is met', () => {
+            const context = { allData: { newsletter: 'yes' } };
+            expect(acceptedIf(true, ['newsletter', 'yes'], 'field', context)).toBe(true);
+            expect(acceptedIf(false, ['newsletter', 'yes'], 'field', context)).toBe(false);
+        });
+    });
+
+    describe('declined', () => {
+        it('validates declined values', () => {
+            expect(declined(false)).toBe(true);
+            expect(declined('no')).toBe(true);
+            expect(declined('off')).toBe(true);
+            expect(declined(0)).toBe(true);
+            expect(declined(true)).toBe(false);
+        });
+    });
+
+    describe('declined_if', () => {
+        it('requires decline when condition is met', () => {
+            const context = { allData: { unsubscribe: 'yes' } };
+            expect(declinedIf(false, ['unsubscribe', 'yes'], 'field', context)).toBe(true);
+            expect(declinedIf(true, ['unsubscribe', 'yes'], 'field', context)).toBe(false);
+        });
+    });
+
+    describe('date_equals', () => {
+        it('validates date equals given date', () => {
+            expect(dateEquals('2024-01-01', ['2024-01-01'])).toBe(true);
+            expect(dateEquals('2024-01-02', ['2024-01-01'])).toBe(false);
+        });
+    });
+
+    describe('doesnt_start_with', () => {
+        it('validates value does not start with prefix', () => {
+            expect(doesntStartWith('hello', ['hi', 'hey'])).toBe(true);
+            expect(doesntStartWith('hello', ['hel', 'hey'])).toBe(false);
+        });
+    });
+
+    describe('doesnt_end_with', () => {
+        it('validates value does not end with suffix', () => {
+            expect(doesntEndWith('hello', ['ing', 'ed'])).toBe(true);
+            expect(doesntEndWith('hello', ['lo', 'o'])).toBe(false);
+        });
+    });
+});
