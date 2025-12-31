@@ -10,11 +10,12 @@ A powerful Laravel package that brings server-side validation rules to the clien
 - 🚀 **Real-time validation** - Instant feedback as users fill forms
 - 📝 **FormRequest support** - Extract rules from your existing FormRequest classes
 - ⚡ **Client + Remote validation** - Client-side rules run instantly, server rules via AJAX
-- 🎨 **Multiple integrations** - Alpine.js, Vanilla JS, or programmatic use
+- 🎨 **Multiple integrations** - Alpine.js, Livewire, Vanilla JS, or programmatic use
 - 🔧 **Zero configuration** - Works out of the box with sensible defaults
 - 🎯 **Flexible triggers** - Validate on blur, input, or form submit
 - 🎪 **Validation Hooks** - beforeValidate, afterValidate events
 - ⚡ **High Performance** - Debouncing, caching, request deduplication
+- 📦 **74 validation rules** - Comprehensive client-side rule coverage
 
 ## 🚀 Quick Start
 
@@ -97,6 +98,141 @@ Choose your preferred approach below.
 | `isValid()` | Check if form is valid |
 | `clearError('field')` | Clear errors for field |
 | `reset()` | Reset form to initial state |
+
+---
+
+## 📕 Usage with Livewire
+
+### Using the `x-wire-validate` Directive
+
+The Livewire adapter integrates seamlessly with Livewire 3's `wire:model` binding:
+
+```html
+<div wire:id="my-component">
+    <form wire:submit="save">
+        {{-- Validate on blur (default) --}}
+        <input type="email" 
+               wire:model="email" 
+               x-wire-validate="'required|email'"
+               name="email">
+        <span class="validation-error" data-error="email"></span>
+
+        {{-- Live validation as you type --}}
+        <input type="text" 
+               wire:model.live="username" 
+               x-wire-validate.live="'required|alpha_dash|min:3'"
+               name="username">
+        <span class="validation-error" data-error="username"></span>
+
+        {{-- Password with confirmation --}}
+        <input type="password" 
+               wire:model="password"
+               x-wire-validate="'required|min:8|confirmed'"
+               name="password">
+        <span class="validation-error" data-error="password"></span>
+
+        <input type="password" 
+               wire:model="password_confirmation"
+               name="password_confirmation">
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+```
+
+### Using the PHP Trait
+
+Add the `WithClientValidation` trait to your Livewire component:
+
+```php
+use Livewire\Component;
+use MrPunyapal\ClientValidation\Livewire\WithClientValidation;
+
+class CreateUser extends Component
+{
+    use WithClientValidation;
+
+    public string $name = '';
+    public string $email = '';
+    public string $password = '';
+    public string $password_confirmation = '';
+
+    protected $rules = [
+        'name' => 'required|string|min:2|max:50',
+        'email' => 'required|email',
+        'password' => 'required|min:8|confirmed',
+    ];
+
+    protected $messages = [
+        'email.required' => 'Please enter your email address',
+        'password.confirmed' => 'Passwords do not match',
+    ];
+
+    public function render()
+    {
+        return view('livewire.create-user');
+    }
+}
+```
+
+In your Blade view:
+
+```html
+<div x-data="{ clientRules: @json($this->getClientRules()) }">
+    <input wire:model="email" 
+           x-wire-validate="clientRules.email"
+           name="email">
+</div>
+```
+
+### Programmatic Livewire Validation
+
+```javascript
+import { createLivewireValidator } from 'laravel-client-validation';
+
+// In your component's Alpine data
+Alpine.data('myForm', () => ({
+    validator: null,
+    
+    init() {
+        this.validator = createLivewireValidator(this.$wire, {
+            rules: {
+                email: 'required|email',
+                password: 'required|min:8'
+            }
+        });
+    },
+    
+    async validateField(field, value) {
+        const result = await this.validator.validateField(field, value);
+        console.log(result.valid, result.errors);
+    }
+}));
+```
+
+### Livewire Events
+
+The adapter dispatches events to your Livewire component:
+
+```php
+// In your Livewire component
+protected $listeners = [
+    'client-validation-error' => 'handleClientError',
+    'client-validation-cleared' => 'handleClientCleared',
+];
+
+public function handleClientError($data)
+{
+    // $data = ['field' => 'email', 'errors' => ['The email field is required.']]
+    // Handle client-side validation errors
+}
+
+public function handleClientCleared($data)
+{
+    // $data = ['field' => 'email']
+    // Handle when field errors are cleared
+}
+```
 
 ---
 
@@ -184,13 +320,33 @@ public function create()
 
 ---
 
-## 🔧 Validation Types
+## 🔧 Validation Rules
 
-### Client-Side Rules (Instant)
+### Client-Side Rules (74 rules - Instant)
 
 These rules validate immediately in the browser:
 
-`required`, `email`, `url`, `min`, `max`, `between`, `size`, `numeric`, `integer`, `alpha`, `alpha_num`, `alpha_dash`, `confirmed`, `same`, `different`, `in`, `not_in`, `date`, `after`, `before`, `regex`, `boolean`, `accepted`, `nullable`
+**Core:** `required`, `nullable`, `filled`, `present`
+
+**String:** `string`, `email`, `url`, `alpha`, `alpha_num`, `alpha_dash`, `regex`, `lowercase`, `uppercase`, `starts_with`, `ends_with`, `doesnt_start_with`, `doesnt_end_with`, `ascii`, `uuid`, `ulid`, `json`, `hex_color`
+
+**Numeric:** `numeric`, `integer`, `decimal`, `multiple_of`, `digits`, `digits_between`, `min_digits`, `max_digits`
+
+**Size:** `min`, `max`, `between`, `size`
+
+**Comparison:** `confirmed`, `same`, `different`, `gt`, `gte`, `lt`, `lte`, `in`, `not_in`
+
+**Date:** `date`, `after`, `before`, `after_or_equal`, `before_or_equal`, `date_equals`, `date_format`, `timezone`
+
+**Conditional:** `required_if`, `required_unless`, `required_with`, `required_without`, `required_with_all`, `required_without_all`, `required_array_keys`
+
+**Boolean:** `boolean`, `accepted`, `accepted_if`, `declined`, `declined_if`
+
+**Prohibition:** `prohibited`, `prohibited_if`, `prohibited_unless`
+
+**Network:** `ip`, `ipv4`, `ipv6`, `mac_address`, `active_url`
+
+**Array:** `array`, `distinct`
 
 ### Remote Rules (AJAX)
 
@@ -283,16 +439,7 @@ Check the `examples/` directory for complete demos:
 
 - [alpine-demo.blade.php](examples/alpine-demo.blade.php) - Alpine.js integration
 - [vanilla-demo.blade.php](examples/vanilla-demo.blade.php) - Vanilla JS with data attributes
-
----
-
-## 🔄 Future Packages
-
-This package is designed to be modular. In the future, we plan to offer:
-
-- `laravel-client-validation-livewire` - Deep Livewire integration
-- `laravel-client-validation-inertia` - Inertia.js + Vue/React support
-- `laravel-client-validation-core` - Standalone JS package for any framework
+- [livewire-demo.blade.php](examples/livewire-demo.blade.php) - Livewire integration
 
 ---
 
