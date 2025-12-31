@@ -38,6 +38,21 @@ class RuleRegistry {
             regex: 'The :attribute format is invalid.',
             unique: 'The :attribute has already been taken.',
             exists: 'The selected :attribute is invalid.',
+            gt: 'The :attribute must be greater than :other.',
+            gte: 'The :attribute must be greater than or equal to :other.',
+            lt: 'The :attribute must be less than :other.',
+            lte: 'The :attribute must be less than or equal to :other.',
+            filled: 'The :attribute field must have a value when present.',
+            present: 'The :attribute field must be present.',
+            starts_with: 'The :attribute must start with one of: :values.',
+            ends_with: 'The :attribute must end with one of: :values.',
+            uuid: 'The :attribute must be a valid UUID.',
+            json: 'The :attribute must be a valid JSON string.',
+            lowercase: 'The :attribute must be lowercase.',
+            uppercase: 'The :attribute must be uppercase.',
+            ip: 'The :attribute must be a valid IP address.',
+            ipv4: 'The :attribute must be a valid IPv4 address.',
+            ipv6: 'The :attribute must be a valid IPv6 address.',
         };
     }
 

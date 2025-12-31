@@ -2,7 +2,7 @@
 
 This document lists all available validation rules and their implementation status.
 
-## Available Rules (29)
+## Available Rules (44)
 
 These rules are implemented and ready for client-side validation:
 
@@ -36,6 +36,21 @@ These rules are implemented and ready for client-side validation:
 | `string` | Must be a string | ✅ Implemented |
 | `nullable` | Field can be null/empty | ✅ Implemented |
 | `array` | Must be an array | ✅ Implemented |
+| `gt:field` | Greater than another field | ✅ Implemented |
+| `gte:field` | Greater than or equal to another field | ✅ Implemented |
+| `lt:field` | Less than another field | ✅ Implemented |
+| `lte:field` | Less than or equal to another field | ✅ Implemented |
+| `filled` | Must not be empty when present | ✅ Implemented |
+| `present` | Field must be present (can be empty) | ✅ Implemented |
+| `starts_with:prefix` | Must start with given value | ✅ Implemented |
+| `ends_with:suffix` | Must end with given value | ✅ Implemented |
+| `uuid` | Valid UUID format | ✅ Implemented |
+| `json` | Valid JSON string | ✅ Implemented |
+| `lowercase` | Must be lowercase | ✅ Implemented |
+| `uppercase` | Must be uppercase | ✅ Implemented |
+| `ip` | Valid IP address | ✅ Implemented |
+| `ipv4` | Valid IPv4 address | ✅ Implemented |
+| `ipv6` | Valid IPv6 address | ✅ Implemented |
 
 ## Remote Rules (4)
 
@@ -58,29 +73,18 @@ These rules require server-side validation via AJAX:
 | `required_unless:field,value` | Required unless another field has value | Medium |
 | `required_with:field` | Required if another field is present | Medium |
 | `required_without:field` | Required if another field is absent | Medium |
-| `gt:field` | Greater than another field | Easy |
-| `gte:field` | Greater than or equal to another field | Easy |
-| `lt:field` | Less than another field | Easy |
-| `lte:field` | Less than or equal to another field | Easy |
-| `filled` | Must not be empty when present | Easy |
-| `present` | Field must be present (can be empty) | Easy |
+| `after_or_equal:date` | Must be after or equal to date | Easy |
+| `before_or_equal:date` | Must be before or equal to date | Easy |
 
 ### Medium Priority
 
 | Rule | Description | Difficulty |
 |------|-------------|------------|
-| `starts_with:prefix` | Must start with given value | Easy |
-| `ends_with:suffix` | Must end with given value | Easy |
-| `uuid` | Valid UUID format | Easy |
-| `json` | Valid JSON string | Easy |
-| `ip` | Valid IP address | Easy |
-| `ipv4` | Valid IPv4 address | Easy |
-| `ipv6` | Valid IPv6 address | Easy |
-| `lowercase` | Must be lowercase | Easy |
-| `uppercase` | Must be uppercase | Easy |
 | `distinct` | Array values must be unique | Medium |
-| `after_or_equal:date` | Must be after or equal to date | Easy |
-| `before_or_equal:date` | Must be before or equal to date | Easy |
+| `mac_address` | Valid MAC address | Easy |
+| `ascii` | ASCII characters only | Easy |
+| `decimal:min,max` | Decimal with specific precision | Medium |
+| `multiple_of:value` | Multiple of given number | Easy |
 
 ### Low Priority (Less Common)
 

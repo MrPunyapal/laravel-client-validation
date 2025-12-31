@@ -26,6 +26,21 @@ import digitsBetween from './digits_between.js';
 import string from './string.js';
 import nullable from './nullable.js';
 import array from './array.js';
+import gt from './gt.js';
+import gte from './gte.js';
+import lt from './lt.js';
+import lte from './lte.js';
+import filled from './filled.js';
+import present from './present.js';
+import startsWith from './starts_with.js';
+import endsWith from './ends_with.js';
+import uuid from './uuid.js';
+import json from './json.js';
+import lowercase from './lowercase.js';
+import uppercase from './uppercase.js';
+import ip from './ip.js';
+import ipv4 from './ipv4.js';
+import ipv6 from './ipv6.js';
 
 export default {
     required,
@@ -56,4 +71,19 @@ export default {
     string,
     nullable,
     array,
+    gt,
+    gte,
+    lt,
+    lte,
+    filled,
+    present,
+    starts_with: startsWith,
+    ends_with: endsWith,
+    uuid,
+    json,
+    lowercase,
+    uppercase,
+    ip,
+    ipv4,
+    ipv6,
 };
