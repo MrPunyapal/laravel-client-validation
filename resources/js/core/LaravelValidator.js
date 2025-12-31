@@ -1,43 +1,12 @@
-/**
- * Laravel Client Validator
- *
- * The main validation engine that works with both client-side and remote rules.
- * Designed to be framework-agnostic - use with Alpine.js, Vanilla JS, or any framework.
- *
- * @example
- * // Basic usage
- * const validator = new Validator({
- *     rules: {
- *         email: 'required|email|unique:users',
- *         password: 'required|min:8|confirmed'
- *     },
- *     messages: {
- *         'email.unique': 'This email is already taken'
- *     }
- * });
- *
- * // Validate a single field
- * const result = await validator.validateField('email', 'test@example.com');
- *
- * // Validate entire form
- * const formResult = await validator.validateAll({ email: 'test@example.com', password: '12345678' });
- */
-
 import RuleRegistry from './RuleRegistry.js';
 import RemoteValidator from './RemoteValidator.js';
 import EventEmitter from './EventEmitter.js';
 
+/**
+ * Main validation engine for client-side and remote rules.
+ * Framework-agnostic - works with Alpine.js, Vanilla JS, or any framework.
+ */
 export default class LaravelValidator {
-    /**
-     * Create a new Validator instance
-     *
-     * @param {Object} options - Configuration options
-     * @param {Object} options.rules - Validation rules keyed by field name
-     * @param {Object} options.messages - Custom error messages
-     * @param {Object} options.attributes - Custom attribute names for fields
-     * @param {string} options.remoteUrl - URL for remote validation
-     * @param {number} options.debounce - Debounce time in ms for live validation
-     */
     constructor(options = {}) {
         this.rules = this.normalizeRules(options.rules || {});
         this.messages = options.messages || {};
@@ -166,21 +135,13 @@ export default class LaravelValidator {
         return { valid, errors };
     }
 
-    /**
-     * Validate a client-side rule
-     */
     validateClientRule(field, value, ruleName, params, allData) {
         const validator = this.registry.get(ruleName);
         if (!validator) {
             return { valid: true, message: null };
         }
 
-        // Build context for rules that need other field values
-        const context = {
-            field,
-            allData,
-            rules: this.rules[field]
-        };
+        const context = { field, allData, rules: this.rules[field] };
 
         try {
             const isValid = validator(value, params, context);
@@ -194,12 +155,6 @@ export default class LaravelValidator {
         }
     }
 
-    /**
-     * Validate all fields
-     *
-     * @param {Object} data - Form data to validate
-     * @returns {Promise<{valid: boolean, errors: Object}>}
-     */
     async validateAll(data = {}) {
         await this.events.emit('form:validating', { data });
 
@@ -225,17 +180,12 @@ export default class LaravelValidator {
         };
     }
 
-    /**
-     * Validate field with debounce (for live validation)
-     */
     validateFieldDebounced(field, value, allData = {}) {
         return new Promise((resolve) => {
-            // Clear existing timer
             if (this.debounceTimers.has(field)) {
                 clearTimeout(this.debounceTimers.get(field));
             }
 
-            // Set new timer
             const timer = setTimeout(async () => {
                 const result = await this.validateField(field, value, allData);
                 this.debounceTimers.delete(field);
@@ -246,19 +196,12 @@ export default class LaravelValidator {
         });
     }
 
-    /**
-     * Format error message with placeholders
-     */
     formatMessage(field, ruleName, params) {
-        // Check for custom message
         const customKey = `${field}.${ruleName}`;
         let message = this.messages[customKey] || this.messages[ruleName] || this.registry.getMessage(ruleName);
-
-        // Get display name for field
         const displayName = this.attributes[field] || field.replace(/_/g, ' ');
 
-        // Replace placeholders
-        message = message
+        return message
             .replace(/:attribute/g, displayName)
             .replace(/:field/g, displayName)
             .replace(/:min/g, params[0] || '')
@@ -267,21 +210,13 @@ export default class LaravelValidator {
             .replace(/:digits/g, params[0] || '')
             .replace(/:date/g, params[0] || '')
             .replace(/:other/g, params[0] || '');
-
-        return message;
     }
 
-    /**
-     * Check if field has a specific rule
-     */
     hasRule(field, ruleName) {
         const fieldRules = this.rules[field] || [];
         return fieldRules.some(r => this.parseRule(r).name === ruleName);
     }
 
-    /**
-     * Check if value is empty
-     */
     isEmpty(value) {
         if (value === null || value === undefined) return true;
         if (typeof value === 'string') return value.trim() === '';
@@ -289,40 +224,25 @@ export default class LaravelValidator {
         return false;
     }
 
-    // ==================== State Methods ====================
+    // State Methods
 
-    /**
-     * Get errors for a field
-     */
     getErrors(field) {
         return this.errors[field] || [];
     }
 
-    /**
-     * Get first error for a field
-     */
     getError(field) {
         const errors = this.getErrors(field);
         return errors.length > 0 ? errors[0] : null;
     }
 
-    /**
-     * Check if field has errors
-     */
     hasError(field) {
         return this.errors[field] && this.errors[field].length > 0;
     }
 
-    /**
-     * Check if any field has errors
-     */
     hasErrors() {
         return Object.keys(this.errors).length > 0;
     }
 
-    /**
-     * Check if field is currently validating
-     */
     isValidating(field = null) {
         if (field) {
             return this.validating.has(field);
@@ -330,30 +250,20 @@ export default class LaravelValidator {
         return this.validating.size > 0;
     }
 
-    /**
-     * Check if field has been touched (validated at least once)
-     */
     isTouched(field) {
         return this.touched.has(field);
     }
 
-    /**
-     * Check if field is valid (touched and no errors)
-     */
     isValid(field = null) {
         if (field) {
             return this.touched.has(field) && !this.hasError(field);
         }
-        // Check all fields
         for (const f of Object.keys(this.rules)) {
             if (this.hasError(f)) return false;
         }
         return this.touched.size > 0;
     }
 
-    /**
-     * Clear errors for a field or all fields
-     */
     clearErrors(field = null) {
         if (field) {
             delete this.errors[field];
@@ -364,9 +274,6 @@ export default class LaravelValidator {
         }
     }
 
-    /**
-     * Reset validator state
-     */
     reset() {
         this.errors = {};
         this.touched.clear();
@@ -375,73 +282,46 @@ export default class LaravelValidator {
         this.debounceTimers.clear();
     }
 
-    // ==================== Rule Management ====================
+    // Rule Management
 
-    /**
-     * Add or update rules
-     */
     setRules(rules) {
         this.rules = { ...this.rules, ...this.normalizeRules(rules) };
     }
 
-    /**
-     * Set custom messages
-     */
     setMessages(messages) {
         this.messages = { ...this.messages, ...messages };
     }
 
-    /**
-     * Set custom attribute names
-     */
     setAttributes(attributes) {
         this.attributes = { ...this.attributes, ...attributes };
     }
 
-    /**
-     * Register a custom validation rule
-     */
     extend(name, validator, message = null) {
         this.registry.extend(name, validator, message);
     }
 
-    // ==================== Event Hooks ====================
+    // Event Hooks
 
-    /**
-     * Hook: Before field validation
-     */
     beforeFieldValidate(callback) {
         this.events.on('field:validating', callback);
         return this;
     }
 
-    /**
-     * Hook: After field validation
-     */
     afterFieldValidate(callback) {
         this.events.on('field:validated', callback);
         return this;
     }
 
-    /**
-     * Hook: Before form validation
-     */
     beforeValidate(callback) {
         this.events.on('form:validating', callback);
         return this;
     }
 
-    /**
-     * Hook: After form validation
-     */
     afterValidate(callback) {
         this.events.on('form:validated', callback);
         return this;
     }
 
-    /**
-     * Destroy validator instance
-     */
     destroy() {
         this.reset();
         this.events.removeAll();

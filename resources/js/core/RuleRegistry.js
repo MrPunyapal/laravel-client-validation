@@ -1,24 +1,14 @@
 /**
- * Rule Registry - Manages validation rules
- *
- * Provides a centralized registry for all validation rules (client and remote).
+ * Rule Registry - Manages validation rules (client and remote).
  */
 import validationRules from './rules/index.js';
 
 class RuleRegistry {
     constructor() {
-        // Built-in client-side rules
         this.clientRules = new Map(Object.entries(validationRules));
-
-        // Custom rules added at runtime
         this.customRules = new Map();
+        this.remoteRules = new Set(['unique', 'exists', 'password', 'current_password']);
 
-        // Rules that require server-side validation
-        this.remoteRules = new Set([
-            'unique', 'exists', 'password', 'current_password'
-        ]);
-
-        // Default messages for each rule
         this.defaultMessages = {
             required: 'The :attribute field is required.',
             email: 'The :attribute must be a valid email address.',
@@ -51,62 +41,33 @@ class RuleRegistry {
         };
     }
 
-    /**
-     * Check if a rule exists (client or custom)
-     */
     has(ruleName) {
         return this.clientRules.has(ruleName) || this.customRules.has(ruleName);
     }
 
-    /**
-     * Get a rule validator function
-     */
     get(ruleName) {
-        if (this.customRules.has(ruleName)) {
-            return this.customRules.get(ruleName);
-        }
-        return this.clientRules.get(ruleName);
+        return this.customRules.get(ruleName) || this.clientRules.get(ruleName);
     }
 
-    /**
-     * Check if rule requires remote (server-side) validation
-     */
     isRemote(ruleName) {
         return this.remoteRules.has(ruleName);
     }
 
-    /**
-     * Register a custom rule
-     */
     extend(name, validator, message = null) {
         this.customRules.set(name, validator);
-        if (message) {
-            this.defaultMessages[name] = message;
-        }
+        if (message) this.defaultMessages[name] = message;
     }
 
-    /**
-     * Register a rule as remote (server-side only)
-     */
     registerRemote(name) {
         this.remoteRules.add(name);
     }
 
-    /**
-     * Get default message for a rule
-     */
     getMessage(ruleName) {
         return this.defaultMessages[ruleName] || 'The :attribute is invalid.';
     }
 
-    /**
-     * Get all available rules
-     */
     getAvailableRules() {
-        return [
-            ...this.clientRules.keys(),
-            ...this.customRules.keys()
-        ];
+        return [...this.clientRules.keys(), ...this.customRules.keys()];
     }
 }
 
