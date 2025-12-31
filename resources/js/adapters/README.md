@@ -52,6 +52,42 @@ Works with plain HTML using data attributes - no framework required.
 | `data-message` | Custom error message |
 | `data-attribute` | Display name for field in messages |
 
+### 3. Livewire Adapter (`livewire.js`)
+
+Deep integration with Livewire 3 for client-side pre-validation.
+
+#### Usage with Alpine.js + Livewire
+
+```html
+<!-- x-wire-validate directive -->
+<input wire:model="email" x-wire-validate="'required|email'" name="email">
+<input wire:model="password" x-wire-validate.live="'required|min:8'" name="password">
+```
+
+#### Usage with JavaScript
+
+```javascript
+import { createLivewireValidator } from 'laravel-client-validation';
+
+// In Livewire component
+const validator = createLivewireValidator(this, {
+    rules: {
+        email: 'required|email',
+        password: 'required|min:8|confirmed'
+    }
+});
+
+// Validate before wire:submit
+await validator.validateAll(formData);
+```
+
+#### Livewire Event Integration
+
+The adapter dispatches events to Livewire components:
+- `client-validation-error` - When validation fails
+- `client-validation-cleared` - When errors are cleared
+- `client-validation` - General validation event with field, valid, and errors
+
 ## Creating Custom Adapters
 
 Adapters should:
@@ -79,5 +115,4 @@ Planned adapters:
 
 - **React** - Hook-based validation (`useValidation()`)
 - **Vue** - Composition API integration
-- **Livewire** - Deep Livewire 3 integration
 - **Inertia** - Inertia.js form helpers

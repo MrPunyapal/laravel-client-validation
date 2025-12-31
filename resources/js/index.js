@@ -1,6 +1,6 @@
 /**
  * Laravel Client Validation
- * Client-side validation for Laravel rules. Works with Alpine.js, Vanilla JS, or any framework.
+ * Client-side validation for Laravel rules. Works with Alpine.js, Livewire, Vanilla JS, or any framework.
  */
 
 // Core
@@ -12,6 +12,7 @@ import EventEmitter from './core/EventEmitter.js';
 // Adapters
 import registerAlpine from './adapters/alpine.js';
 import vanillaAdapter, { VanillaFormValidator, initForms, createFormValidator, autoInit } from './adapters/vanilla.js';
+import livewireAdapter, { LivewireValidator, createLivewireValidator, registerLivewireDirective } from './adapters/livewire.js';
 
 function init(config = {}) {
     window.LaravelClientValidation = window.LaravelClientValidation || {};
@@ -27,8 +28,12 @@ function init(config = {}) {
 
     if (window.Alpine) {
         registerAlpine(window.Alpine);
+        registerLivewireDirective(window.Alpine);
     } else {
-        document.addEventListener('alpine:init', () => registerAlpine(window.Alpine));
+        document.addEventListener('alpine:init', () => {
+            registerAlpine(window.Alpine);
+            registerLivewireDirective(window.Alpine);
+        });
     }
 
     autoInit();
@@ -45,6 +50,9 @@ if (typeof window !== 'undefined') {
         VanillaFormValidator,
         initForms,
         createFormValidator,
+        LivewireValidator,
+        createLivewireValidator,
+        registerLivewireDirective,
         config: {},
         init,
         extend(name, validator, message = null) {
@@ -54,9 +62,11 @@ if (typeof window !== 'undefined') {
 
     if (window.Alpine) {
         registerAlpine(window.Alpine);
+        registerLivewireDirective(window.Alpine);
     } else {
         document.addEventListener('alpine:init', () => {
             registerAlpine(window.Alpine);
+            registerLivewireDirective(window.Alpine);
         });
     }
 
@@ -78,6 +88,9 @@ export {
     VanillaFormValidator,
     initForms,
     createFormValidator,
+    LivewireValidator,
+    createLivewireValidator,
+    registerLivewireDirective,
     init
 };
 
