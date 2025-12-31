@@ -144,7 +144,7 @@ export default class LaravelValidator {
         const context = { field, allData, rules: this.rules[field] };
 
         try {
-            const isValid = validator(value, params, context);
+            const isValid = validator(value, params, field, context);
             return {
                 valid: isValid,
                 message: isValid ? null : this.formatMessage(field, ruleName, params)
@@ -236,7 +236,7 @@ export default class LaravelValidator {
     }
 
     hasError(field) {
-        return this.errors[field] && this.errors[field].length > 0;
+        return Boolean(this.errors[field] && this.errors[field].length > 0);
     }
 
     hasErrors() {

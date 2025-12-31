@@ -1,6 +1,6 @@
-export default function confirmed(value, params, context = {}) {
-    const field = context.field || '';
+export default function confirmed(value, params, field, context = {}) {
+    const fieldName = context.field || field || '';
     const allData = context.allData || {};
-    const confirmationField = `${field}_confirmation`;
+    const confirmationField = `${fieldName}_confirmation`;
     return value === allData[confirmationField];
 }

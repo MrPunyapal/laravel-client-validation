@@ -1,3 +1,4 @@
-export default function different(value, [otherField], field, data = {}) {
-    return value !== data[otherField];
+export default function different(value, [otherField], field, context = {}) {
+    const allData = context.allData || context || {};
+    return value !== allData[otherField];
 }
