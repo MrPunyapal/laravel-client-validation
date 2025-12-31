@@ -2,7 +2,7 @@
 
 This document lists all available validation rules and their implementation status.
 
-## Available Rules (64)
+## Available Rules (74)
 
 These rules are implemented and ready for client-side validation:
 
@@ -20,6 +20,7 @@ These rules are implemented and ready for client-side validation:
 | `string` | Must be a string | ✅ Implemented |
 | `email` | Must be valid email format | ✅ Implemented |
 | `url` | Valid URL format | ✅ Implemented |
+| `active_url` | Valid URL with hostname | ✅ Implemented |
 | `alpha` | Letters only | ✅ Implemented |
 | `alpha_num` | Letters and numbers only | ✅ Implemented |
 | `alpha_dash` | Letters, numbers, dashes, underscores | ✅ Implemented |
@@ -32,7 +33,9 @@ These rules are implemented and ready for client-side validation:
 | `doesnt_end_with:suffix` | Must not end with given value | ✅ Implemented |
 | `ascii` | ASCII characters only | ✅ Implemented |
 | `uuid` | Valid UUID format | ✅ Implemented |
+| `ulid` | Valid ULID format | ✅ Implemented |
 | `json` | Valid JSON string | ✅ Implemented |
+| `hex_color` | Valid hexadecimal color | ✅ Implemented |
 
 ### Numeric Rules
 | Rule | Description | Status |
@@ -43,6 +46,8 @@ These rules are implemented and ready for client-side validation:
 | `multiple_of:value` | Multiple of given number | ✅ Implemented |
 | `digits:value` | Exact number of digits | ✅ Implemented |
 | `digits_between:min,max` | Digits between min and max | ✅ Implemented |
+| `min_digits:value` | Minimum number of digits | ✅ Implemented |
+| `max_digits:value` | Maximum number of digits | ✅ Implemented |
 
 ### Size Rules
 | Rule | Description | Status |
@@ -74,6 +79,8 @@ These rules are implemented and ready for client-side validation:
 | `after_or_equal:date` | Must be after or equal to date | ✅ Implemented |
 | `before_or_equal:date` | Must be before or equal to date | ✅ Implemented |
 | `date_equals:date` | Must equal given date | ✅ Implemented |
+| `date_format:format` | Must match date format | ✅ Implemented |
+| `timezone` | Must be a valid timezone | ✅ Implemented |
 
 ### Conditional Rules
 | Rule | Description | Status |
@@ -82,6 +89,9 @@ These rules are implemented and ready for client-side validation:
 | `required_unless:field,value` | Required unless another field has value | ✅ Implemented |
 | `required_with:field` | Required if another field is present | ✅ Implemented |
 | `required_without:field` | Required if another field is absent | ✅ Implemented |
+| `required_with_all:fields` | Required if all fields are present | ✅ Implemented |
+| `required_without_all:fields` | Required if all fields are absent | ✅ Implemented |
+| `required_array_keys:keys` | Array must contain specified keys | ✅ Implemented |
 | `prohibited` | Field must be empty | ✅ Implemented |
 | `prohibited_if:field,value` | Prohibited if condition met | ✅ Implemented |
 | `prohibited_unless:field,value` | Prohibited unless condition met | ✅ Implemented |
@@ -120,18 +130,6 @@ These rules require server-side validation via AJAX:
 | `password` | Current password verification | 🌐 Remote |
 | `current_password` | Current password verification | 🌐 Remote |
 
-## Missing Rules (Low Priority)
-
-| Rule | Description | Difficulty |
-|------|-------------|------------|
-| `required_with_all:fields` | Required if all fields present | Medium |
-| `required_without_all:fields` | Required if all fields absent | Medium |
-| `required_array_keys:keys` | Array must have specific keys | Medium |
-| `min_digits:value` | Minimum number of digits | Easy |
-| `max_digits:value` | Maximum number of digits | Easy |
-| `timezone` | Valid timezone | Medium |
-| `date_format:format` | Specific date format | Medium |
-
 ## Usage Examples
 
 ### Basic Validation
@@ -144,6 +142,28 @@ These rules require server-side validation via AJAX:
 ```html
 <input x-validate="'required_if:role,admin'" name="permissions">
 <input x-validate="'required_with:first_name'" name="last_name">
+<input x-validate="'required_with_all:street,city'" name="zip">
+```
+
+### Date Validation
+```html
+<input x-validate="'date|after:today'" name="start_date">
+<input x-validate="'date|date_format:Y-m-d'" name="birth_date">
+<input x-validate="'timezone'" name="timezone">
+```
+
+### Network Validation
+```html
+<input x-validate="'ip'" name="ip_address">
+<input x-validate="'mac_address'" name="mac">
+<input x-validate="'active_url'" name="website">
+```
+
+### Format Validation
+```html
+<input x-validate="'uuid'" name="uuid">
+<input x-validate="'ulid'" name="ulid">
+<input x-validate="'hex_color'" name="color">
 ```
 
 ### Live Validation
