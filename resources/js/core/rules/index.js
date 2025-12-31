@@ -41,6 +41,26 @@ import uppercase from './uppercase.js';
 import ip from './ip.js';
 import ipv4 from './ipv4.js';
 import ipv6 from './ipv6.js';
+import requiredIf from './required_if.js';
+import requiredUnless from './required_unless.js';
+import requiredWith from './required_with.js';
+import requiredWithout from './required_without.js';
+import afterOrEqual from './after_or_equal.js';
+import beforeOrEqual from './before_or_equal.js';
+import multipleOf from './multiple_of.js';
+import decimal from './decimal.js';
+import distinct from './distinct.js';
+import macAddress from './mac_address.js';
+import ascii from './ascii.js';
+import prohibited from './prohibited.js';
+import prohibitedIf from './prohibited_if.js';
+import prohibitedUnless from './prohibited_unless.js';
+import acceptedIf from './accepted_if.js';
+import declined from './declined.js';
+import declinedIf from './declined_if.js';
+import dateEquals from './date_equals.js';
+import doesntStartWith from './doesnt_start_with.js';
+import doesntEndWith from './doesnt_end_with.js';
 
 export default {
     required,
@@ -86,4 +106,24 @@ export default {
     ip,
     ipv4,
     ipv6,
+    required_if: requiredIf,
+    required_unless: requiredUnless,
+    required_with: requiredWith,
+    required_without: requiredWithout,
+    after_or_equal: afterOrEqual,
+    before_or_equal: beforeOrEqual,
+    multiple_of: multipleOf,
+    decimal,
+    distinct,
+    mac_address: macAddress,
+    ascii,
+    prohibited,
+    prohibited_if: prohibitedIf,
+    prohibited_unless: prohibitedUnless,
+    accepted_if: acceptedIf,
+    declined,
+    declined_if: declinedIf,
+    date_equals: dateEquals,
+    doesnt_start_with: doesntStartWith,
+    doesnt_end_with: doesntEndWith,
 };
