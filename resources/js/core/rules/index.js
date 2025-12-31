@@ -45,6 +45,8 @@ import requiredIf from './required_if.js';
 import requiredUnless from './required_unless.js';
 import requiredWith from './required_with.js';
 import requiredWithout from './required_without.js';
+import requiredWithAll from './required_with_all.js';
+import requiredWithoutAll from './required_without_all.js';
 import afterOrEqual from './after_or_equal.js';
 import beforeOrEqual from './before_or_equal.js';
 import multipleOf from './multiple_of.js';
@@ -61,6 +63,14 @@ import declinedIf from './declined_if.js';
 import dateEquals from './date_equals.js';
 import doesntStartWith from './doesnt_start_with.js';
 import doesntEndWith from './doesnt_end_with.js';
+import minDigits from './min_digits.js';
+import maxDigits from './max_digits.js';
+import dateFormat from './date_format.js';
+import timezone from './timezone.js';
+import requiredArrayKeys from './required_array_keys.js';
+import activeUrl from './active_url.js';
+import ulid from './ulid.js';
+import hexColor from './hex_color.js';
 
 export default {
     required,
@@ -110,6 +120,8 @@ export default {
     required_unless: requiredUnless,
     required_with: requiredWith,
     required_without: requiredWithout,
+    required_with_all: requiredWithAll,
+    required_without_all: requiredWithoutAll,
     after_or_equal: afterOrEqual,
     before_or_equal: beforeOrEqual,
     multiple_of: multipleOf,
@@ -126,4 +138,12 @@ export default {
     date_equals: dateEquals,
     doesnt_start_with: doesntStartWith,
     doesnt_end_with: doesntEndWith,
+    min_digits: minDigits,
+    max_digits: maxDigits,
+    date_format: dateFormat,
+    timezone,
+    required_array_keys: requiredArrayKeys,
+    active_url: activeUrl,
+    ulid,
+    hex_color: hexColor,
 };

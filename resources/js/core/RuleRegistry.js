@@ -73,6 +73,16 @@ class RuleRegistry {
             date_equals: 'The :attribute must be a date equal to :date.',
             doesnt_start_with: 'The :attribute may not start with: :values.',
             doesnt_end_with: 'The :attribute may not end with: :values.',
+            required_with_all: 'The :attribute field is required when :values are present.',
+            required_without_all: 'The :attribute field is required when none of :values are present.',
+            min_digits: 'The :attribute must have at least :min digits.',
+            max_digits: 'The :attribute must not have more than :max digits.',
+            date_format: 'The :attribute does not match the format :format.',
+            timezone: 'The :attribute must be a valid timezone.',
+            required_array_keys: 'The :attribute must contain entries for: :values.',
+            active_url: 'The :attribute must be a valid URL.',
+            ulid: 'The :attribute must be a valid ULID.',
+            hex_color: 'The :attribute must be a valid hexadecimal color.',
         };
     }
 

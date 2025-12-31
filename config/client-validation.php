@@ -147,16 +147,16 @@ return [
 
         // String rules
         'starts_with', 'ends_with', 'doesnt_start_with', 'doesnt_end_with',
-        'uuid', 'lowercase', 'uppercase', 'ascii',
+        'uuid', 'ulid', 'lowercase', 'uppercase', 'ascii', 'hex_color',
 
         // Network rules
-        'ip', 'ipv4', 'ipv6', 'mac_address',
+        'ip', 'ipv4', 'ipv6', 'mac_address', 'active_url',
 
         // Numeric rules
-        'decimal', 'multiple_of',
+        'decimal', 'multiple_of', 'min_digits', 'max_digits',
 
         // Date rules
-        'after_or_equal', 'before_or_equal', 'date_equals',
+        'after_or_equal', 'before_or_equal', 'date_equals', 'date_format', 'timezone',
 
         // Acceptance rules
         'accepted_if', 'declined', 'declined_if',
@@ -166,6 +166,7 @@ return [
 
         // Conditional rules (client-side)
         'required_if', 'required_unless', 'required_with', 'required_without',
+        'required_with_all', 'required_without_all', 'required_array_keys',
     ],
 
     /*
