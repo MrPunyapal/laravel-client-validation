@@ -29,6 +29,16 @@ import digitsBetween from '../../resources/js/core/rules/digits_between.js';
 import string from '../../resources/js/core/rules/string.js';
 import nullable from '../../resources/js/core/rules/nullable.js';
 import array from '../../resources/js/core/rules/array.js';
+import requiredWithAll from '../../resources/js/core/rules/required_with_all.js';
+import requiredWithoutAll from '../../resources/js/core/rules/required_without_all.js';
+import minDigits from '../../resources/js/core/rules/min_digits.js';
+import maxDigits from '../../resources/js/core/rules/max_digits.js';
+import dateFormat from '../../resources/js/core/rules/date_format.js';
+import timezone from '../../resources/js/core/rules/timezone.js';
+import activeUrl from '../../resources/js/core/rules/active_url.js';
+import ulid from '../../resources/js/core/rules/ulid.js';
+import hexColor from '../../resources/js/core/rules/hex_color.js';
+import requiredArrayKeys from '../../resources/js/core/rules/required_array_keys.js';
 
 describe('Validation Rules', () => {
     describe('required', () => {
@@ -524,6 +534,102 @@ describe('New Validation Rules', () => {
         it('validates value does not end with suffix', () => {
             expect(doesntEndWith('hello', ['ing', 'ed'])).toBe(true);
             expect(doesntEndWith('hello', ['lo', 'o'])).toBe(false);
+        });
+    });
+
+    describe('required_with_all', () => {
+        it('requires value when all fields are present', () => {
+            const context = { allData: { first: 'John', last: 'Doe' } };
+            expect(requiredWithAll('value', ['first', 'last'], 'field', context)).toBe(true);
+            expect(requiredWithAll('', ['first', 'last'], 'field', context)).toBe(false);
+        });
+
+        it('passes when not all fields are present', () => {
+            const context = { allData: { first: 'John' } };
+            expect(requiredWithAll('', ['first', 'last'], 'field', context)).toBe(true);
+        });
+    });
+
+    describe('required_without_all', () => {
+        it('requires value when all fields are missing', () => {
+            const context = { allData: {} };
+            expect(requiredWithoutAll('value', ['first', 'last'], 'field', context)).toBe(true);
+            expect(requiredWithoutAll('', ['first', 'last'], 'field', context)).toBe(false);
+        });
+
+        it('passes when at least one field is present', () => {
+            const context = { allData: { first: 'John' } };
+            expect(requiredWithoutAll('', ['first', 'last'], 'field', context)).toBe(true);
+        });
+    });
+
+    describe('min_digits', () => {
+        it('validates minimum number of digits', () => {
+            expect(minDigits('12345', ['5'])).toBe(true);
+            expect(minDigits('123', ['5'])).toBe(false);
+            expect(minDigits('', ['5'])).toBe(true); // empty is valid
+        });
+    });
+
+    describe('max_digits', () => {
+        it('validates maximum number of digits', () => {
+            expect(maxDigits('123', ['5'])).toBe(true);
+            expect(maxDigits('123456', ['5'])).toBe(false);
+            expect(maxDigits('', ['5'])).toBe(true); // empty is valid
+        });
+    });
+
+    describe('date_format', () => {
+        it('validates date format', () => {
+            expect(dateFormat('2024-01-15', ['Y-m-d'])).toBe(true);
+            expect(dateFormat('01/15/2024', ['m/d/Y'])).toBe(true);
+            expect(dateFormat('invalid', ['Y-m-d'])).toBe(false);
+            expect(dateFormat('', ['Y-m-d'])).toBe(true); // empty is valid
+        });
+    });
+
+    describe('timezone', () => {
+        it('validates timezone', () => {
+            expect(timezone('UTC')).toBe(true);
+            expect(timezone('America/New_York')).toBe(true);
+            expect(timezone('Europe/London')).toBe(true);
+            expect(timezone('Invalid/Timezone')).toBe(false);
+            expect(timezone('')).toBe(true); // empty is valid
+        });
+    });
+
+    describe('active_url', () => {
+        it('validates active URL format', () => {
+            expect(activeUrl('https://example.com')).toBe(true);
+            expect(activeUrl('http://test.org')).toBe(true);
+            expect(activeUrl('not-a-url')).toBe(false);
+            expect(activeUrl('')).toBe(true); // empty is valid
+        });
+    });
+
+    describe('ulid', () => {
+        it('validates ULID format', () => {
+            expect(ulid('01ARZ3NDEKTSV4RRFFQ69G5FAV')).toBe(true);
+            expect(ulid('invalid')).toBe(false);
+            expect(ulid('')).toBe(true); // empty is valid
+        });
+    });
+
+    describe('hex_color', () => {
+        it('validates hex color format', () => {
+            expect(hexColor('#FFF')).toBe(true);
+            expect(hexColor('#FFFFFF')).toBe(true);
+            expect(hexColor('FF5733')).toBe(true);
+            expect(hexColor('#GGGGGG')).toBe(false);
+            expect(hexColor('')).toBe(true); // empty is valid
+        });
+    });
+
+    describe('required_array_keys', () => {
+        it('validates required array keys', () => {
+            expect(requiredArrayKeys({ name: 'John', age: 30 }, ['name', 'age'])).toBe(true);
+            expect(requiredArrayKeys({ name: 'John' }, ['name', 'age'])).toBe(false);
+            expect(requiredArrayKeys('', ['name'])).toBe(true); // empty is valid
         });
     });
 });
