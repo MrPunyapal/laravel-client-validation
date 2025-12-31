@@ -176,12 +176,12 @@ describe('Validation Rules', () => {
     describe('confirmed', () => {
         it('checks confirmation field matches', () => {
             const context = { field: 'password', allData: { password: 'secret', password_confirmation: 'secret' } };
-            expect(confirmed('secret', [], context)).toBe(true);
+            expect(confirmed('secret', [], 'password', context)).toBe(true);
         });
 
         it('fails when confirmation does not match', () => {
             const context = { field: 'password', allData: { password: 'secret', password_confirmation: 'different' } };
-            expect(confirmed('secret', [], context)).toBe(false);
+            expect(confirmed('secret', [], 'password', context)).toBe(false);
         });
     });
 
