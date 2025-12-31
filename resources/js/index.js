@@ -13,10 +13,6 @@ import EventEmitter from './core/EventEmitter.js';
 import registerAlpine from './adapters/alpine.js';
 import vanillaAdapter, { VanillaFormValidator, initForms, createFormValidator, autoInit } from './adapters/vanilla.js';
 
-// Legacy support
-import LegacyClientValidator from './core/validator.js';
-import legacyAlpineIntegration from './integrations/alpine.js';
-
 function init(config = {}) {
     window.LaravelClientValidation = window.LaravelClientValidation || {};
     window.LaravelClientValidation.config = {
@@ -49,7 +45,6 @@ if (typeof window !== 'undefined') {
         VanillaFormValidator,
         initForms,
         createFormValidator,
-        ClientValidator: LegacyClientValidator,
         config: {},
         init,
         extend(name, validator, message = null) {
@@ -57,18 +52,11 @@ if (typeof window !== 'undefined') {
         }
     };
 
-    window.LaravelValidator = {
-        ClientValidator: LegacyClientValidator,
-        Validator: LegacyClientValidator
-    };
-
     if (window.Alpine) {
         registerAlpine(window.Alpine);
-        legacyAlpineIntegration(window.Alpine);
     } else {
         document.addEventListener('alpine:init', () => {
             registerAlpine(window.Alpine);
-            legacyAlpineIntegration(window.Alpine);
         });
     }
 
@@ -90,8 +78,6 @@ export {
     VanillaFormValidator,
     initForms,
     createFormValidator,
-    LegacyClientValidator as ClientValidator,
-    legacyAlpineIntegration as alpineIntegration,
     init
 };
 
