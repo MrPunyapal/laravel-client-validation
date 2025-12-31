@@ -3,24 +3,22 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation.svg?style=flat-square)](https://packagist.org/packages/mrpunyapal/laravel-client-validation)
 [![Total Downloads](https://img.shields.io/packagist/dt/mrpunyapal/laravel-client-validation.svg?style=flat-square)](https://packagist.org/packages/mrpunyapal/laravel-client-validation)
 
-A powerful Laravel package that brings server-side validation rules to the client-side using Alpine.js. Validate forms in real-time with the same rules you use in your Laravel backend, including support for FormRequest classes and AJAX fallbacks for complex validation rules.
+A powerful Laravel package that brings server-side validation rules to the client-side. Validate forms in real-time with the same rules you use in your Laravel backend.
 
 ## ✨ Features
 
-- 🚀 **Real-time validation** with Alpine.js integration
-- 📝 **FormRequest support** - Extract rules, messages, and attributes automatically  
-- ⚡ **AJAX fallback** for complex rules (unique, exists, etc.)
-- 🎨 **Customizable templates** and styling
-- 🔧 **Zero configuration** - Works out of the box
-- 🖼️ **Livewire ready** - Seamless integration
-- 📱 **Mobile friendly** - Responsive validation UX
-- 🎯 **Elegant DX** - Expressive, clean code
-- 🎪 **Validation Hooks** - beforeValidate, afterValidate, onPasses, onFails
-- ⚡ **High Performance** - Debouncing, caching, batching
+- 🚀 **Real-time validation** - Instant feedback as users fill forms
+- 📝 **FormRequest support** - Extract rules from your existing FormRequest classes
+- ⚡ **Client + Remote validation** - Client-side rules run instantly, server rules via AJAX
+- 🎨 **Multiple integrations** - Alpine.js, Vanilla JS, or programmatic use
+- 🔧 **Zero configuration** - Works out of the box with sensible defaults
+- 🎯 **Flexible triggers** - Validate on blur, input, or form submit
+- 🎪 **Validation Hooks** - beforeValidate, afterValidate events
+- ⚡ **High Performance** - Debouncing, caching, request deduplication
 
 ## 🚀 Quick Start
 
-### 1. Install & Setup
+### 1. Install
 
 ```bash
 composer require mrpunyapal/laravel-client-validation
@@ -28,7 +26,7 @@ composer require mrpunyapal/laravel-client-validation
 
 ### 2. Include Assets
 
-Add to your layout:
+Add to your layout's `<head>`:
 
 ```blade
 @clientValidationAssets
@@ -36,208 +34,135 @@ Add to your layout:
 
 ### 3. Start Validating
 
-**Validation modes:**
+Choose your preferred approach below.
+
+---
+
+## 📘 Usage with Alpine.js
+
+### Simple Field Validation
+
 ```html
-<!-- Live validation (validates as you type) -->
-<input x-validate.live="'required|email|unique:users,email'">
+{{-- Validate on blur (default) --}}
+<input x-validate="'required|email'" name="email">
 
-<!-- Form validation (validates on submit) -->
-<input x-validate.form="'required|min:8|confirmed'">
+{{-- Validate as you type --}}
+<input x-validate.live="'required|min:3'" name="username">
 
-<!-- Blur validation (validates when field loses focus) -->
-<input x-validate="'required|alpha_dash|min:3'">
+{{-- Validate on form submit only --}}
+<input x-validate.submit="'required|min:8'" name="password">
 ```
 
-**Complete form with FormRequest:**
-```php
-// Controller
-use MrPunyapal\ClientValidation\Facades\ClientValidation;
+### Complete Form Component
 
-$validation = ClientValidation::fromRequest(CreateUserRequest::class);
-return view('users.create', compact('validation'));
-```
-
-```blade
-{{-- Blade Template --}}
-<div x-data="@alpineValidation($validation)">
-    <form @submit.prevent="submitForm">
-        <input x-model="form.name" @blur="validate('name')">
-        <div x-show="hasError('name')" x-text="getError('name')"></div>
-        
+```html
+<div x-data="validation({
+    rules: {
+        email: 'required|email',
+        password: 'required|min:8',
+        password_confirmation: 'required|same:password'
+    },
+    messages: {
+        'email.required': 'Please enter your email',
+        'password.min': 'Password is too short'
+    }
+})">
+    <form @submit.prevent="submit(async (data) => { 
+        // Form is valid, submit to server
+        console.log(data);
+    })">
         <input x-model="form.email" @blur="validate('email')">
-        <div x-show="hasError('email')" x-text="getError('email')"></div>
+        <span x-text="error('email')" x-show="hasError('email')"></span>
         
-        <button :disabled="!isValid()">Create User</button>
+        <input type="password" x-model="form.password" @blur="validate('password')">
+        <span x-text="error('password')" x-show="hasError('password')"></span>
+        
+        <input type="password" x-model="form.password_confirmation">
+        
+        <button :disabled="validating || !isValid()">Submit</button>
     </form>
 </div>
 ```
 
-#### Alpine.js Form Component
+### Available Methods in `validation()` Component
+
+| Method | Description |
+|--------|-------------|
+| `validate('field')` | Validate a single field |
+| `validateAll()` | Validate all fields |
+| `submit(callback)` | Validate then call callback if valid |
+| `error('field')` | Get first error for field |
+| `hasError('field')` | Check if field has errors |
+| `hasErrors()` | Check if any errors exist |
+| `isValid()` | Check if form is valid |
+| `clearError('field')` | Clear errors for field |
+| `reset()` | Reset form to initial state |
+
+---
+
+## 📗 Usage with Vanilla JS (No Framework)
+
+### Using Data Attributes
 
 ```html
-<div x-data="validateForm({
-    email: 'required|email|unique:users,email',
-    password: 'required|min:8|confirmed',
-    terms: 'required|accepted'
-}, {
-    'email.unique': 'This email is already registered',
-    'password.confirmed': 'Passwords do not match'
-})">
-    <form @submit.prevent="submitForm(async (data) => {
-        // Your submission logic
-        console.log('Form data:', data);
-    })">
-        <input type="email" x-model="form.email" @blur="validate('email')">
-        <div x-show="hasError('email')" x-text="getError('email')"></div>
-        
-        <input type="password" x-model="form.password" @blur="validate('password')">
-        <input type="password" x-model="form.password_confirmation">
-        
-        <input type="checkbox" x-model="form.terms" value="1">
-        
-        <button :disabled="!isValid() || validating">
-            <span x-show="!validating">Submit</span>
-            <span x-show="validating">Validating...</span>
-## 🎯 Advanced Features
-
-### Validation Hooks
-
-```javascript
-validator
-    .beforeValidate(ctx => console.log('Starting validation...'))
-    .afterValidate(ctx => console.log('Validation complete'))
-    .onPasses(ctx => enableSubmitButton())
-    .onFails(ctx => showValidationErrors());
-```
-
-### Blade Directives
-
-```blade
-{{-- Quick validation directives --}}
-@validate('email', 'required|email')
-@validateLive('username', 'required|alpha_dash|min:3')
-@validateForm('password', 'required|min:8')
-
-{{-- Alpine.js data generation --}}
-<div x-data="@alpineValidation($rules, $messages, $attributes)">
-    <!-- Your form -->
-</div>
-```
-
-### Custom Rules
-
-```php
-// Register custom server-side rule
-ClientValidation::extend('strong_password', function ($value) {
-    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/', $value);
-}, 'Password must contain uppercase, lowercase, number and special character.');
-
-// Make it client-side capable
-ClientValidation::extendClientSide('strong_password', `
-    (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(value)
-`);
-```
-
-### Smart AJAX Fallback
-
-The package automatically detects which rules require server-side validation:
-
-- **Client-side**: `required`, `email`, `min`, `max`, `regex`, etc.
-- **Server-side**: `unique`, `exists`, `password`, etc.
-- **Conditional**: `required_if`, `required_unless`, etc.
-
-```html
-<!-- This will automatically use AJAX for the 'unique' rule -->
-<input x-validate.live="'required|email|unique:users,email'">
-```
-```
-
-#### Direct Rule Validation
-
-```html
-<!-- Manual validation trigger -->
-<input type="email" name="email" x-validate="'required|email'" placeholder="Enter email">
-<button onclick="document.querySelector('[name=email]').validate()">Validate</button>
-
-<!-- Live validation (validates as you type) -->
-<input type="text" name="username" x-validate.live="'required|alpha_dash|min:3'" placeholder="Username">
-
-<!-- Form validation (validates on submit) -->
-<form>
-    <input type="text" name="name" x-validate.form="'required|string|min:2'" placeholder="Full Name">
+{{-- Add data-validate to form, data-rules to inputs --}}
+<form data-validate>
+    <input name="email" 
+           data-rules="required|email" 
+           data-validate-on="blur">
+    
+    <input name="username" 
+           data-rules="required|alpha_dash|min:3" 
+           data-validate-on="input"> {{-- validates as you type --}}
+    
     <button type="submit">Submit</button>
 </form>
 ```
 
-#### Alpine.js Data Component
+### Using Blade Directives
 
 ```html
-<div x-data="validateForm({
-    email: 'required|email',
-    password: 'required|min:8|confirmed',
-    terms: 'required|accepted'
-}, {
-    'email.required': 'Please provide your email address',
-    'password.min': 'Password must be at least 8 characters'
-}, {
-    email: 'email address'
-})">
-    <form @submit.prevent="submitForm">
-        <input type="email" name="email" x-model="form.email" @blur="validate('email')">
-        <div x-show="hasError('email')" x-text="getError('email')"></div>
-        
-        <input type="password" name="password" x-model="form.password">
-        <input type="password" name="password_confirmation" x-model="form.password_confirmation">
-        
-        <input type="checkbox" name="terms" x-model="form.terms" value="1">
-        
-        <button type="submit" :disabled="!isValid()">Submit</button>
-    </form>
-</div>
+<form data-validate>
+    {{-- Using @rules directive --}}
+    <input name="email" @rules('email', 'required|email', ['mode' => 'blur'])>
+    
+    {{-- Shorthand directives --}}
+    <input name="username" @validateLive('username', 'required|min:3')>
+    <input name="password" @validateBlur('password', 'required|min:8')>
+    <input name="terms" @validateSubmit('terms', 'accepted')>
+</form>
 ```
 
-### 3. FormRequest Integration
+### Programmatic Validation
 
-Create a FormRequest:
-
-```php
-<?php
-
-namespace App\Http\Requests;
-
-use Illuminate\Foundation\Http\FormRequest;
-
-class CreateUserRequest extends FormRequest
-{
-    public function rules(): array
-    {
-        return [
-            'name' => 'required|string|min:2|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'age' => 'required|integer|min:18|max:120',
-        ];
+```javascript
+// Create validator
+const validator = new LaravelClientValidation.Validator({
+    rules: {
+        email: 'required|email',
+        password: 'required|min:8'
+    },
+    messages: {
+        'email.required': 'Email is required'
     }
+});
 
-    public function messages(): array
-    {
-        return [
-            'email.unique' => 'This email is already registered.',
-            'password.confirmed' => 'Password confirmation does not match.',
-        ];
-    }
+// Validate a field
+const result = await validator.validateField('email', 'test@example.com');
+console.log(result.valid, result.errors);
 
-    public function attributes(): array
-    {
-        return [
-            'name' => 'full name',
-            'email' => 'email address',
-        ];
-    }
-}
+// Validate all
+const formResult = await validator.validateAll({ 
+    email: 'test@example.com', 
+    password: '12345678' 
+});
 ```
 
-Use in your controller:
+---
+
+## 📙 Using with FormRequest
+
+### In Controller
 
 ```php
 use MrPunyapal\ClientValidation\Facades\ClientValidation;
@@ -245,59 +170,132 @@ use MrPunyapal\ClientValidation\Facades\ClientValidation;
 public function create()
 {
     $validation = ClientValidation::fromRequest(CreateUserRequest::class);
-    return view('user.create', compact('validation'));
+    return view('users.create', compact('validation'));
 }
 ```
 
-Use in your Blade template:
+### In Blade (Alpine.js)
 
 ```blade
-<div x-data="validateForm(@json($validation['rules']), @json($validation['messages']), @json($validation['attributes']))">
-    <form @submit.prevent="submitForm">
-        <input type="text" name="name" x-model="form.name" x-validate.live="rules.name">
-        <input type="email" name="email" x-model="form.email" x-validate.live="rules.email">
-        <!-- AJAX validation for unique email will happen automatically -->
-        
-        <button type="submit" :disabled="!isValid()">Create User</button>
-    </form>
+<div x-data="validation(@json($validation))">
+    {{-- Form fields --}}
 </div>
 ```
 
-## Supported Validation Rules
+---
 
-### Client-Side Rules
-These rules are validated instantly on the client:
+## 🔧 Validation Types
 
-- `required`, `nullable`
-- `email`, `url`
-- `string`, `numeric`, `integer`, `boolean`
-- `min`, `max`, `between`, `size`
-- `alpha`, `alpha_num`, `alpha_dash`
-- `confirmed`, `same`, `different`
-- `in`, `not_in`
-- `date`, `after`, `before`
-- `regex`
+### Client-Side Rules (Instant)
 
-### AJAX-Fallback Rules
-These rules automatically fall back to server-side validation:
+These rules validate immediately in the browser:
 
-- `unique` - Check database uniqueness
-- `exists` - Verify record exists
-- `password` - Current password verification
-- `current_password` - Laravel's current password rule
+`required`, `email`, `url`, `min`, `max`, `between`, `size`, `numeric`, `integer`, `alpha`, `alpha_num`, `alpha_dash`, `confirmed`, `same`, `different`, `in`, `not_in`, `date`, `after`, `before`, `regex`, `boolean`, `accepted`, `nullable`
 
-## Configuration
+### Remote Rules (AJAX)
 
-The configuration file `config/client-validation.php` allows you to customize everything.
+These rules require server-side validation:
 
-## Examples
+`unique`, `exists`, `password`, `current_password`
 
-Check the `examples/` directory for complete working examples including:
-- Basic HTML demo
-- Laravel FormRequest integration
-- Livewire components
-- API usage
+```html
+{{-- AJAX validation happens automatically for 'unique' --}}
+<input x-validate.live="'required|email|unique:users,email'" name="email">
+```
 
-## License
+---
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+## ⚙️ Configuration
+
+Publish the config file:
+
+```bash
+php artisan vendor:publish --tag=client-validation-config
+```
+
+Key configuration options:
+
+```php
+return [
+    // Validation trigger default mode
+    'validation_mode' => 'blur', // 'blur', 'input', 'submit'
+    
+    // Debounce for live validation (ms)
+    'debounce_ms' => 300,
+    
+    // Enable AJAX for remote rules
+    'enable_ajax_validation' => true,
+    
+    // Error display styling
+    'error_template' => [
+        'container_class' => 'text-red-500 text-sm mt-1',
+    ],
+    
+    // Field styling on validation
+    'field_styling' => [
+        'valid_class' => 'border-green-500',
+        'invalid_class' => 'border-red-500',
+    ],
+];
+```
+
+---
+
+## 🎣 Validation Hooks
+
+```javascript
+const validator = new LaravelClientValidation.Validator({ rules });
+
+validator
+    .beforeValidate(({ data }) => console.log('Starting...'))
+    .afterValidate(({ valid, errors }) => console.log('Done!', valid));
+```
+
+---
+
+## 🔌 Custom Rules
+
+### Client-Side Custom Rule
+
+```javascript
+// Register custom rule
+LaravelClientValidation.extend('phone', (value, params) => {
+    return /^\d{10}$/.test(value);
+}, 'The :attribute must be a valid phone number.');
+
+// Use it
+<input x-validate="'required|phone'" name="phone">
+```
+
+### Server-Side Custom Rule (PHP)
+
+```php
+ClientValidation::extend('strong_password', function ($value) {
+    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/', $value);
+}, 'Password must contain uppercase, lowercase, and numbers.');
+```
+
+---
+
+## 📁 Examples
+
+Check the `examples/` directory for complete demos:
+
+- [alpine-demo.blade.php](examples/alpine-demo.blade.php) - Alpine.js integration
+- [vanilla-demo.blade.php](examples/vanilla-demo.blade.php) - Vanilla JS with data attributes
+
+---
+
+## 🔄 Future Packages
+
+This package is designed to be modular. In the future, we plan to offer:
+
+- `laravel-client-validation-livewire` - Deep Livewire integration
+- `laravel-client-validation-inertia` - Inertia.js + Vue/React support
+- `laravel-client-validation-core` - Standalone JS package for any framework
+
+---
+
+## 📄 License
+
+The MIT License (MIT). See [License File](LICENSE.md) for more information.
