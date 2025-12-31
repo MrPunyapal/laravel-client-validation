@@ -40,6 +40,13 @@ class RuleParser implements RuleParserInterface
         'digits_between', 'string', 'nullable', 'accepted', 'array',
         'json', 'file', 'image', 'mimes', 'extensions', 'filled',
         'present', 'distinct', 'lt', 'lte', 'gt', 'gte',
+        'starts_with', 'ends_with', 'doesnt_start_with', 'doesnt_end_with',
+        'uuid', 'lowercase', 'uppercase', 'ip', 'ipv4', 'ipv6',
+        'mac_address', 'ascii', 'decimal', 'multiple_of',
+        'after_or_equal', 'before_or_equal', 'date_equals',
+        'accepted_if', 'declined', 'declined_if',
+        'prohibited', 'prohibited_if', 'prohibited_unless',
+        'required_if', 'required_unless', 'required_with', 'required_without',
     ];
 
     /**
