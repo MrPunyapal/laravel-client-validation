@@ -12,6 +12,7 @@ export default defineConfig({
     rollupOptions: {
       external: ['alpinejs'],
       output: {
+        exports: 'named',
         globals: {
           alpinejs: 'Alpine'
         }

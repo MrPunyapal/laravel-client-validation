@@ -124,6 +124,70 @@ class ClientValidation
     }
 
     /**
+     * Generate validation config as JSON for any JavaScript framework.
+     *
+     * @param array<string, mixed> $rules Validation rules
+     * @param array<string, string> $messages Custom messages
+     * @param array<string, string> $attributes Custom attribute names
+     * @return string JSON configuration object
+     */
+    public function toJson(array $rules, array $messages = [], array $attributes = []): string
+    {
+        return json_encode([
+            'rules' => $rules,
+            'messages' => $this->mergeMessages($messages),
+            'attributes' => $this->mergeAttributes($attributes),
+            'config' => $this->getClientConfig(),
+        ], JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * Generate validation config for HTML data attributes.
+     *
+     * @param string $field Field name
+     * @param string|array<int, string> $rules Validation rules
+     * @param array<string, mixed> $options Additional options
+     * @return string HTML data attributes string
+     */
+    public function dataAttributes(string $field, string|array $rules, array $options = []): string
+    {
+        $rulesString = is_array($rules) ? implode('|', $rules) : $rules;
+        $mode = $options['mode'] ?? 'blur';
+
+        $attrs = sprintf('data-rules="%s"', e($rulesString));
+
+        if ($mode !== 'blur') {
+            $attrs .= sprintf(' data-validate-on="%s"', e($mode));
+        }
+
+        if (!empty($options['message'])) {
+            $attrs .= sprintf(' data-message="%s"', e($options['message']));
+        }
+
+        if (!empty($options['attribute'])) {
+            $attrs .= sprintf(' data-attribute="%s"', e($options['attribute']));
+        }
+
+        return $attrs;
+    }
+
+    /**
+     * Get client configuration array.
+     *
+     * @return array<string, mixed>
+     */
+    public function getClientConfig(): array
+    {
+        return [
+            'remoteUrl' => route('client-validation.validate'),
+            'debounce' => config('client-validation.debounce_ms', 300),
+            'errorClass' => config('client-validation.error_template.container_class', 'validation-error text-red-500 text-sm mt-1'),
+            'validClass' => config('client-validation.field_styling.valid_class', 'border-green-500'),
+            'invalidClass' => config('client-validation.field_styling.invalid_class', 'border-red-500'),
+        ];
+    }
+
+    /**
      * Render the script tag for validation assets.
      */
     public function renderAssets(): string

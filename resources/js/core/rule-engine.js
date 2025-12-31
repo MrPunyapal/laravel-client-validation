@@ -1,4 +1,4 @@
-import validationRules from '../rules/index.js';
+import validationRules from './rules/index.js';
 
 /**
  * Rule Engine for client-side validation rules

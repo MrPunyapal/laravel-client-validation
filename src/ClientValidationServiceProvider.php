@@ -52,12 +52,70 @@ class ClientValidationServiceProvider extends PackageServiceProvider
 
     protected function registerBladeDirectives(): void
     {
-        Blade::directive('clientValidation', function ($expression) {
+        // ==================== Asset Directives ====================
+
+        // Include validation assets
+        // Usage: @clientValidationAssets
+        Blade::directive('clientValidationAssets', function () {
+            return "<?php echo view('client-validation::assets')->render(); ?>";
+        });
+
+        // Include validation config as JavaScript
+        // Usage: @clientValidationConfig
+        Blade::directive('clientValidationConfig', function () {
+            return "<?php echo '<script>window.clientValidationConfig = ' . json_encode(app('client-validation')->getClientConfig()) . ';</script>'; ?>";
+        });
+
+        // ==================== Alpine.js Directives ====================
+
+        // Generate Alpine.js validation component data
+        // Usage: @alpineValidation(['email' => 'required|email'], ['email.required' => 'Email is required'])
+        Blade::directive('alpineValidation', function ($expression) {
             return "<?php echo app('client-validation')->generate({$expression}); ?>";
         });
 
-        Blade::directive('clientValidationAssets', function () {
-            return "<?php echo view('client-validation::assets')->render(); ?>";
+        // Generate validation JSON for custom use
+        // Usage: @validationJson(['email' => 'required|email'])
+        Blade::directive('validationJson', function ($expression) {
+            return "<?php echo app('client-validation')->toJson({$expression}); ?>";
+        });
+
+        // ==================== Vanilla JS / Data Attribute Directives ====================
+
+        // Generate data-rules and data-validate-on attributes
+        // Usage: <input @rules('email', 'required|email', ['mode' => 'live'])>
+        Blade::directive('rules', function ($expression) {
+            return "<?php echo app('client-validation')->dataAttributes({$expression}); ?>";
+        });
+
+        // Shorthand for blur validation (default)
+        // Usage: <input @validateBlur('email', 'required|email')>
+        Blade::directive('validateBlur', function ($expression) {
+            $params = str_replace(['(', ')'], '', $expression);
+            [$field, $rules] = array_pad(explode(',', $params, 2), 2, '""');
+            return "<?php echo app('client-validation')->dataAttributes({$field}, {$rules}, ['mode' => 'blur']); ?>";
+        });
+
+        // Shorthand for live validation (on input)
+        // Usage: <input @validateLive('username', 'required|min:3')>
+        Blade::directive('validateLive', function ($expression) {
+            $params = str_replace(['(', ')'], '', $expression);
+            [$field, $rules] = array_pad(explode(',', $params, 2), 2, '""');
+            return "<?php echo app('client-validation')->dataAttributes({$field}, {$rules}, ['mode' => 'input']); ?>";
+        });
+
+        // Shorthand for submit-only validation
+        // Usage: <input @validateSubmit('password', 'required|min:8')>
+        Blade::directive('validateSubmit', function ($expression) {
+            $params = str_replace(['(', ')'], '', $expression);
+            [$field, $rules] = array_pad(explode(',', $params, 2), 2, '""');
+            return "<?php echo app('client-validation')->dataAttributes({$field}, {$rules}, ['mode' => 'submit']); ?>";
+        });
+
+        // ==================== Legacy Directives (for backward compatibility) ====================
+
+        Blade::directive('clientValidation', function ($expression) {
+            return "<?php echo app('client-validation')->generate({$expression}); ?>";
         });
 
         Blade::directive('validate', function ($expression) {
@@ -66,20 +124,10 @@ class ClientValidationServiceProvider extends PackageServiceProvider
             return "<?php echo app('client-validation')->directive({$field}, {$rules}, {$options}); ?>";
         });
 
-        Blade::directive('validateLive', function ($expression) {
-            $params = str_replace(['(', ')'], '', $expression);
-            [$field, $rules] = array_pad(explode(',', $params, 2), 2, '""');
-            return "<?php echo app('client-validation')->directive({$field}, {$rules}, ['mode' => 'live']); ?>";
-        });
-
         Blade::directive('validateForm', function ($expression) {
             $params = str_replace(['(', ')'], '', $expression);
             [$field, $rules] = array_pad(explode(',', $params, 2), 2, '""');
             return "<?php echo app('client-validation')->directive({$field}, {$rules}, ['mode' => 'form']); ?>";
-        });
-
-        Blade::directive('alpineValidation', function ($expression) {
-            return "<?php echo app('client-validation')->alpineData({$expression}); ?>";
         });
     }
 
