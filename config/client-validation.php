@@ -136,6 +136,7 @@ return [
     |
     */
     'client_side_rules' => [
+        // Core rules
         'required', 'email', 'min', 'max', 'numeric', 'integer',
         'alpha', 'alpha_num', 'alpha_dash', 'url', 'between',
         'confirmed', 'size', 'in', 'not_in', 'boolean', 'date',
@@ -143,6 +144,28 @@ return [
         'digits_between', 'string', 'nullable', 'accepted', 'array',
         'json', 'file', 'image', 'mimes', 'extensions', 'filled',
         'present', 'distinct', 'lt', 'lte', 'gt', 'gte',
+
+        // String rules
+        'starts_with', 'ends_with', 'doesnt_start_with', 'doesnt_end_with',
+        'uuid', 'lowercase', 'uppercase', 'ascii',
+
+        // Network rules
+        'ip', 'ipv4', 'ipv6', 'mac_address',
+
+        // Numeric rules
+        'decimal', 'multiple_of',
+
+        // Date rules
+        'after_or_equal', 'before_or_equal', 'date_equals',
+
+        // Acceptance rules
+        'accepted_if', 'declined', 'declined_if',
+
+        // Prohibition rules
+        'prohibited', 'prohibited_if', 'prohibited_unless',
+
+        // Conditional rules (client-side)
+        'required_if', 'required_unless', 'required_with', 'required_without',
     ],
 
     /*
