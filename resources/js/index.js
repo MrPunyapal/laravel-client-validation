@@ -17,6 +17,8 @@ import reactAdapter, { useValidation as useReactValidation, ReactValidator, crea
 import vueAdapter, { useValidation as useVueValidation, createVueValidator, vValidate, VueValidationPlugin, ValidationMixin } from './adapters/vue.js';
 
 function init(config = {}) {
+    if (typeof window === 'undefined') return {};
+
     window.LaravelClientValidation = window.LaravelClientValidation || {};
     window.LaravelClientValidation.config = {
         remoteUrl: '/client-validation/validate',
@@ -55,13 +57,11 @@ if (typeof window !== 'undefined') {
         LivewireValidator,
         createLivewireValidator,
         registerLivewireDirective,
-        // React
         ReactValidator,
         createReactValidator,
         useReactValidation,
         createFieldProps,
         getErrorProps,
-        // Vue
         createVueValidator,
         useVueValidation,
         vValidate,
@@ -105,13 +105,11 @@ export {
     LivewireValidator,
     createLivewireValidator,
     registerLivewireDirective,
-    // React
     ReactValidator,
     createReactValidator,
     useReactValidation,
     createFieldProps,
     getErrorProps,
-    // Vue
     createVueValidator,
     useVueValidation,
     vValidate,

@@ -476,8 +476,10 @@ describe('New Validation Rules', () => {
     });
 
     describe('prohibited', () => {
-        it('always fails', () => {
-            expect(prohibited()).toBe(false);
+        it('passes for empty values and fails for non-empty', () => {
+            expect(prohibited()).toBe(true);
+            expect(prohibited(null)).toBe(true);
+            expect(prohibited('')).toBe(true);
             expect(prohibited('value')).toBe(false);
         });
     });

@@ -5,14 +5,19 @@
 
 import LaravelValidator from '../core/LaravelValidator.js';
 
+const defaults = {
+    remoteUrl: '/client-validation/validate',
+    debounce: 300,
+    errorClass: 'validation-error text-red-500 text-sm mt-1',
+    validClass: 'is-valid border-green-500',
+    invalidClass: 'is-invalid border-red-500',
+};
+
 function getConfig() {
-    return window.LaravelClientValidation?.config || {
-        remoteUrl: '/client-validation/validate',
-        debounce: 300,
-        errorClass: 'validation-error text-red-500 text-sm mt-1',
-        validClass: 'is-valid border-green-500',
-        invalidClass: 'is-invalid border-red-500',
-    };
+    if (typeof window !== 'undefined' && window.LaravelClientValidation?.config) {
+        return { ...defaults, ...window.LaravelClientValidation.config };
+    }
+    return defaults;
 }
 
 function debounce(fn, ms) {
