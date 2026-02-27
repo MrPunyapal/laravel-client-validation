@@ -7,7 +7,7 @@ class RuleRegistry {
     constructor() {
         this.clientRules = new Map(Object.entries(validationRules));
         this.customRules = new Map();
-        this.remoteRules = new Set(['unique', 'exists', 'password', 'current_password']);
+        this.remoteRules = new Set(['unique', 'exists', 'password', 'current_password', 'encoding']);
 
         this.defaultMessages = {
             required: 'The :attribute field is required.',
@@ -83,6 +83,33 @@ class RuleRegistry {
             active_url: 'The :attribute must be a valid URL.',
             ulid: 'The :attribute must be a valid ULID.',
             hex_color: 'The :attribute must be a valid hexadecimal color.',
+            not_regex: 'The :attribute format is invalid.',
+            contains: 'The :attribute must contain: :values.',
+            doesnt_contain: 'The :attribute must not contain: :values.',
+            in_array: 'The :attribute field must exist in :other.',
+            in_array_keys: 'The :attribute must contain at least one of the given keys.',
+            list: 'The :attribute must be a list.',
+            missing: 'The :attribute field must not be present.',
+            missing_if: 'The :attribute field must not be present when :other is :value.',
+            missing_unless: 'The :attribute field must not be present unless :other is :value.',
+            missing_with: 'The :attribute field must not be present when :values is present.',
+            missing_with_all: 'The :attribute field must not be present when :values are present.',
+            present_if: 'The :attribute field must be present when :other is :value.',
+            present_unless: 'The :attribute field must be present unless :other is :value.',
+            present_with: 'The :attribute field must be present when :values is present.',
+            present_with_all: 'The :attribute field must be present when :values are present.',
+            prohibited_if_accepted: 'The :attribute field is prohibited when :other is accepted.',
+            prohibited_if_declined: 'The :attribute field is prohibited when :other is declined.',
+            prohibits: 'The :attribute field prohibits :other from being present.',
+            required_if_accepted: 'The :attribute field is required when :other is accepted.',
+            required_if_declined: 'The :attribute field is required when :other is declined.',
+            enum: 'The selected :attribute is invalid.',
+            file: 'The :attribute must be a file.',
+            image: 'The :attribute must be an image.',
+            mimes: 'The :attribute must be a file of type: :values.',
+            mimetypes: 'The :attribute must be a file of type: :values.',
+            extensions: 'The :attribute must have one of the following extensions: :values.',
+            dimensions: 'The :attribute has invalid image dimensions.',
         };
     }
 

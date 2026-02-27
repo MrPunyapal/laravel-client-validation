@@ -80,30 +80,27 @@ export default class LaravelValidator {
         const errors = [];
         let valid = true;
 
+        const hasBail = fieldRules.some(r => this.parseRule(r).name === 'bail');
+
         for (const ruleString of fieldRules) {
             const { name, params } = this.parseRule(ruleString);
 
-            // Skip nullable rule if value is empty and field has nullable
-            if (name === 'nullable') continue;
+            if (name === 'nullable' || name === 'bail' || name === 'sometimes') continue;
 
-            // Handle nullable - if field is nullable and value is empty, skip remaining rules
             if (this.hasRule(field, 'nullable') && this.isEmpty(value)) {
                 break;
             }
 
             let result;
 
-            // Check if this is a remote rule
             if (this.registry.isRemote(name)) {
                 result = await this.remote.validate(field, value, name, params, {
                     messages: this.messages,
                     attributes: this.attributes
                 });
             } else if (this.registry.has(name)) {
-                // Client-side validation
-                result = this.validateClientRule(field, value, name, params, allData);
+                result = await this.validateClientRule(field, value, name, params, allData);
             } else {
-                // Unknown rule - treat as remote
                 result = await this.remote.validate(field, value, name, params, {
                     messages: this.messages,
                     attributes: this.attributes
@@ -115,7 +112,7 @@ export default class LaravelValidator {
                 const message = result.message || this.formatMessage(field, name, params);
                 errors.push(message);
 
-                if (this.options.stopOnFirstError) {
+                if (hasBail || this.options.stopOnFirstError) {
                     break;
                 }
             }
@@ -135,7 +132,7 @@ export default class LaravelValidator {
         return { valid, errors };
     }
 
-    validateClientRule(field, value, ruleName, params, allData) {
+    async validateClientRule(field, value, ruleName, params, allData) {
         const validator = this.registry.get(ruleName);
         if (!validator) {
             return { valid: true, message: null };
@@ -144,7 +141,10 @@ export default class LaravelValidator {
         const context = { field, allData, rules: this.rules[field] };
 
         try {
-            const isValid = validator(value, params, field, context);
+            let isValid = validator(value, params, field, context);
+            if (isValid instanceof Promise) {
+                isValid = await isValid;
+            }
             return {
                 valid: isValid,
                 message: isValid ? null : this.formatMessage(field, ruleName, params)

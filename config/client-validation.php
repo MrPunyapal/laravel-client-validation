@@ -140,14 +140,17 @@ return [
         'required', 'email', 'min', 'max', 'numeric', 'integer',
         'alpha', 'alpha_num', 'alpha_dash', 'url', 'between',
         'confirmed', 'size', 'in', 'not_in', 'boolean', 'date',
-        'after', 'before', 'regex', 'same', 'different', 'digits',
-        'digits_between', 'string', 'nullable', 'accepted', 'array',
-        'json', 'file', 'image', 'mimes', 'extensions', 'filled',
-        'present', 'distinct', 'lt', 'lte', 'gt', 'gte',
+        'after', 'before', 'regex', 'not_regex', 'same', 'different',
+        'digits', 'digits_between', 'string', 'nullable', 'accepted',
+        'array', 'json', 'filled', 'present', 'distinct',
+        'lt', 'lte', 'gt', 'gte', 'bail', 'enum',
 
         // String rules
         'starts_with', 'ends_with', 'doesnt_start_with', 'doesnt_end_with',
         'uuid', 'ulid', 'lowercase', 'uppercase', 'ascii', 'hex_color',
+
+        // Array rules
+        'contains', 'doesnt_contain', 'in_array', 'in_array_keys', 'list',
 
         // Network rules
         'ip', 'ipv4', 'ipv6', 'mac_address', 'active_url',
@@ -163,10 +166,21 @@ return [
 
         // Prohibition rules
         'prohibited', 'prohibited_if', 'prohibited_unless',
+        'prohibited_if_accepted', 'prohibited_if_declined', 'prohibits',
 
-        // Conditional rules (client-side)
+        // Conditional required rules
         'required_if', 'required_unless', 'required_with', 'required_without',
         'required_with_all', 'required_without_all', 'required_array_keys',
+        'required_if_accepted', 'required_if_declined',
+
+        // Conditional present rules
+        'present_if', 'present_unless', 'present_with', 'present_with_all',
+
+        // Missing rules
+        'missing', 'missing_if', 'missing_unless', 'missing_with', 'missing_with_all',
+
+        // File rules
+        'file', 'image', 'mimes', 'mimetypes', 'extensions', 'dimensions',
     ],
 
     /*
@@ -178,7 +192,7 @@ return [
     |
     */
     'server_side_rules' => [
-        'unique', 'exists', 'password', 'current_password',
+        'unique', 'exists', 'password', 'current_password', 'encoding',
         'exclude', 'exclude_if', 'exclude_unless', 'exclude_with',
         'exclude_without', 'sometimes',
     ],

@@ -71,6 +71,33 @@ import requiredArrayKeys from './required_array_keys.js';
 import activeUrl from './active_url.js';
 import ulid from './ulid.js';
 import hexColor from './hex_color.js';
+import notRegex from './not_regex.js';
+import contains from './contains.js';
+import doesntContain from './doesnt_contain.js';
+import inArrayField from './in_array.js';
+import inArrayKeysRule from './in_array_keys.js';
+import listRule from './list.js';
+import missing from './missing.js';
+import missingIf from './missing_if.js';
+import missingUnless from './missing_unless.js';
+import missingWith from './missing_with.js';
+import missingWithAll from './missing_with_all.js';
+import presentIf from './present_if.js';
+import presentUnless from './present_unless.js';
+import presentWith from './present_with.js';
+import presentWithAll from './present_with_all.js';
+import prohibitedIfAccepted from './prohibited_if_accepted.js';
+import prohibitedIfDeclined from './prohibited_if_declined.js';
+import prohibits from './prohibits.js';
+import requiredIfAccepted from './required_if_accepted.js';
+import requiredIfDeclined from './required_if_declined.js';
+import enumRule from './enum.js';
+import file from './file.js';
+import image from './image.js';
+import mimes from './mimes.js';
+import mimetypes from './mimetypes.js';
+import extensions from './extensions.js';
+import dimensions from './dimensions.js';
 
 export default {
     required,
@@ -146,4 +173,31 @@ export default {
     active_url: activeUrl,
     ulid,
     hex_color: hexColor,
+    not_regex: notRegex,
+    contains,
+    doesnt_contain: doesntContain,
+    in_array: inArrayField,
+    in_array_keys: inArrayKeysRule,
+    list: listRule,
+    missing,
+    missing_if: missingIf,
+    missing_unless: missingUnless,
+    missing_with: missingWith,
+    missing_with_all: missingWithAll,
+    present_if: presentIf,
+    present_unless: presentUnless,
+    present_with: presentWith,
+    present_with_all: presentWithAll,
+    prohibited_if_accepted: prohibitedIfAccepted,
+    prohibited_if_declined: prohibitedIfDeclined,
+    prohibits,
+    required_if_accepted: requiredIfAccepted,
+    required_if_declined: requiredIfDeclined,
+    enum: enumRule,
+    file,
+    image,
+    mimes,
+    mimetypes,
+    extensions,
+    dimensions,
 };
