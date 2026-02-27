@@ -3,29 +3,30 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation.svg?style=flat-square)](https://packagist.org/packages/mrpunyapal/laravel-client-validation)
 [![Total Downloads](https://img.shields.io/packagist/dt/mrpunyapal/laravel-client-validation.svg?style=flat-square)](https://packagist.org/packages/mrpunyapal/laravel-client-validation)
 
-A powerful Laravel package that brings server-side validation rules to the client-side. Validate forms in real-time with the same rules you use in your Laravel backend.
+A powerful validation package that brings Laravel validation rules to the client-side. Validate forms in real-time using the same rules you know from Laravel — works with **any backend** or as a standalone NPM package.
 
-## ✨ Features
+## Features
 
-- 🚀 **Real-time validation** - Instant feedback as users fill forms
-- 📝 **FormRequest support** - Extract rules from your existing FormRequest classes
-- ⚡ **Client + Remote validation** - Client-side rules run instantly, server rules via AJAX
-- 🎨 **Multiple integrations** - Alpine.js, Livewire, Vanilla JS, or programmatic use
-- 🔧 **Zero configuration** - Works out of the box with sensible defaults
-- 🎯 **Flexible triggers** - Validate on blur, input, or form submit
-- 🎪 **Validation Hooks** - beforeValidate, afterValidate events
-- ⚡ **High Performance** - Debouncing, caching, request deduplication
-- 📦 **74 validation rules** - Comprehensive client-side rule coverage
+- **102 client-side rules** — Comprehensive coverage of Laravel validation rules
+- **5 remote rules** — Server-side AJAX validation for `unique`, `exists`, etc.
+- **Backend-agnostic** — Use with Laravel, Django, Express, Rails, or any backend
+- **Multiple integrations** — Alpine.js, Livewire, Filament, Vanilla JS, React, Vue
+- **Real-time validation** — Instant feedback on blur, input, or submit
+- **FormRequest support** — Extract rules from existing Laravel FormRequest classes
+- **Validation hooks** — `beforeValidate`, `afterValidate`, field-level events
+- **Bail support** — Stop on first failure per field with `bail` rule
+- **Batch validation** — Validate multiple fields in a single AJAX request
+- **Rate limiting** — Built-in request throttling for AJAX validation
+- **Zero configuration** — Works out of the box with sensible defaults
+- **Tree-shakeable** — ES module subpath exports for minimal bundle size
 
-## 🚀 Quick Start
+## Quick Start
 
-### 1. Install
+### Option A: Laravel Package (Composer)
 
 ```bash
 composer require mrpunyapal/laravel-client-validation
 ```
-
-### 2. Include Assets
 
 Add to your layout's `<head>`:
 
@@ -33,13 +34,39 @@ Add to your layout's `<head>`:
 @clientValidationAssets
 ```
 
-### 3. Start Validating
+### Option B: Standalone NPM Package
 
-Choose your preferred approach below.
+```bash
+npm install laravel-client-validation
+```
+
+Import only what you need:
+
+```js
+// Core engine only (no framework dependency)
+import { LaravelValidator, RuleRegistry } from 'laravel-client-validation/core';
+
+// Alpine.js adapter
+import { createAlpineValidator } from 'laravel-client-validation/alpine';
+
+// Vanilla JS adapter
+import { createFormValidator } from 'laravel-client-validation/vanilla';
+```
+
+### Option C: CDN / Script Tag
+
+```html
+<script src="https://unpkg.com/laravel-client-validation/resources/js/dist/client-validation.iife.js"></script>
+<script>
+  const validator = new LaravelClientValidation.Validator({
+    rules: { email: 'required|email' }
+  });
+</script>
+```
 
 ---
 
-## 📘 Usage with Alpine.js
+## Usage with Alpine.js
 
 ### Simple Field Validation
 
@@ -52,6 +79,9 @@ Choose your preferred approach below.
 
 {{-- Validate on form submit only --}}
 <input x-validate.submit="'required|min:8'" name="password">
+
+{{-- Bail on first failure --}}
+<input x-validate="'bail|required|email|unique:users'" name="email">
 ```
 
 ### Complete Form Component
@@ -68,18 +98,17 @@ Choose your preferred approach below.
         'password.min': 'Password is too short'
     }
 })">
-    <form @submit.prevent="submit(async (data) => { 
-        // Form is valid, submit to server
-        console.log(data);
+    <form @submit.prevent="submit(async (data) => {
+        console.log('Valid!', data);
     })">
         <input x-model="form.email" @blur="validate('email')">
         <span x-text="error('email')" x-show="hasError('email')"></span>
-        
+
         <input type="password" x-model="form.password" @blur="validate('password')">
         <span x-text="error('password')" x-show="hasError('password')"></span>
-        
+
         <input type="password" x-model="form.password_confirmation">
-        
+
         <button :disabled="validating || !isValid()">Submit</button>
     </form>
 </div>
@@ -101,39 +130,24 @@ Choose your preferred approach below.
 
 ---
 
-## 📕 Usage with Livewire
+## Usage with Livewire
 
 ### Using the `x-wire-validate` Directive
-
-The Livewire adapter integrates seamlessly with Livewire 3's `wire:model` binding:
 
 ```html
 <div wire:id="my-component">
     <form wire:submit="save">
-        {{-- Validate on blur (default) --}}
-        <input type="email" 
-               wire:model="email" 
+        <input type="email"
+               wire:model="email"
                x-wire-validate="'required|email'"
                name="email">
         <span class="validation-error" data-error="email"></span>
 
-        {{-- Live validation as you type --}}
-        <input type="text" 
-               wire:model.live="username" 
+        <input type="text"
+               wire:model.live="username"
                x-wire-validate.live="'required|alpha_dash|min:3'"
                name="username">
         <span class="validation-error" data-error="username"></span>
-
-        {{-- Password with confirmation --}}
-        <input type="password" 
-               wire:model="password"
-               x-wire-validate="'required|min:8|confirmed'"
-               name="password">
-        <span class="validation-error" data-error="password"></span>
-
-        <input type="password" 
-               wire:model="password_confirmation"
-               name="password_confirmation">
 
         <button type="submit">Submit</button>
     </form>
@@ -141,8 +155,6 @@ The Livewire adapter integrates seamlessly with Livewire 3's `wire:model` bindin
 ```
 
 ### Using the PHP Trait
-
-Add the `WithClientValidation` trait to your Livewire component:
 
 ```php
 use Livewire\Component;
@@ -179,43 +191,15 @@ In your Blade view:
 
 ```html
 <div x-data="{ clientRules: @json($this->getClientRules()) }">
-    <input wire:model="email" 
+    <input wire:model="email"
            x-wire-validate="clientRules.email"
            name="email">
 </div>
 ```
 
-### Programmatic Livewire Validation
-
-```javascript
-import { createLivewireValidator } from 'laravel-client-validation';
-
-// In your component's Alpine data
-Alpine.data('myForm', () => ({
-    validator: null,
-    
-    init() {
-        this.validator = createLivewireValidator(this.$wire, {
-            rules: {
-                email: 'required|email',
-                password: 'required|min:8'
-            }
-        });
-    },
-    
-    async validateField(field, value) {
-        const result = await this.validator.validateField(field, value);
-        console.log(result.valid, result.errors);
-    }
-}));
-```
-
 ### Livewire Events
 
-The adapter dispatches events to your Livewire component:
-
 ```php
-// In your Livewire component
 protected $listeners = [
     'client-validation-error' => 'handleClientError',
     'client-validation-cleared' => 'handleClientCleared',
@@ -224,56 +208,82 @@ protected $listeners = [
 public function handleClientError($data)
 {
     // $data = ['field' => 'email', 'errors' => ['The email field is required.']]
-    // Handle client-side validation errors
-}
-
-public function handleClientCleared($data)
-{
-    // $data = ['field' => 'email']
-    // Handle when field errors are cleared
 }
 ```
 
 ---
 
-## 📗 Usage with Vanilla JS (No Framework)
+## Usage with Filament
+
+### Register the Plugin
+
+```php
+use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
+
+class AdminPanelProvider extends PanelProvider
+{
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->plugins([
+                ClientValidationPlugin::make()
+                    ->enableRemoteValidation()
+                    ->validationMode('live'),
+            ]);
+    }
+}
+```
+
+### Add Validation to Fields
+
+Use the `HasClientValidation` trait on your custom Filament fields:
+
+```php
+use Filament\Forms\Components\Field;
+use MrPunyapal\ClientValidation\Filament\HasClientValidation;
+
+class MyField extends Field
+{
+    use HasClientValidation;
+}
+```
+
+Or use the pre-built `ClientValidatedField`:
+
+```php
+use MrPunyapal\ClientValidation\Filament\ClientValidatedField;
+
+ClientValidatedField::make('email')
+    ->clientValidation('required|email')
+    ->clientValidationMode('live');
+```
+
+---
+
+## Usage with Vanilla JS (No Framework)
 
 ### Using Data Attributes
 
 ```html
-{{-- Add data-validate to form, data-rules to inputs --}}
 <form data-validate>
-    <input name="email" 
-           data-rules="required|email" 
+    <input name="email"
+           data-rules="required|email"
            data-validate-on="blur">
-    
-    <input name="username" 
-           data-rules="required|alpha_dash|min:3" 
-           data-validate-on="input"> {{-- validates as you type --}}
-    
+
+    <input name="username"
+           data-rules="required|alpha_dash|min:3"
+           data-validate-on="input">
+
     <button type="submit">Submit</button>
-</form>
-```
-
-### Using Blade Directives
-
-```html
-<form data-validate>
-    {{-- Using @rules directive --}}
-    <input name="email" @rules('email', 'required|email', ['mode' => 'blur'])>
-    
-    {{-- Shorthand directives --}}
-    <input name="username" @validateLive('username', 'required|min:3')>
-    <input name="password" @validateBlur('password', 'required|min:8')>
-    <input name="terms" @validateSubmit('terms', 'accepted')>
 </form>
 ```
 
 ### Programmatic Validation
 
 ```javascript
-// Create validator
-const validator = new LaravelClientValidation.Validator({
+import { LaravelValidator } from 'laravel-client-validation/core';
+
+const validator = new LaravelValidator({
     rules: {
         email: 'required|email',
         password: 'required|min:8'
@@ -283,20 +293,28 @@ const validator = new LaravelClientValidation.Validator({
     }
 });
 
-// Validate a field
 const result = await validator.validateField('email', 'test@example.com');
 console.log(result.valid, result.errors);
 
-// Validate all
-const formResult = await validator.validateAll({ 
-    email: 'test@example.com', 
-    password: '12345678' 
+const formResult = await validator.validateAll({
+    email: 'test@example.com',
+    password: '12345678'
 });
+```
+
+### Using Blade Directives
+
+```html
+<form data-validate>
+    <input name="email" @rules('email', 'required|email', ['mode' => 'blur'])>
+    <input name="username" @validateLive('username', 'required|min:3')>
+    <input name="password" @validateBlur('password', 'required|min:8')>
+</form>
 ```
 
 ---
 
-## 📙 Using with FormRequest
+## Using with FormRequest
 
 ### In Controller
 
@@ -310,7 +328,7 @@ public function create()
 }
 ```
 
-### In Blade (Alpine.js)
+### In Blade
 
 ```blade
 <div x-data="validation(@json($validation))">
@@ -320,74 +338,115 @@ public function create()
 
 ---
 
-## 🔧 Validation Rules
+## Backend-Agnostic Remote Validation
 
-### Client-Side Rules (74 rules - Instant)
+The `RemoteValidator` works with any backend, not just Laravel. Configure it for your stack:
 
-These rules validate immediately in the browser:
+### Express.js / Node
 
-**Core:** `required`, `nullable`, `filled`, `present`
+```javascript
+import { RemoteValidator } from 'laravel-client-validation/core';
 
-**String:** `string`, `email`, `url`, `alpha`, `alpha_num`, `alpha_dash`, `regex`, `lowercase`, `uppercase`, `starts_with`, `ends_with`, `doesnt_start_with`, `doesnt_end_with`, `ascii`, `uuid`, `ulid`, `json`, `hex_color`
+const remote = new RemoteValidator({
+    endpoint: '/api/validate',
+    csrf: false,
+    requestFormatter: (field, value, rule, params) => ({
+        field_name: field,
+        field_value: value,
+        validation_rule: rule,
+        rule_params: params
+    }),
+    responseParser: (response) => ({
+        valid: response.success,
+        message: response.error || null
+    })
+});
+```
+
+### Django
+
+```javascript
+const remote = new RemoteValidator({
+    endpoint: '/validate/',
+    csrfHeaderName: 'X-CSRFToken',
+    csrfTokenResolver: () => document.cookie.match(/csrftoken=([^;]+)/)?.[1]
+});
+```
+
+### Custom Adapter
+
+```javascript
+const remote = new RemoteValidator();
+remote.setAdapter(async (field, value, rule, params) => {
+    const res = await myHttpClient.post('/validate', { field, value, rule });
+    return { valid: res.ok, message: res.error };
+});
+```
+
+---
+
+## Validation Rules
+
+### Client-Side Rules (102 — Instant)
+
+**Core:** `required`, `nullable`, `filled`, `present`, `bail`
+
+**String:** `string`, `email`, `url`, `active_url`, `alpha`, `alpha_num`, `alpha_dash`, `regex`, `not_regex`, `contains`, `doesnt_contain`, `lowercase`, `uppercase`, `starts_with`, `ends_with`, `doesnt_start_with`, `doesnt_end_with`, `ascii`, `uuid`, `ulid`, `json`, `hex_color`
 
 **Numeric:** `numeric`, `integer`, `decimal`, `multiple_of`, `digits`, `digits_between`, `min_digits`, `max_digits`
 
 **Size:** `min`, `max`, `between`, `size`
 
-**Comparison:** `confirmed`, `same`, `different`, `gt`, `gte`, `lt`, `lte`, `in`, `not_in`
+**Comparison:** `confirmed`, `same`, `different`, `gt`, `gte`, `lt`, `lte`, `in`, `not_in`, `enum`
 
 **Date:** `date`, `after`, `before`, `after_or_equal`, `before_or_equal`, `date_equals`, `date_format`, `timezone`
 
-**Conditional:** `required_if`, `required_unless`, `required_with`, `required_without`, `required_with_all`, `required_without_all`, `required_array_keys`
+**Conditional:** `required_if`, `required_unless`, `required_with`, `required_without`, `required_with_all`, `required_without_all`, `required_if_accepted`, `required_if_declined`, `required_array_keys`
+
+**Presence / Missing:** `present_if`, `present_unless`, `present_with`, `present_with_all`, `missing`, `missing_if`, `missing_unless`, `missing_with`, `missing_with_all`
+
+**Prohibition:** `prohibited`, `prohibited_if`, `prohibited_unless`, `prohibited_if_accepted`, `prohibited_if_declined`, `prohibits`
 
 **Boolean:** `boolean`, `accepted`, `accepted_if`, `declined`, `declined_if`
 
-**Prohibition:** `prohibited`, `prohibited_if`, `prohibited_unless`
+**Network:** `ip`, `ipv4`, `ipv6`, `mac_address`
 
-**Network:** `ip`, `ipv4`, `ipv6`, `mac_address`, `active_url`
+**Array:** `array`, `distinct`, `in_array`, `in_array_keys`, `list`
 
-**Array:** `array`, `distinct`
+**File:** `file`, `image`, `mimes`, `mimetypes`, `extensions`, `dimensions`
 
-### Remote Rules (AJAX)
+### Remote Rules (5 — AJAX)
 
-These rules require server-side validation:
-
-`unique`, `exists`, `password`, `current_password`
+`unique`, `exists`, `password`, `current_password`, `encoding`
 
 ```html
-{{-- AJAX validation happens automatically for 'unique' --}}
 <input x-validate.live="'required|email|unique:users,email'" name="email">
 ```
 
+See [docs/RULES.md](docs/RULES.md) for full details and examples.
+
 ---
 
-## ⚙️ Configuration
-
-Publish the config file:
+## Configuration
 
 ```bash
 php artisan vendor:publish --tag=client-validation-config
 ```
 
-Key configuration options:
+Key options:
 
 ```php
 return [
-    // Validation trigger default mode
-    'validation_mode' => 'blur', // 'blur', 'input', 'submit'
-    
-    // Debounce for live validation (ms)
-    'debounce_ms' => 300,
-    
-    // Enable AJAX for remote rules
-    'enable_ajax_validation' => true,
-    
-    // Error display styling
+    'validation_mode' => 'blur',        // 'blur', 'input', 'submit'
+    'debounce_ms' => 300,               // Debounce for live validation
+    'enable_ajax_validation' => true,   // Enable AJAX for remote rules
+    'rate_limit' => [
+        'max_attempts' => 60,           // Requests per window (0 = disabled)
+        'decay_seconds' => 60,          // Window duration
+    ],
     'error_template' => [
         'container_class' => 'text-red-500 text-sm mt-1',
     ],
-    
-    // Field styling on validation
     'field_styling' => [
         'valid_class' => 'border-green-500',
         'invalid_class' => 'border-red-500',
@@ -397,7 +456,7 @@ return [
 
 ---
 
-## 🎣 Validation Hooks
+## Validation Hooks
 
 ```javascript
 const validator = new LaravelClientValidation.Validator({ rules });
@@ -409,21 +468,22 @@ validator
 
 ---
 
-## 🔌 Custom Rules
+## Custom Rules
 
-### Client-Side Custom Rule
+### Client-Side
 
 ```javascript
-// Register custom rule
-LaravelClientValidation.extend('phone', (value, params) => {
-    return /^\d{10}$/.test(value);
+LaravelClientValidation.extend('phone', (value, params, field, context) => {
+    if (!value) return true;
+    return /^\+?[\d\s-]{10,}$/.test(value);
 }, 'The :attribute must be a valid phone number.');
+```
 
-// Use it
+```html
 <input x-validate="'required|phone'" name="phone">
 ```
 
-### Server-Side Custom Rule (PHP)
+### Server-Side (PHP)
 
 ```php
 ClientValidation::extend('strong_password', function ($value) {
@@ -433,16 +493,42 @@ ClientValidation::extend('strong_password', function ($value) {
 
 ---
 
-## 📁 Examples
+## NPM Subpath Exports
 
-Check the `examples/` directory for complete demos:
-
-- [alpine-demo.blade.php](examples/alpine-demo.blade.php) - Alpine.js integration
-- [vanilla-demo.blade.php](examples/vanilla-demo.blade.php) - Vanilla JS with data attributes
-- [livewire-demo.blade.php](examples/livewire-demo.blade.php) - Livewire integration
+| Import Path | Contents |
+|-------------|----------|
+| `laravel-client-validation` | Full bundle (all adapters) |
+| `laravel-client-validation/core` | `LaravelValidator`, `RuleRegistry`, `RemoteValidator`, `EventEmitter` |
+| `laravel-client-validation/alpine` | Alpine.js `x-validate` directive |
+| `laravel-client-validation/vanilla` | Vanilla JS `data-validate` form validator |
+| `laravel-client-validation/livewire` | Livewire adapter |
+| `laravel-client-validation/react` | React hook adapter |
+| `laravel-client-validation/vue` | Vue composable adapter |
 
 ---
 
-## 📄 License
+## Examples
+
+See the `examples/` directory for complete demos:
+
+- [Alpine.js demo](examples/alpine-demo.blade.php)
+- [Vanilla JS demo](examples/vanilla-demo.blade.php)
+- [Livewire demo](examples/livewire-demo.blade.php)
+
+---
+
+## Testing
+
+```bash
+# PHP tests (Pest)
+composer test
+
+# JavaScript tests (Vitest)
+npm test
+```
+
+---
+
+## License
 
 The MIT License (MIT). See [License File](LICENSE.md) for more information.

@@ -46,6 +46,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Rate Limiting
+    |--------------------------------------------------------------------------
+    |
+    | Rate limiting for AJAX validation requests. Set max_attempts to 0
+    | to disable rate limiting entirely.
+    |
+    */
+    'rate_limit' => [
+        'max_attempts' => env('CLIENT_VALIDATION_RATE_LIMIT', 60),
+        'decay_seconds' => env('CLIENT_VALIDATION_RATE_DECAY', 60),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Validation Mode
     |--------------------------------------------------------------------------
     |

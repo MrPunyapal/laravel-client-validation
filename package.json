@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cross-env BUILD_BUNDLE=true vite build",
+    "build": "vite build && node scripts/build-bundle.js",
     "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -61,6 +61,7 @@
   ],
   "author": "Punyapal Shah <mrpunyapal@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mrpunyapal/laravel-client-validation.git"

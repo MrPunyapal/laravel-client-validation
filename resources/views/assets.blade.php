@@ -17,7 +17,9 @@
 {{-- Laravel Client Validation Script --}}
 @if(file_exists(public_path('vendor/client-validation/client-validation.iife.js')))
 <script src="{{ asset('vendor/client-validation/client-validation.iife.js') }}"></script>
+@elseif(file_exists(public_path('vendor/client-validation/client-validation.es.js')))
+<script type="module" src="{{ asset('vendor/client-validation/client-validation.es.js') }}"></script>
 @else
-<script src="https://unpkg.com/laravel-client-validation@latest/dist/client-validation.iife.js"></script>
+<script src="https://unpkg.com/laravel-client-validation@latest/resources/js/dist/client-validation.iife.js"></script>
 @endif
 @endif

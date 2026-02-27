@@ -139,6 +139,8 @@ class ClientValidationServiceProvider extends PackageServiceProvider
                 ->group(function () {
                     Route::post('validate', [ValidationController::class, 'validate'])
                         ->name('client-validation.validate');
+                    Route::post('validate/batch', [ValidationController::class, 'validateBatch'])
+                        ->name('client-validation.validate-batch');
                 });
         }
     }
