@@ -195,6 +195,9 @@ return [
 
         // File rules
         'file', 'image', 'mimes', 'mimetypes', 'extensions', 'dimensions',
+
+        // Advanced rules
+        'any_of', 'password_strength',
     ],
 
     /*

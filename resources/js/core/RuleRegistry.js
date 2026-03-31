@@ -110,6 +110,8 @@ class RuleRegistry {
             mimetypes: 'The :attribute must be a file of type: :values.',
             extensions: 'The :attribute must have one of the following extensions: :values.',
             dimensions: 'The :attribute has invalid image dimensions.',
+            any_of: 'The :attribute must match at least one of the given validation rule sets.',
+            password_strength: 'The :attribute does not meet the password strength requirements.',
         };
     }
 

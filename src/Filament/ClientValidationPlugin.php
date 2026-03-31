@@ -6,19 +6,9 @@ namespace MrPunyapal\ClientValidation\Filament;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Assets\Js;
+use Filament\Support\Facades\FilamentAsset;
 
-/**
- * Filament plugin for client-side validation.
- *
- * Registers the validation JS assets with Filament panels and provides
- * integration with Filament form components via the HasClientValidation trait.
- *
- * @example
- * // In your PanelProvider:
- * $panel->plugin(ClientValidationPlugin::make())
- */
 class ClientValidationPlugin implements Plugin
 {
     protected bool $enableRemoteValidation = true;
@@ -27,7 +17,7 @@ class ClientValidationPlugin implements Plugin
 
     public static function make(): static
     {
-        return new static();
+        return new static;
     }
 
     public function getId(): string
@@ -61,11 +51,11 @@ class ClientValidationPlugin implements Plugin
 
     protected function registerAssets(): void
     {
-        $distPath = __DIR__ . '/../../resources/js/dist';
+        $distPath = __DIR__.'/../../resources/js/dist';
 
-        if (file_exists($distPath . '/client-validation.iife.js')) {
+        if (file_exists($distPath.'/client-validation.iife.js')) {
             FilamentAsset::register([
-                Js::make('client-validation', $distPath . '/client-validation.iife.js'),
+                Js::make('client-validation', $distPath.'/client-validation.iife.js'),
             ], 'mrpunyapal/laravel-client-validation');
         }
     }

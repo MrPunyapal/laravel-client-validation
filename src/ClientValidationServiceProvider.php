@@ -6,6 +6,7 @@ namespace MrPunyapal\ClientValidation;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
+use MrPunyapal\ClientValidation\Console\InstallCommand;
 use MrPunyapal\ClientValidation\Contracts\RuleParserInterface;
 use MrPunyapal\ClientValidation\Contracts\ValidationManagerInterface;
 use MrPunyapal\ClientValidation\Core\RuleParser;
@@ -23,6 +24,7 @@ class ClientValidationServiceProvider extends PackageServiceProvider
             ->name('client-validation')
             ->hasConfigFile()
             ->hasViews()
+            ->hasCommand(InstallCommand::class)
             ->publishesServiceProvider('ClientValidationServiceProvider');
     }
 

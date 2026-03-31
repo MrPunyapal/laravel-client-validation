@@ -7,8 +7,12 @@ A powerful validation package that brings Laravel validation rules to the client
 
 ## Features
 
-- **102 client-side rules** — Comprehensive coverage of Laravel validation rules
+- **104 client-side rules** — Comprehensive coverage of Laravel validation rules
 - **5 remote rules** — Server-side AJAX validation for `unique`, `exists`, etc.
+- **TypeScript declarations** — Full type definitions for IDE autocompletion
+- **Laravel 12/13 support** — Compatible with the latest Laravel versions
+- **Livewire v3 & v4** — Automatic version detection and optimized integration
+- **Filament v3 & v5** — Panel plugin with field-level validation
 - **Backend-agnostic** — Use with Laravel, Django, Express, Rails, or any backend
 - **Multiple integrations** — Alpine.js, Livewire, Filament, Vanilla JS, React, Vue
 - **Real-time validation** — Instant feedback on blur, input, or submit
@@ -26,12 +30,7 @@ A powerful validation package that brings Laravel validation rules to the client
 
 ```bash
 composer require mrpunyapal/laravel-client-validation
-```
-
-Add to your layout's `<head>`:
-
-```blade
-@clientValidationAssets
+php artisan client-validation:install
 ```
 
 ### Option B: Standalone NPM Package
@@ -132,6 +131,8 @@ import { createFormValidator } from 'laravel-client-validation/vanilla';
 
 ## Usage with Livewire
 
+> Supports both Livewire v3 and v4. Version is detected automatically.
+
 ### Using the `x-wire-validate` Directive
 
 ```html
@@ -143,6 +144,7 @@ import { createFormValidator } from 'laravel-client-validation/vanilla';
                name="email">
         <span class="validation-error" data-error="email"></span>
 
+        {{-- Livewire v4: use wire:model.live for real-time sync --}}
         <input type="text"
                wire:model.live="username"
                x-wire-validate.live="'required|alpha_dash|min:3'"
@@ -387,17 +389,17 @@ remote.setAdapter(async (field, value, rule, params) => {
 
 ## Validation Rules
 
-### Client-Side Rules (102 — Instant)
+### Client-Side Rules (104 — Instant)
 
 **Core:** `required`, `nullable`, `filled`, `present`, `bail`
 
-**String:** `string`, `email`, `url`, `active_url`, `alpha`, `alpha_num`, `alpha_dash`, `regex`, `not_regex`, `contains`, `doesnt_contain`, `lowercase`, `uppercase`, `starts_with`, `ends_with`, `doesnt_start_with`, `doesnt_end_with`, `ascii`, `uuid`, `ulid`, `json`, `hex_color`
+**String:** `string`, `email`, `url`, `active_url`, `alpha`, `alpha:ascii`, `alpha_num`, `alpha_num:ascii`, `alpha_dash`, `alpha_dash:ascii`, `regex`, `not_regex`, `contains`, `doesnt_contain`, `lowercase`, `uppercase`, `starts_with`, `ends_with`, `doesnt_start_with`, `doesnt_end_with`, `ascii`, `uuid`, `uuid:version`, `ulid`, `json`, `hex_color`
 
-**Numeric:** `numeric`, `integer`, `decimal`, `multiple_of`, `digits`, `digits_between`, `min_digits`, `max_digits`
+**Numeric:** `numeric`, `numeric:strict`, `integer`, `integer:strict`, `decimal`, `multiple_of`, `digits`, `digits_between`, `min_digits`, `max_digits`
 
 **Size:** `min`, `max`, `between`, `size`
 
-**Comparison:** `confirmed`, `same`, `different`, `gt`, `gte`, `lt`, `lte`, `in`, `not_in`, `enum`
+**Comparison:** `confirmed`, `confirmed:field`, `same`, `different`, `gt`, `gte`, `lt`, `lte`, `in`, `not_in`, `enum`
 
 **Date:** `date`, `after`, `before`, `after_or_equal`, `before_or_equal`, `date_equals`, `date_format`, `timezone`
 
@@ -407,13 +409,15 @@ remote.setAdapter(async (field, value, rule, params) => {
 
 **Prohibition:** `prohibited`, `prohibited_if`, `prohibited_unless`, `prohibited_if_accepted`, `prohibited_if_declined`, `prohibits`
 
-**Boolean:** `boolean`, `accepted`, `accepted_if`, `declined`, `declined_if`
+**Boolean:** `boolean`, `boolean:strict`, `accepted`, `accepted_if`, `declined`, `declined_if`
 
 **Network:** `ip`, `ipv4`, `ipv6`, `mac_address`
 
 **Array:** `array`, `distinct`, `in_array`, `in_array_keys`, `list`
 
 **File:** `file`, `image`, `mimes`, `mimetypes`, `extensions`, `dimensions`
+
+**Advanced:** `any_of`, `password_strength`
 
 ### Remote Rules (5 — AJAX)
 

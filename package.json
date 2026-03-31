@@ -1,10 +1,10 @@
 {
   "name": "laravel-client-validation",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Laravel validation rules for client-side JavaScript. Works with Alpine.js, Vanilla JS, Livewire, React, Vue, or any framework.",
   "main": "resources/js/dist/client-validation.umd.js",
   "module": "resources/js/dist/client-validation.es.js",
-  "types": "resources/js/index.js",
+  "types": "resources/js/index.d.ts",
   "exports": {
     ".": {
       "import": "./resources/js/index.js",

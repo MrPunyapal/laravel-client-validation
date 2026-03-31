@@ -1,9 +1,13 @@
-export default function numeric(value) {
-    // Allow empty/null/undefined values
+export default function numeric(value, params) {
     if (value === null || value === undefined || value === '') return true;
 
-    // Explicitly reject boolean values
     if (typeof value === 'boolean') return false;
+
+    const strict = params && params.includes('strict');
+
+    if (strict) {
+        return typeof value === 'number' && !isNaN(value) && isFinite(value);
+    }
 
     return !isNaN(value) && !isNaN(parseFloat(value)) && isFinite(value);
 }

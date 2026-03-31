@@ -1,6 +1,6 @@
 /**
  * Livewire Adapter for Laravel Client Validation
- * Provides client-side validation that works seamlessly with Livewire components.
+ * Supports both Livewire v3 and v4.
  */
 
 import LaravelValidator from '../core/LaravelValidator.js';
@@ -18,6 +18,31 @@ function getConfig() {
         return { ...defaults, ...window.LaravelClientValidation.config };
     }
     return defaults;
+}
+
+function getLivewireVersion() {
+    if (typeof window === 'undefined' || !window.Livewire) return null;
+    if (typeof window.Livewire.interceptMessage === 'function') return 4;
+    return 3;
+}
+
+function getComponentData(component) {
+    if (!component || !component.$wire) return {};
+
+    try {
+        const version = getLivewireVersion();
+
+        if (version === 4) {
+            if (typeof component.$wire.$get === 'function') {
+                return component.$wire;
+            }
+            return component.$wire.snapshot?.memo?.data || component.$wire.snapshot?.data || {};
+        }
+
+        return component.$wire.snapshot?.data || {};
+    } catch {
+        return {};
+    }
 }
 
 export class LivewireValidator {
@@ -101,13 +126,8 @@ export class LivewireValidator {
     getFormData(additionalData = {}) {
         const data = { ...additionalData };
 
-        if (this.component && this.component.$wire) {
-            try {
-                const wireData = this.component.$wire.snapshot?.data || {};
-                Object.assign(data, wireData);
-            } catch (e) {
-                // Use provided data only
-            }
+        if (this.component) {
+            Object.assign(data, getComponentData(this.component));
         }
 
         this.fields.forEach((el, name) => {
@@ -231,7 +251,12 @@ export function registerLivewireDirective(Alpine) {
     const config = getConfig();
 
     Alpine.directive('wire-validate', (el, { expression, modifiers }, { evaluate, effect, cleanup }) => {
-        const fieldName = el.name || el.getAttribute('wire:model') || el.getAttribute('data-field');
+        const fieldName = el.name
+            || el.getAttribute('wire:model')
+            || el.getAttribute('wire:model.live')
+            || el.getAttribute('wire:model.blur')
+            || el.getAttribute('wire:model.change')
+            || el.getAttribute('data-field');
         if (!fieldName) {
             console.warn('x-wire-validate: Element must have a name or wire:model attribute');
             return;
@@ -314,14 +339,26 @@ function setupLivewireFieldHandlers(el, validator, fieldName, mode, config) {
         const result = await validator.validateField(fieldName, value, getFormData());
         updateUI(result);
 
-        if (window.Livewire && el.closest('[wire\\:id]')) {
-            const component = window.Livewire.find(el.closest('[wire\\:id]').getAttribute('wire:id'));
+        const wireEl = el.closest('[wire\\:id]');
+        if (window.Livewire && wireEl) {
+            const wireId = wireEl.getAttribute('wire:id');
+            const component = window.Livewire.find(wireId);
             if (component) {
-                component.dispatch('client-validation', {
-                    field: fieldName,
-                    valid: result.valid,
-                    errors: result.errors
-                });
+                const version = getLivewireVersion();
+
+                if (version === 4 && typeof component.$dispatch === 'function') {
+                    component.$dispatch('client-validation', {
+                        field: fieldName,
+                        valid: result.valid,
+                        errors: result.errors
+                    });
+                } else if (component.dispatch) {
+                    component.dispatch('client-validation', {
+                        field: fieldName,
+                        valid: result.valid,
+                        errors: result.errors
+                    });
+                }
             }
         }
 

@@ -49,6 +49,13 @@ class RuleParser implements RuleParserInterface
         'required_if', 'required_unless', 'required_with', 'required_without',
         'required_with_all', 'required_without_all', 'required_array_keys',
         'min_digits', 'max_digits', 'timezone', 'active_url', 'hex_color',
+        'any_of', 'password_strength',
+        'not_regex', 'contains', 'doesnt_contain', 'in_array', 'in_array_keys',
+        'list', 'missing', 'missing_if', 'missing_unless', 'missing_with',
+        'missing_with_all', 'present_if', 'present_unless', 'present_with',
+        'present_with_all', 'prohibited_if_accepted', 'prohibited_if_declined',
+        'prohibits', 'required_if_accepted', 'required_if_declined',
+        'enum', 'file', 'image', 'mimes', 'mimetypes', 'extensions', 'dimensions',
     ];
 
     /**

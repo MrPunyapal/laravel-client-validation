@@ -98,6 +98,8 @@ import mimes from './mimes.js';
 import mimetypes from './mimetypes.js';
 import extensions from './extensions.js';
 import dimensions from './dimensions.js';
+import anyOf from './any_of.js';
+import passwordStrength from './password_strength.js';
 
 export default {
     required,
@@ -200,4 +202,6 @@ export default {
     mimetypes,
     extensions,
     dimensions,
+    any_of: anyOf,
+    password_strength: passwordStrength,
 };

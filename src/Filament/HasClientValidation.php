@@ -6,24 +6,6 @@ namespace MrPunyapal\ClientValidation\Filament;
 
 use Closure;
 
-/**
- * Trait for Filament form components to enable client-side validation.
- *
- * Adds the x-validate Alpine.js directive to form components, running
- * client-side validation using the same Laravel validation rules.
- *
- * @example
- * // In a Filament form field:
- * TextInput::make('email')
- *     ->clientValidation('required|email')
- *     ->clientValidationMode('live')
- *
- * // Or using the rules already defined on the field:
- * TextInput::make('email')
- *     ->required()
- *     ->email()
- *     ->withClientValidation()
- */
 trait HasClientValidation
 {
     protected string|Closure|null $clientValidationRules = null;
@@ -32,9 +14,6 @@ trait HasClientValidation
 
     protected bool $clientValidationEnabled = false;
 
-    /**
-     * Set explicit client-side validation rules.
-     */
     public function clientValidation(string|Closure|null $rules = null): static
     {
         $this->clientValidationEnabled = true;
@@ -43,9 +22,6 @@ trait HasClientValidation
         return $this;
     }
 
-    /**
-     * Enable client validation using the field's existing rules.
-     */
     public function withClientValidation(): static
     {
         $this->clientValidationEnabled = true;
@@ -53,9 +29,6 @@ trait HasClientValidation
         return $this;
     }
 
-    /**
-     * Disable client-side validation.
-     */
     public function withoutClientValidation(): static
     {
         $this->clientValidationEnabled = false;
@@ -63,9 +36,6 @@ trait HasClientValidation
         return $this;
     }
 
-    /**
-     * Set the client validation mode.
-     */
     public function clientValidationMode(string $mode): static
     {
         $this->clientValidationMode = $mode;
@@ -73,17 +43,11 @@ trait HasClientValidation
         return $this;
     }
 
-    /**
-     * Check if client validation is enabled.
-     */
     public function hasClientValidation(): bool
     {
         return $this->clientValidationEnabled;
     }
 
-    /**
-     * Get the resolved client validation rules string.
-     */
     public function getClientValidationRules(): ?string
     {
         if (! $this->clientValidationEnabled) {
@@ -97,9 +61,6 @@ trait HasClientValidation
         return $this->resolveRulesFromField();
     }
 
-    /**
-     * Get the x-validate directive modifier based on mode.
-     */
     public function getClientValidationModifier(): string
     {
         return match ($this->clientValidationMode) {
@@ -109,11 +70,7 @@ trait HasClientValidation
         };
     }
 
-    /**
-     * Get the extra Alpine attributes for client validation.
-     *
-     * @return array<string, string>
-     */
+    /** @return array<string, string> */
     public function getClientValidationAttributes(): array
     {
         $rules = $this->getClientValidationRules();
@@ -129,9 +86,6 @@ trait HasClientValidation
         ];
     }
 
-    /**
-     * Try to resolve validation rules from the field's existing configuration.
-     */
     protected function resolveRulesFromField(): ?string
     {
         $rules = [];

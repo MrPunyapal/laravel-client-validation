@@ -51,7 +51,7 @@
                         <label class="block text-sm font-medium mb-1">Password</label>
                         <input type="password"
                                wire:model="password"
-                               x-wire-validate="'required|min:8'"
+                               x-wire-validate="'required|password_strength:min=8,letters,mixedCase,numbers,symbols'"
                                name="password"
                                placeholder="Enter password"
                                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
