@@ -84,3 +84,6 @@ composer.lock
 
 # playground
 /playground/
+
+# workground
+/workground/

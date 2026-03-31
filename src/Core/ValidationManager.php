@@ -35,7 +35,7 @@ class ValidationManager implements ValidationManagerInterface
     public function fromRequest(string|FormRequest $request): ValidationContext
     {
         if (is_string($request)) {
-            $request = app($request);
+            $request = new $request;
         }
 
         if (!$request instanceof FormRequest) {
@@ -44,7 +44,7 @@ class ValidationManager implements ValidationManagerInterface
 
         $rules = $request->rules();
         $messages = $request->messages();
-        $attributes = $request->attributes();
+        $attributes = method_exists($request, 'attributes') ? $request->attributes() : [];
 
         return $this->createContext($rules, $messages, $attributes);
     }
