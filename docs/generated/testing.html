@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Testing | Laravel Client Validation</title>
+    <meta name="description" content="Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/testing.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/testing.html">
+        <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Laravel Client Validation">
+    <meta property="og:title" content="Testing | Laravel Client Validation">
+    <meta property="og:description" content="Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#e85d43">
+    <script>
+        (() => {
+            try {
+                const savedTheme = window.localStorage.getItem('docs-theme');
+                const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.dataset.theme = preferredTheme;
+            } catch (error) {
+                document.documentElement.dataset.theme = 'light';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="docs-background" aria-hidden="true"></div>
+    <header class="docs-header">
+        <div class="docs-header__inner">
+            <button class="docs-header__menu" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a class="docs-brand" href="index.html">
+                <span class="docs-brand__eyebrow">Package Docs</span>
+                <span class="docs-brand__title">Laravel Client Validation</span>
+            </a>
+            <div class="docs-search">
+                <label class="sr-only" for="docs-search-input">Search the documentation</label>
+                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search installation, rules, hooks…" autocomplete="off" data-search-input>
+                <div class="docs-search__results" data-search-results hidden></div>
+            </div>
+            <div class="docs-header__actions">
+                                <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">GitHub</a>
+                                <a class="docs-action-link" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">Packagist</a>
+                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+                    <span data-theme-label>Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-overlay" data-sidebar-overlay hidden></div>
+
+    <div class="docs-shell">
+        <aside class="docs-sidebar" data-sidebar>
+            <div class="docs-sidebar__hero">
+                <div>
+                    <p class="docs-sidebar__label">Static handbook</p>
+                    <h2>Laravel Client Validation</h2>
+                    <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+                </div>
+                <div class="docs-badges">
+                    <span class="docs-badge">PHP 8.2+</span>
+                    <span class="docs-badge">Laravel 12+</span>
+                </div>
+                <a class="docs-packagist-badge" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">
+                    <img src="https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation?style=flat-square&amp;label=packagist" alt="Packagist version badge">
+                </a>
+            </div>
+
+            <nav class="docs-nav" aria-label="Documentation navigation">
+                                <a class="docs-nav__link" href="index.html">
+                    Overview                </a>
+                                <a class="docs-nav__link" href="installation.html">
+                    Installation                </a>
+                                <a class="docs-nav__link" href="configuration.html">
+                    Configuration                </a>
+                                <a class="docs-nav__link" href="usage.html">
+                    Usage                </a>
+                                <a class="docs-nav__link" href="validation-rules.html">
+                    Validation Rules                </a>
+                                <a class="docs-nav__link" href="custom-rules.html">
+                    Custom Rules                </a>
+                                <a class="docs-nav__link is-active" href="testing.html" aria-current="page">
+                    Testing                </a>
+                                <a class="docs-nav__link" href="troubleshooting.html">
+                    Troubleshooting                </a>
+                                <a class="docs-nav__link" href="examples.html">
+                    Examples                </a>
+                            </nav>
+        </aside>
+
+        <main class="docs-main">
+            <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
+                                                <a href="index.html">Documentation</a>
+                                                <span class="docs-breadcrumbs__separator">/</span>
+                                <a href="testing.html">Testing</a>
+                            </nav>
+
+            <article class="docs-content">
+                <header class="docs-content__header">
+                    <p class="docs-content__eyebrow">Markdown source, generated HTML output</p>
+                    <h1>Testing</h1>
+                    <p class="docs-content__lead">Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.</p>
+                </header>
+
+                
+                <p>Package changes are safest when you validate both the runtime behavior and the generated documentation in the same branch.</p>
+<h2>PHP test suite<a id="php-test-suite" href="#php-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Run the Pest suite from the repository root:</p>
+<pre><code class="language-bash">composer test
+</code></pre>
+<p>Use coverage when you are working on package internals or parser behavior.</p>
+<pre><code class="language-bash">composer test-coverage
+</code></pre>
+<h2>JavaScript test suite<a id="javascript-test-suite" href="#javascript-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The frontend rules and adapters live in <code>resources/js</code>, so use the JavaScript suite when you change the browser runtime.</p>
+<pre><code class="language-bash">npm test
+</code></pre>
+<h2>Documentation build<a id="documentation-build" href="#documentation-build" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The documentation site is generated from Markdown and committed as HTML output.</p>
+<pre><code class="language-bash">composer docs:build
+</code></pre>
+<p>That command runs <code>php docs/build.php</code>, regenerates <code>docs/generated</code>, refreshes the search index, and rewrites the sitemap.</p>
+<h2>Recommended contributor loop<a id="recommended-contributor-loop" href="#recommended-contributor-loop" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ol>
+<li>Update the package code or the Markdown source in <code>docs/md</code>.</li>
+<li>Run the narrowest tests that can falsify the change.</li>
+<li>Rebuild the documentation site with <code>composer docs:build</code>.</li>
+<li>Inspect the generated HTML locally before opening a pull request.</li>
+</ol>
+<h2>Practical verification examples<a id="practical-verification-examples" href="#practical-verification-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3>Rule or parser change<a id="rule-or-parser-change" href="#rule-or-parser-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<pre><code class="language-bash">composer test
+npm test
+composer docs:build
+</code></pre>
+<h3>Documentation-only change<a id="documentation-only-change" href="#documentation-only-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<pre><code class="language-bash">composer docs:build
+</code></pre>
+<p>If the generated HTML or search index changes unexpectedly, compare the affected Markdown source rather than editing <code>docs/generated</code> by hand.</p>
+            </article>
+
+            <footer class="docs-footer">
+                <div>
+                    <p>Last updated <time datetime="2026-05-13T08:14:00+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T08:39:45+00:00</p>
+                </div>
+                <div class="docs-footer__actions">
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/testing.md">Edit this page</a>
+                                    </div>
+            </footer>
+
+                        <nav class="docs-pager" aria-label="Page navigation">
+                                <a class="docs-pager__link" href="custom-rules.html">
+                    <span class="docs-pager__label">Previous</span>
+                    <strong>Custom Rules</strong>
+                </a>
+                
+                                <a class="docs-pager__link docs-pager__link--next" href="troubleshooting.html">
+                    <span class="docs-pager__label">Next</span>
+                    <strong>Troubleshooting</strong>
+                </a>
+                            </nav>
+                    </main>
+
+            </div>
+
+    <script>
+        window.__DOCS_CONFIG__ = {"currentPage":"testing.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup-templating.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
+    <script defer src="assets/app.js"></script>
+</body>
+</html>

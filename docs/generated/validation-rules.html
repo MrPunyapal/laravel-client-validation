@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Validation Rules | Laravel Client Validation</title>
+    <meta name="description" content="Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/validation-rules.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/validation-rules.html">
+        <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Laravel Client Validation">
+    <meta property="og:title" content="Validation Rules | Laravel Client Validation">
+    <meta property="og:description" content="Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#e85d43">
+    <script>
+        (() => {
+            try {
+                const savedTheme = window.localStorage.getItem('docs-theme');
+                const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.dataset.theme = preferredTheme;
+            } catch (error) {
+                document.documentElement.dataset.theme = 'light';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="docs-background" aria-hidden="true"></div>
+    <header class="docs-header">
+        <div class="docs-header__inner">
+            <button class="docs-header__menu" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a class="docs-brand" href="index.html">
+                <span class="docs-brand__eyebrow">Package Docs</span>
+                <span class="docs-brand__title">Laravel Client Validation</span>
+            </a>
+            <div class="docs-search">
+                <label class="sr-only" for="docs-search-input">Search the documentation</label>
+                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search installation, rules, hooks…" autocomplete="off" data-search-input>
+                <div class="docs-search__results" data-search-results hidden></div>
+            </div>
+            <div class="docs-header__actions">
+                                <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">GitHub</a>
+                                <a class="docs-action-link" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">Packagist</a>
+                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+                    <span data-theme-label>Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-overlay" data-sidebar-overlay hidden></div>
+
+    <div class="docs-shell">
+        <aside class="docs-sidebar" data-sidebar>
+            <div class="docs-sidebar__hero">
+                <div>
+                    <p class="docs-sidebar__label">Static handbook</p>
+                    <h2>Laravel Client Validation</h2>
+                    <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+                </div>
+                <div class="docs-badges">
+                    <span class="docs-badge">PHP 8.2+</span>
+                    <span class="docs-badge">Laravel 12+</span>
+                </div>
+                <a class="docs-packagist-badge" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">
+                    <img src="https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation?style=flat-square&amp;label=packagist" alt="Packagist version badge">
+                </a>
+            </div>
+
+            <nav class="docs-nav" aria-label="Documentation navigation">
+                                <a class="docs-nav__link" href="index.html">
+                    Overview                </a>
+                                <a class="docs-nav__link" href="installation.html">
+                    Installation                </a>
+                                <a class="docs-nav__link" href="configuration.html">
+                    Configuration                </a>
+                                <a class="docs-nav__link" href="usage.html">
+                    Usage                </a>
+                                <a class="docs-nav__link is-active" href="validation-rules.html" aria-current="page">
+                    Validation Rules                </a>
+                                <a class="docs-nav__link" href="custom-rules.html">
+                    Custom Rules                </a>
+                                <a class="docs-nav__link" href="testing.html">
+                    Testing                </a>
+                                <a class="docs-nav__link" href="troubleshooting.html">
+                    Troubleshooting                </a>
+                                <a class="docs-nav__link" href="examples.html">
+                    Examples                </a>
+                            </nav>
+        </aside>
+
+        <main class="docs-main">
+            <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
+                                                <a href="index.html">Documentation</a>
+                                                <span class="docs-breadcrumbs__separator">/</span>
+                                <a href="validation-rules.html">Validation Rules</a>
+                            </nav>
+
+            <article class="docs-content">
+                <header class="docs-content__header">
+                    <p class="docs-content__eyebrow">Markdown source, generated HTML output</p>
+                    <h1>Validation Rules</h1>
+                    <p class="docs-content__lead">Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.</p>
+                </header>
+
+                
+                <p>Laravel Client Validation currently ships broad client-side coverage and a smaller set of explicitly remote rules. Use this page as the working overview when deciding whether a rule can stay in the browser or must hit the backend.</p>
+<h2>Rule parity at a glance<a id="rule-parity-at-a-glance" href="#rule-parity-at-a-glance" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Client-side rules: 104</li>
+<li>Remote rules: 5 primary rules handled through AJAX</li>
+<li>Rule source lists: <code>config/client-validation.php</code>, <code>resources/js/core/rules</code>, and <code>resources/js/core/RuleRegistry.js</code></li>
+</ul>
+<h2>Common client-side categories<a id="common-client-side-categories" href="#common-client-side-categories" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3>Core and string rules<a id="core-and-string-rules" href="#core-and-string-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Data types</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>required</code></td>
+<td>Reject empty input</td>
+<td>string, array, file</td>
+<td><code>required</code></td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>Validate email format</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>alpha_dash</code></td>
+<td>Allow letters, numbers, dashes, underscores</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>contains:value</code></td>
+<td>Require a substring</td>
+<td>string</td>
+<td><code>contains:@company.com</code></td>
+</tr>
+<tr>
+<td><code>uuid:4</code></td>
+<td>Validate UUID format and version</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+</tbody>
+</table>
+<h3>Numeric and size rules<a id="numeric-and-size-rules" href="#numeric-and-size-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Data types</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>numeric</code></td>
+<td>Accept numeric values</td>
+<td>string, number</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>integer:strict</code></td>
+<td>Enforce integer-only values</td>
+<td>number, numeric string</td>
+<td>`integer:strict</td>
+</tr>
+<tr>
+<td><code>between:min,max</code></td>
+<td>Constrain range or length</td>
+<td>string, array, numeric</td>
+<td><code>between:3,10</code></td>
+</tr>
+<tr>
+<td><code>multiple_of:value</code></td>
+<td>Enforce divisibility</td>
+<td>number</td>
+<td><code>multiple_of:5</code></td>
+</tr>
+<tr>
+<td><code>digits_between:min,max</code></td>
+<td>Validate exact digit count range</td>
+<td>numeric string</td>
+<td><code>digits_between:6,8</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Comparison and conditional rules<a id="comparison-and-conditional-rules" href="#comparison-and-conditional-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Data types</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>confirmed</code></td>
+<td>Match a confirmation field</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>same:field</code></td>
+<td>Match another field value</td>
+<td>mixed</td>
+<td><code>same:billing_email</code></td>
+</tr>
+<tr>
+<td><code>required_if:field,value</code></td>
+<td>Require when another field matches</td>
+<td>mixed</td>
+<td><code>required_if:role,admin</code></td>
+</tr>
+<tr>
+<td><code>required_without:field</code></td>
+<td>Require when another field is missing</td>
+<td>mixed</td>
+<td><code>required_without:phone</code></td>
+</tr>
+<tr>
+<td><code>prohibits:field</code></td>
+<td>Prevent conflicting fields</td>
+<td>mixed</td>
+<td><code>prohibits:coupon_code</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Date, network, and file rules<a id="date-network-and-file-rules" href="#date-network-and-file-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Data types</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>date_format:format</code></td>
+<td>Match a Laravel-style date format</td>
+<td>string</td>
+<td><code>date_format:Y-m-d</code></td>
+</tr>
+<tr>
+<td><code>after:today</code></td>
+<td>Compare against a relative date</td>
+<td>string</td>
+<td>`date</td>
+</tr>
+<tr>
+<td><code>ip</code> / <code>ipv4</code> / <code>ipv6</code></td>
+<td>Validate network values</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>Restrict uploaded files to images</td>
+<td>file</td>
+<td>`file</td>
+</tr>
+<tr>
+<td><code>dimensions:...</code></td>
+<td>Inspect image width or height</td>
+<td>image file</td>
+<td><code>dimensions:min_width=640,min_height=480</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Remote rules<a id="remote-rules" href="#remote-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Remote rules are intentionally delegated to the server because they depend on application state or backend facilities.</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Why it stays remote</th>
+<th>Typical example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unique</code></td>
+<td>Needs database access</td>
+<td><code>unique:users,email</code></td>
+</tr>
+<tr>
+<td><code>exists</code></td>
+<td>Needs database access</td>
+<td><code>exists:roles,id</code></td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>Needs current auth context</td>
+<td><code>password</code></td>
+</tr>
+<tr>
+<td><code>current_password</code></td>
+<td>Needs current auth context</td>
+<td><code>current_password</code></td>
+</tr>
+<tr>
+<td><code>encoding</code></td>
+<td>Needs backend encoding checks</td>
+<td><code>encoding:UTF-8</code></td>
+</tr>
+</tbody>
+</table>
+<p>If a remote rule never fires, check <a href="./troubleshooting.html">troubleshooting</a> for route, CSRF, or timeout issues.</p>
+<h2>Usage examples<a id="usage-examples" href="#usage-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3>Typical account form<a id="typical-account-form" href="#typical-account-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<pre><code class="language-html">&lt;input name="name" @validateBlur('name', 'required|string|min:2|max:50')&gt;
+&lt;input name="email" @validateLive('email', 'required|email|unique:users,email')&gt;
+&lt;input name="password" @validateSubmit('password', 'required|min:8|confirmed')&gt;
+</code></pre>
+<h3>Array, date, and file examples<a id="array-date-and-file-examples" href="#array-date-and-file-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<pre><code class="language-html">&lt;input name="timezone" @rules('timezone', 'required|timezone')&gt;
+&lt;input name="launch_date" @rules('launch_date', 'required|date|after_or_equal:today')&gt;
+&lt;input type="file" name="avatar" @rules('avatar', 'file|image|mimes:jpg,png|dimensions:min_width=256,min_height=256')&gt;
+</code></pre>
+<h2>Edge cases and expected behavior<a id="edge-cases-and-expected-behavior" href="#edge-cases-and-expected-behavior" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li><code>nullable</code> allows empty input but does not skip other rules when the value is non-empty.</li>
+<li>Rules that compare against sibling fields, such as <code>same</code>, <code>different</code>, <code>gt</code>, or <code>required_if</code>, depend on the form data already being available to the validator.</li>
+<li>Remote rules still need normal Laravel validation messages and backend authorization to be correct.</li>
+<li>File rules depend on browser-provided <code>File</code> objects, so they should be tested in a real browser flow rather than only in isolated unit tests.</li>
+</ul>
+<h2>Message placeholders<a id="message-placeholders" href="#message-placeholders" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Default browser messages use the same placeholder vocabulary Laravel developers expect, such as <code>:attribute</code>, <code>:min</code>, <code>:max</code>, <code>:other</code>, and <code>:values</code>.</p>
+<pre><code class="language-php">'messages' =&gt; [
+    'required' =&gt; 'The :attribute field is required.',
+    'min' =&gt; 'The :attribute must be at least :min characters.',
+    'unique' =&gt; 'The :attribute has already been taken.',
+],
+</code></pre>
+<h2>When documenting a new rule<a id="when-documenting-a-new-rule" href="#when-documenting-a-new-rule" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Explain the rule purpose in one sentence.</li>
+<li>Include a realistic Laravel rule string.</li>
+<li>Call out the supported value types.</li>
+<li>Document edge cases, especially for remote or cross-field rules.</li>
+<li>Show at least one example validation message.</li>
+</ul>
+            </article>
+
+            <footer class="docs-footer">
+                <div>
+                    <p>Last updated <time datetime="2026-05-13T08:14:00+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T08:39:45+00:00</p>
+                </div>
+                <div class="docs-footer__actions">
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/validation-rules.md">Edit this page</a>
+                                    </div>
+            </footer>
+
+                        <nav class="docs-pager" aria-label="Page navigation">
+                                <a class="docs-pager__link" href="usage.html">
+                    <span class="docs-pager__label">Previous</span>
+                    <strong>Usage</strong>
+                </a>
+                
+                                <a class="docs-pager__link docs-pager__link--next" href="custom-rules.html">
+                    <span class="docs-pager__label">Next</span>
+                    <strong>Custom Rules</strong>
+                </a>
+                            </nav>
+                    </main>
+
+            </div>
+
+    <script>
+        window.__DOCS_CONFIG__ = {"currentPage":"validation-rules.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup-templating.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
+    <script defer src="assets/app.js"></script>
+</body>
+</html>

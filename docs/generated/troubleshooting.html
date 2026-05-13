@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Troubleshooting | Laravel Client Validation</title>
+    <meta name="description" content="Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/troubleshooting.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/troubleshooting.html">
+        <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Laravel Client Validation">
+    <meta property="og:title" content="Troubleshooting | Laravel Client Validation">
+    <meta property="og:description" content="Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#e85d43">
+    <script>
+        (() => {
+            try {
+                const savedTheme = window.localStorage.getItem('docs-theme');
+                const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.dataset.theme = preferredTheme;
+            } catch (error) {
+                document.documentElement.dataset.theme = 'light';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="docs-background" aria-hidden="true"></div>
+    <header class="docs-header">
+        <div class="docs-header__inner">
+            <button class="docs-header__menu" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a class="docs-brand" href="index.html">
+                <span class="docs-brand__eyebrow">Package Docs</span>
+                <span class="docs-brand__title">Laravel Client Validation</span>
+            </a>
+            <div class="docs-search">
+                <label class="sr-only" for="docs-search-input">Search the documentation</label>
+                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search installation, rules, hooks…" autocomplete="off" data-search-input>
+                <div class="docs-search__results" data-search-results hidden></div>
+            </div>
+            <div class="docs-header__actions">
+                                <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">GitHub</a>
+                                <a class="docs-action-link" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">Packagist</a>
+                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+                    <span data-theme-label>Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-overlay" data-sidebar-overlay hidden></div>
+
+    <div class="docs-shell">
+        <aside class="docs-sidebar" data-sidebar>
+            <div class="docs-sidebar__hero">
+                <div>
+                    <p class="docs-sidebar__label">Static handbook</p>
+                    <h2>Laravel Client Validation</h2>
+                    <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+                </div>
+                <div class="docs-badges">
+                    <span class="docs-badge">PHP 8.2+</span>
+                    <span class="docs-badge">Laravel 12+</span>
+                </div>
+                <a class="docs-packagist-badge" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">
+                    <img src="https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation?style=flat-square&amp;label=packagist" alt="Packagist version badge">
+                </a>
+            </div>
+
+            <nav class="docs-nav" aria-label="Documentation navigation">
+                                <a class="docs-nav__link" href="index.html">
+                    Overview                </a>
+                                <a class="docs-nav__link" href="installation.html">
+                    Installation                </a>
+                                <a class="docs-nav__link" href="configuration.html">
+                    Configuration                </a>
+                                <a class="docs-nav__link" href="usage.html">
+                    Usage                </a>
+                                <a class="docs-nav__link" href="validation-rules.html">
+                    Validation Rules                </a>
+                                <a class="docs-nav__link" href="custom-rules.html">
+                    Custom Rules                </a>
+                                <a class="docs-nav__link" href="testing.html">
+                    Testing                </a>
+                                <a class="docs-nav__link is-active" href="troubleshooting.html" aria-current="page">
+                    Troubleshooting                </a>
+                                <a class="docs-nav__link" href="examples.html">
+                    Examples                </a>
+                            </nav>
+        </aside>
+
+        <main class="docs-main">
+            <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
+                                                <a href="index.html">Documentation</a>
+                                                <span class="docs-breadcrumbs__separator">/</span>
+                                <a href="troubleshooting.html">Troubleshooting</a>
+                            </nav>
+
+            <article class="docs-content">
+                <header class="docs-content__header">
+                    <p class="docs-content__eyebrow">Markdown source, generated HTML output</p>
+                    <h1>Troubleshooting</h1>
+                    <p class="docs-content__lead">Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.</p>
+                </header>
+
+                
+                <p>Most validation failures come down to one of three causes: the browser bundle is not loaded, the field metadata was not rendered, or a remote validation request cannot reach the backend.</p>
+<h2>The browser bundle never initializes<a id="the-browser-bundle-never-initializes" href="#the-browser-bundle-never-initializes" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3>Symptoms<a id="symptoms" href="#symptoms" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<ul>
+<li><code>x-validate</code> or <code>data-validate</code> fields do nothing.</li>
+<li><code>window.LaravelClientValidation</code> is undefined in the console.</li>
+</ul>
+<h3>Checks<a id="checks" href="#checks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<pre><code class="language-php">@clientValidationAssets
+</code></pre>
+<ul>
+<li>Confirm the directive is rendered in the page layout.</li>
+<li>Confirm the published files exist in <code>public/vendor/client-validation</code>.</li>
+<li>Check the network tab for the package bundle or the CDN fallback.</li>
+</ul>
+<h2>Rules render, but errors never appear<a id="rules-render-but-errors-never-appear" href="#rules-render-but-errors-never-appear" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3>Symptoms<a id="symptoms-1" href="#symptoms-1" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<ul>
+<li>Inputs contain attributes, but no validation message is shown.</li>
+<li>Classes such as <code>is-invalid</code> or <code>validation-error</code> never appear.</li>
+</ul>
+<h3>Checks<a id="checks-1" href="#checks-1" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<pre><code class="language-php">'error_template' =&gt; [
+    'enabled' =&gt; true,
+],
+
+'field_styling' =&gt; [
+    'enabled' =&gt; true,
+],
+</code></pre>
+<ul>
+<li>Verify <code>error_template.enabled</code> or <code>field_styling.enabled</code> has not been disabled.</li>
+<li>Inspect the rendered markup and confirm the directive output is attached to the correct field.</li>
+<li>Test with a simpler rule like <code>required</code> before adding compound logic.</li>
+</ul>
+<h2>Remote rules never finish<a id="remote-rules-never-finish" href="#remote-rules-never-finish" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3>Symptoms<a id="symptoms-2" href="#symptoms-2" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<ul>
+<li><code>unique</code> stays pending.</li>
+<li>No request reaches the Laravel application.</li>
+</ul>
+<h3>Checks<a id="checks-2" href="#checks-2" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<pre><code class="language-php">'enable_ajax_validation' =&gt; true,
+'route_prefix' =&gt; 'client-validation',
+'ajax_timeout' =&gt; 5000,
+</code></pre>
+<ul>
+<li>Confirm the validation endpoint exists at the configured prefix.</li>
+<li>Confirm the page includes the CSRF token and the route is not blocked by middleware.</li>
+<li>Increase <code>ajax_timeout</code> temporarily while debugging slow responses.</li>
+</ul>
+<h2>Cross-field rules behave inconsistently<a id="cross-field-rules-behave-inconsistently" href="#cross-field-rules-behave-inconsistently" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Rules like <code>same</code>, <code>different</code>, <code>required_if</code>, <code>gt</code>, or <code>lte</code> depend on up-to-date sibling field values.</p>
+<pre><code class="language-html">&lt;input name="password" @validateBlur('password', 'required|min:8')&gt;
+&lt;input name="password_confirmation" @validateBlur('password_confirmation', 'required|same:password')&gt;
+</code></pre>
+<p>Use form bindings that keep both fields synchronized before the comparison runs.</p>
+<h2>The docs site looks stale<a id="the-docs-site-looks-stale" href="#the-docs-site-looks-stale" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The generated HTML is not the canonical source. Rebuild the site from Markdown.</p>
+<pre><code class="language-bash">php docs/build.php
+</code></pre>
+<p>Then review the generated files in <code>docs/generated</code>.</p>
+<h2>Still blocked?<a id="still-blocked" href="#still-blocked" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Compare the current form markup with the working snippets in <a href="./usage.html">usage</a> and <a href="./examples.html">examples</a>.</li>
+<li>Re-run the checks in <a href="./testing.html">testing</a>.</li>
+<li>Document the failure mode in <code>docs/md</code> once you find the root cause so the next contributor does not need to rediscover it.</li>
+</ul>
+            </article>
+
+            <footer class="docs-footer">
+                <div>
+                    <p>Last updated <time datetime="2026-05-13T08:14:00+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T08:39:45+00:00</p>
+                </div>
+                <div class="docs-footer__actions">
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/troubleshooting.md">Edit this page</a>
+                                    </div>
+            </footer>
+
+                        <nav class="docs-pager" aria-label="Page navigation">
+                                <a class="docs-pager__link" href="testing.html">
+                    <span class="docs-pager__label">Previous</span>
+                    <strong>Testing</strong>
+                </a>
+                
+                                <a class="docs-pager__link docs-pager__link--next" href="examples.html">
+                    <span class="docs-pager__label">Next</span>
+                    <strong>Examples</strong>
+                </a>
+                            </nav>
+                    </main>
+
+            </div>
+
+    <script>
+        window.__DOCS_CONFIG__ = {"currentPage":"troubleshooting.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup-templating.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
+    <script defer src="assets/app.js"></script>
+</body>
+</html>

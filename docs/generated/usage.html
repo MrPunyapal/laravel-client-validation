@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Usage | Laravel Client Validation</title>
+    <meta name="description" content="Apply Laravel Client Validation through Blade directives, Alpine.js helpers, remote validation, and programmatic validators.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/usage.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/usage.html">
+        <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Laravel Client Validation">
+    <meta property="og:title" content="Usage | Laravel Client Validation">
+    <meta property="og:description" content="Apply Laravel Client Validation through Blade directives, Alpine.js helpers, remote validation, and programmatic validators.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#e85d43">
+    <script>
+        (() => {
+            try {
+                const savedTheme = window.localStorage.getItem('docs-theme');
+                const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.dataset.theme = preferredTheme;
+            } catch (error) {
+                document.documentElement.dataset.theme = 'light';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="docs-background" aria-hidden="true"></div>
+    <header class="docs-header">
+        <div class="docs-header__inner">
+            <button class="docs-header__menu" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a class="docs-brand" href="index.html">
+                <span class="docs-brand__eyebrow">Package Docs</span>
+                <span class="docs-brand__title">Laravel Client Validation</span>
+            </a>
+            <div class="docs-search">
+                <label class="sr-only" for="docs-search-input">Search the documentation</label>
+                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search installation, rules, hooks…" autocomplete="off" data-search-input>
+                <div class="docs-search__results" data-search-results hidden></div>
+            </div>
+            <div class="docs-header__actions">
+                                <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">GitHub</a>
+                                <a class="docs-action-link" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">Packagist</a>
+                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+                    <span data-theme-label>Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-overlay" data-sidebar-overlay hidden></div>
+
+    <div class="docs-shell">
+        <aside class="docs-sidebar" data-sidebar>
+            <div class="docs-sidebar__hero">
+                <div>
+                    <p class="docs-sidebar__label">Static handbook</p>
+                    <h2>Laravel Client Validation</h2>
+                    <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+                </div>
+                <div class="docs-badges">
+                    <span class="docs-badge">PHP 8.2+</span>
+                    <span class="docs-badge">Laravel 12+</span>
+                </div>
+                <a class="docs-packagist-badge" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">
+                    <img src="https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation?style=flat-square&amp;label=packagist" alt="Packagist version badge">
+                </a>
+            </div>
+
+            <nav class="docs-nav" aria-label="Documentation navigation">
+                                <a class="docs-nav__link" href="index.html">
+                    Overview                </a>
+                                <a class="docs-nav__link" href="installation.html">
+                    Installation                </a>
+                                <a class="docs-nav__link" href="configuration.html">
+                    Configuration                </a>
+                                <a class="docs-nav__link is-active" href="usage.html" aria-current="page">
+                    Usage                </a>
+                                <a class="docs-nav__link" href="validation-rules.html">
+                    Validation Rules                </a>
+                                <a class="docs-nav__link" href="custom-rules.html">
+                    Custom Rules                </a>
+                                <a class="docs-nav__link" href="testing.html">
+                    Testing                </a>
+                                <a class="docs-nav__link" href="troubleshooting.html">
+                    Troubleshooting                </a>
+                                <a class="docs-nav__link" href="examples.html">
+                    Examples                </a>
+                            </nav>
+        </aside>
+
+        <main class="docs-main">
+            <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
+                                                <a href="index.html">Documentation</a>
+                                                <span class="docs-breadcrumbs__separator">/</span>
+                                <a href="usage.html">Usage</a>
+                            </nav>
+
+            <article class="docs-content">
+                <header class="docs-content__header">
+                    <p class="docs-content__eyebrow">Markdown source, generated HTML output</p>
+                    <h1>Usage</h1>
+                    <p class="docs-content__lead">Apply Laravel Client Validation through Blade directives, Alpine.js helpers, remote validation, and programmatic validators.</p>
+                </header>
+
+                
+                <p>Laravel Client Validation supports multiple integration styles, but the core idea is always the same: define rules once, choose a validation trigger, and let the package run client-side checks before falling back to the server when needed.</p>
+<h2>Blade directives<a id="blade-directives" href="#blade-directives" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>For server-rendered Laravel applications, the Blade directives are the fastest way to attach metadata to a field.</p>
+<pre><code class="language-html">&lt;form data-validate&gt;
+    &lt;input name="email" @rules('email', 'required|email', ['mode' =&gt; 'blur'])&gt;
+    &lt;input name="username" @validateLive('username', 'required|alpha_dash|min:3')&gt;
+    &lt;input name="password" @validateSubmit('password', 'required|min:8|confirmed')&gt;
+&lt;/form&gt;
+</code></pre>
+<p>Use the explicit shorthand that matches the interaction you want. That keeps your templates readable when scanning large forms.</p>
+<h2>Alpine.js forms<a id="alpinejs-forms" href="#alpinejs-forms" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The package exposes Alpine-friendly helpers for form state and field-level feedback.</p>
+<pre><code class="language-html">&lt;div x-data="validation({
+    rules: {
+        email: 'required|email',
+        password: 'required|min:8',
+        password_confirmation: 'required|same:password',
+    },
+    messages: {
+        'password.min': 'Use at least eight characters.',
+    },
+})"&gt;
+    &lt;form @submit.prevent="submit(async (data) =&gt; console.log(data))"&gt;
+        &lt;input x-model="form.email" @blur="validate('email')" name="email"&gt;
+        &lt;p x-show="hasError('email')" x-text="error('email')"&gt;&lt;/p&gt;
+
+        &lt;input type="password" x-model="form.password" @blur="validate('password')" name="password"&gt;
+        &lt;p x-show="hasError('password')" x-text="error('password')"&gt;&lt;/p&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+</code></pre>
+<h2>Remote validation flow<a id="remote-validation-flow" href="#remote-validation-flow" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Rules such as <code>unique</code> and <code>exists</code> stay server-backed. The browser bundle sends them to the package route when <code>enable_ajax_validation</code> is enabled.</p>
+<pre><code class="language-html">&lt;input name="email" @validateLive('email', 'required|email|unique:users,email')&gt;
+</code></pre>
+<p>With the default configuration, the request is posted to <code>client-validation/validate</code>.</p>
+<h2>Programmatic validation<a id="programmatic-validation" href="#programmatic-validation" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>You can also work with the validator directly in JavaScript.</p>
+<pre><code class="language-javascript">import { LaravelValidator } from 'laravel-client-validation/core';
+
+const validator = new LaravelValidator({
+    rules: {
+        email: 'required|email',
+        password: 'required|min:8',
+    },
+    messages: {
+        'email.required': 'Email is required.',
+    },
+});
+
+const fieldResult = await validator.validateField('email', 'name@example.com');
+const formResult = await validator.validateAll({
+    email: 'name@example.com',
+    password: 'secret123',
+});
+</code></pre>
+<h2>Validation hooks<a id="validation-hooks" href="#validation-hooks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Hook into form lifecycle events when you need analytics, UI transitions, or custom logging.</p>
+<pre><code class="language-javascript">const validator = new LaravelClientValidation.Validator({ rules });
+
+validator
+    .beforeValidate(({ data }) =&gt; console.log('Validating', data))
+    .afterValidate(({ valid, errors }) =&gt; console.log('Done', valid, errors));
+</code></pre>
+<h2>Livewire and Filament<a id="livewire-and-filament" href="#livewire-and-filament" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The package includes dedicated integration layers for Livewire and Filament, but the rule grammar stays the same.</p>
+<pre><code class="language-php">use MrPunyapal\ClientValidation\Livewire\WithClientValidation;
+
+class CreateUser extends Component
+{
+    use WithClientValidation;
+
+    protected $rules = [
+        'email' =&gt; 'required|email',
+        'password' =&gt; 'required|min:8|confirmed',
+    ];
+}
+</code></pre>
+<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Use <a href="./examples.html">examples</a> for larger snippets.</li>
+<li>Review <a href="./custom-rules.html">custom rules</a> when built-in rules are not sufficient.</li>
+<li>Keep <a href="./troubleshooting.html">troubleshooting</a> close when remote validation and CSRF interact unexpectedly.</li>
+</ul>
+            </article>
+
+            <footer class="docs-footer">
+                <div>
+                    <p>Last updated <time datetime="2026-05-13T08:14:00+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T08:39:45+00:00</p>
+                </div>
+                <div class="docs-footer__actions">
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/usage.md">Edit this page</a>
+                                    </div>
+            </footer>
+
+                        <nav class="docs-pager" aria-label="Page navigation">
+                                <a class="docs-pager__link" href="configuration.html">
+                    <span class="docs-pager__label">Previous</span>
+                    <strong>Configuration</strong>
+                </a>
+                
+                                <a class="docs-pager__link docs-pager__link--next" href="validation-rules.html">
+                    <span class="docs-pager__label">Next</span>
+                    <strong>Validation Rules</strong>
+                </a>
+                            </nav>
+                    </main>
+
+            </div>
+
+    <script>
+        window.__DOCS_CONFIG__ = {"currentPage":"usage.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup-templating.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
+    <script defer src="assets/app.js"></script>
+</body>
+</html>

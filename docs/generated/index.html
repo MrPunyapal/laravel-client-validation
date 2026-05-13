@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laravel Client Validation Docs</title>
+    <meta name="description" content="Build responsive Laravel-fluent forms with markdown-authored documentation, generated HTML pages, and GitHub Pages deployment.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/">
+        <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Laravel Client Validation">
+    <meta property="og:title" content="Laravel Client Validation Docs">
+    <meta property="og:description" content="Build responsive Laravel-fluent forms with markdown-authored documentation, generated HTML pages, and GitHub Pages deployment.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#e85d43">
+    <script>
+        (() => {
+            try {
+                const savedTheme = window.localStorage.getItem('docs-theme');
+                const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.dataset.theme = preferredTheme;
+            } catch (error) {
+                document.documentElement.dataset.theme = 'light';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="docs-background" aria-hidden="true"></div>
+    <header class="docs-header">
+        <div class="docs-header__inner">
+            <button class="docs-header__menu" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a class="docs-brand" href="index.html">
+                <span class="docs-brand__eyebrow">Package Docs</span>
+                <span class="docs-brand__title">Laravel Client Validation</span>
+            </a>
+            <div class="docs-search">
+                <label class="sr-only" for="docs-search-input">Search the documentation</label>
+                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search installation, rules, hooks…" autocomplete="off" data-search-input>
+                <div class="docs-search__results" data-search-results hidden></div>
+            </div>
+            <div class="docs-header__actions">
+                                <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">GitHub</a>
+                                <a class="docs-action-link" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">Packagist</a>
+                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+                    <span data-theme-label>Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-overlay" data-sidebar-overlay hidden></div>
+
+    <div class="docs-shell">
+        <aside class="docs-sidebar" data-sidebar>
+            <div class="docs-sidebar__hero">
+                <div>
+                    <p class="docs-sidebar__label">Static handbook</p>
+                    <h2>Laravel Client Validation</h2>
+                    <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+                </div>
+                <div class="docs-badges">
+                    <span class="docs-badge">PHP 8.2+</span>
+                    <span class="docs-badge">Laravel 12+</span>
+                </div>
+                <a class="docs-packagist-badge" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">
+                    <img src="https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation?style=flat-square&amp;label=packagist" alt="Packagist version badge">
+                </a>
+            </div>
+
+            <nav class="docs-nav" aria-label="Documentation navigation">
+                                <a class="docs-nav__link is-active" href="index.html" aria-current="page">
+                    Overview                </a>
+                                <a class="docs-nav__link" href="installation.html">
+                    Installation                </a>
+                                <a class="docs-nav__link" href="configuration.html">
+                    Configuration                </a>
+                                <a class="docs-nav__link" href="usage.html">
+                    Usage                </a>
+                                <a class="docs-nav__link" href="validation-rules.html">
+                    Validation Rules                </a>
+                                <a class="docs-nav__link" href="custom-rules.html">
+                    Custom Rules                </a>
+                                <a class="docs-nav__link" href="testing.html">
+                    Testing                </a>
+                                <a class="docs-nav__link" href="troubleshooting.html">
+                    Troubleshooting                </a>
+                                <a class="docs-nav__link" href="examples.html">
+                    Examples                </a>
+                            </nav>
+        </aside>
+
+        <main class="docs-main">
+            <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
+                                                <a href="index.html">Documentation</a>
+                            </nav>
+
+            <article class="docs-content">
+                <header class="docs-content__header">
+                    <p class="docs-content__eyebrow">Markdown source, generated HTML output</p>
+                    <h1>Laravel Client Validation</h1>
+                    <p class="docs-content__lead">Build responsive Laravel-fluent forms with markdown-authored documentation, generated HTML pages, and GitHub Pages deployment.</p>
+                </header>
+
+                
+                <p>Laravel Client Validation brings familiar Laravel validation rules into the browser so forms can respond immediately without maintaining a second rule set by hand.</p>
+<h2>Why this package exists<a id="why-this-package-exists" href="#why-this-package-exists" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Keep Laravel-style validation rules close to the UI.</li>
+<li>Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.</li>
+<li>Fall back to AJAX when a rule depends on the server, such as <code>unique</code> or <code>exists</code>.</li>
+<li>Ship contributor-friendly documentation from plain Markdown files in <code>docs/md</code>.</li>
+</ul>
+<h2>Quick start<a id="quick-start" href="#quick-start" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Install the package and publish the configuration and browser assets:</p>
+<pre><code class="language-bash">composer require mrpunyapal/laravel-client-validation
+php artisan client-validation:install
+</code></pre>
+<p>Then render the package assets in a Blade layout:</p>
+<pre><code class="language-php">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @clientValidationAssets
+&lt;/head&gt;
+&lt;body&gt;
+    {{ $slot }}
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2>Documentation map<a id="documentation-map" href="#documentation-map" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Start with <a href="./installation.html">installation</a> if you are onboarding the package into a Laravel app.</li>
+<li>Review <a href="./configuration.html">configuration</a> before changing default validation modes, messages, AJAX, or styling.</li>
+<li>Use <a href="./usage.html">usage</a> for Blade directives, Alpine integration, and remote-validation flow.</li>
+<li>Keep <a href="./validation-rules.html">validation rules</a> nearby when auditing client-side parity.</li>
+<li>Reach for <a href="./custom-rules.html">custom rules</a> when the default rule set is not enough.</li>
+<li>Run the checks in <a href="./testing.html">testing</a> before publishing a package release.</li>
+<li>Check <a href="./troubleshooting.html">troubleshooting</a> when a directive, rule, or AJAX request does not behave as expected.</li>
+<li>Browse <a href="./examples.html">examples</a> for practical Laravel snippets you can adapt directly.</li>
+</ul>
+<h2>Supported integration styles<a id="supported-integration-styles" href="#supported-integration-styles" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3>Blade and Alpine.js<a id="blade-and-alpinejs" href="#blade-and-alpinejs" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<p>The package exposes Blade directives like <code>@rules</code>, <code>@validateBlur</code>, and <code>@validateLive</code>, alongside Alpine helpers and <code>x-validate</code> directives.</p>
+<pre><code class="language-html">&lt;form data-validate&gt;
+    &lt;input name="email" @rules('email', 'required|email')&gt;
+    &lt;input name="username" @validateLive('username', 'required|alpha_dash|min:3')&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>Livewire and Filament<a id="livewire-and-filament" href="#livewire-and-filament" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<p>Livewire components can use <code>WithClientValidation</code>, while Filament panels can install <code>ClientValidationPlugin</code> and field traits for form-level feedback.</p>
+<pre><code class="language-php">use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
+
+$panel-&gt;plugins([
+    ClientValidationPlugin::make()-&gt;validationMode('live'),
+]);
+</code></pre>
+<h3>Vanilla JavaScript<a id="vanilla-javascript" href="#vanilla-javascript" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<p>If you only need client-side validation in a custom frontend, the core validator and adapters are available from the browser bundle or ES module entrypoints.</p>
+<pre><code class="language-javascript">import { LaravelValidator } from 'laravel-client-validation/core';
+
+const validator = new LaravelValidator({
+    rules: {
+        email: 'required|email',
+    },
+});
+</code></pre>
+<h2>How the docs site is generated<a id="how-the-docs-site-is-generated" href="#how-the-docs-site-is-generated" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>This repository keeps Markdown as the source of truth. The generated site in <code>docs/generated</code> is rebuilt from the following command:</p>
+<pre><code class="language-bash">php docs/build.php
+</code></pre>
+<p>The builder reads frontmatter from every file in <code>docs/md</code>, generates the sidebar and previous or next navigation automatically, writes a JSON search index, and copies the assets used by the generated pages.</p>
+            </article>
+
+            <footer class="docs-footer">
+                <div>
+                    <p>Last updated <time datetime="2026-05-13T08:14:00+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T08:39:45+00:00</p>
+                </div>
+                <div class="docs-footer__actions">
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/index.md">Edit this page</a>
+                                    </div>
+            </footer>
+
+                        <nav class="docs-pager" aria-label="Page navigation">
+                                <span></span>
+                
+                                <a class="docs-pager__link docs-pager__link--next" href="installation.html">
+                    <span class="docs-pager__label">Next</span>
+                    <strong>Installation</strong>
+                </a>
+                            </nav>
+                    </main>
+
+            </div>
+
+    <script>
+        window.__DOCS_CONFIG__ = {"currentPage":"index.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup-templating.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
+    <script defer src="assets/app.js"></script>
+</body>
+</html>

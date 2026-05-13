@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configuration | Laravel Client Validation</title>
+    <meta name="description" content="Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/configuration.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/configuration.html">
+        <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Laravel Client Validation">
+    <meta property="og:title" content="Configuration | Laravel Client Validation">
+    <meta property="og:description" content="Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#e85d43">
+    <script>
+        (() => {
+            try {
+                const savedTheme = window.localStorage.getItem('docs-theme');
+                const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.dataset.theme = preferredTheme;
+            } catch (error) {
+                document.documentElement.dataset.theme = 'light';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="docs-background" aria-hidden="true"></div>
+    <header class="docs-header">
+        <div class="docs-header__inner">
+            <button class="docs-header__menu" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a class="docs-brand" href="index.html">
+                <span class="docs-brand__eyebrow">Package Docs</span>
+                <span class="docs-brand__title">Laravel Client Validation</span>
+            </a>
+            <div class="docs-search">
+                <label class="sr-only" for="docs-search-input">Search the documentation</label>
+                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search installation, rules, hooks…" autocomplete="off" data-search-input>
+                <div class="docs-search__results" data-search-results hidden></div>
+            </div>
+            <div class="docs-header__actions">
+                                <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">GitHub</a>
+                                <a class="docs-action-link" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">Packagist</a>
+                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+                    <span data-theme-label>Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-overlay" data-sidebar-overlay hidden></div>
+
+    <div class="docs-shell">
+        <aside class="docs-sidebar" data-sidebar>
+            <div class="docs-sidebar__hero">
+                <div>
+                    <p class="docs-sidebar__label">Static handbook</p>
+                    <h2>Laravel Client Validation</h2>
+                    <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+                </div>
+                <div class="docs-badges">
+                    <span class="docs-badge">PHP 8.2+</span>
+                    <span class="docs-badge">Laravel 12+</span>
+                </div>
+                <a class="docs-packagist-badge" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">
+                    <img src="https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation?style=flat-square&amp;label=packagist" alt="Packagist version badge">
+                </a>
+            </div>
+
+            <nav class="docs-nav" aria-label="Documentation navigation">
+                                <a class="docs-nav__link" href="index.html">
+                    Overview                </a>
+                                <a class="docs-nav__link" href="installation.html">
+                    Installation                </a>
+                                <a class="docs-nav__link is-active" href="configuration.html" aria-current="page">
+                    Configuration                </a>
+                                <a class="docs-nav__link" href="usage.html">
+                    Usage                </a>
+                                <a class="docs-nav__link" href="validation-rules.html">
+                    Validation Rules                </a>
+                                <a class="docs-nav__link" href="custom-rules.html">
+                    Custom Rules                </a>
+                                <a class="docs-nav__link" href="testing.html">
+                    Testing                </a>
+                                <a class="docs-nav__link" href="troubleshooting.html">
+                    Troubleshooting                </a>
+                                <a class="docs-nav__link" href="examples.html">
+                    Examples                </a>
+                            </nav>
+        </aside>
+
+        <main class="docs-main">
+            <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
+                                                <a href="index.html">Documentation</a>
+                                                <span class="docs-breadcrumbs__separator">/</span>
+                                <a href="configuration.html">Configuration</a>
+                            </nav>
+
+            <article class="docs-content">
+                <header class="docs-content__header">
+                    <p class="docs-content__eyebrow">Markdown source, generated HTML output</p>
+                    <h1>Configuration</h1>
+                    <p class="docs-content__lead">Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.</p>
+                </header>
+
+                
+                <p>Laravel Client Validation publishes a single configuration file, <code>config/client-validation.php</code>, that controls how the browser bundle is loaded and how validation behaves by default.</p>
+<h2>Publishing and editing config<a id="publishing-and-editing-config" href="#publishing-and-editing-config" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>If you skipped the installer, publish the configuration manually:</p>
+<pre><code class="language-bash">php artisan vendor:publish --tag=client-validation-config
+</code></pre>
+<p>Then edit the generated file in your application.</p>
+<h2>Core runtime options<a id="core-runtime-options" href="#core-runtime-options" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Use these settings to decide when validation runs and whether server-backed rules are allowed.</p>
+<pre><code class="language-php">return [
+    'auto_include_assets' =&gt; true,
+    'enable_ajax_validation' =&gt; true,
+    'ajax_timeout' =&gt; 5000,
+    'route_prefix' =&gt; 'client-validation',
+    'validation_mode' =&gt; 'blur',
+    'debounce_ms' =&gt; 300,
+];
+</code></pre>
+<h3>Recommended defaults<a id="recommended-defaults" href="#recommended-defaults" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<ul>
+<li>Keep <code>validation_mode</code> at <code>blur</code> for most text fields.</li>
+<li>Switch to <code>input</code> or <code>live</code> only when feedback needs to be immediate.</li>
+<li>Leave <code>enable_ajax_validation</code> enabled if you use <code>unique</code>, <code>exists</code>, <code>password</code>, or other server-side rules.</li>
+</ul>
+<h2>Rate limiting and caching<a id="rate-limiting-and-caching" href="#rate-limiting-and-caching" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>AJAX validation is throttled and cached to avoid spamming the backend while the user types.</p>
+<pre><code class="language-php">'rate_limit' =&gt; [
+    'max_attempts' =&gt; 60,
+    'decay_seconds' =&gt; 60,
+],
+
+'cache' =&gt; [
+    'enabled' =&gt; true,
+    'ttl' =&gt; 300,
+    'max_size' =&gt; 1000,
+],
+</code></pre>
+<p>Use a lower debounce or lower rate limit only when you have confirmed the validation endpoint can tolerate the extra traffic.</p>
+<h2>Error templates and field styling<a id="error-templates-and-field-styling" href="#error-templates-and-field-styling" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The package can add and remove CSS classes automatically when a field passes or fails validation.</p>
+<pre><code class="language-php">'error_template' =&gt; [
+    'enabled' =&gt; true,
+    'container_class' =&gt; 'validation-error text-red-500 text-sm mt-1',
+    'show_on' =&gt; ['fail'],
+    'position' =&gt; 'after',
+],
+
+'field_styling' =&gt; [
+    'enabled' =&gt; true,
+    'valid_class' =&gt; 'is-valid border-green-500',
+    'invalid_class' =&gt; 'is-invalid border-red-500',
+],
+</code></pre>
+<p>This is a good place to align the generated classes with your Tailwind, Bootstrap, or bespoke utility classes.</p>
+<h2>Default messages and attributes<a id="default-messages-and-attributes" href="#default-messages-and-attributes" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Message placeholders are merged with per-form messages, so keep the config file focused on cross-application defaults.</p>
+<pre><code class="language-php">'messages' =&gt; [
+    'required' =&gt; 'The :attribute field is required.',
+    'email' =&gt; 'The :attribute must be a valid email address.',
+],
+
+'attributes' =&gt; [
+    'password_confirmation' =&gt; 'password confirmation',
+],
+</code></pre>
+<h2>Rule capability lists<a id="rule-capability-lists" href="#rule-capability-lists" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The configuration file also keeps track of which rules are treated as fully client-side and which rules should always use the server.</p>
+<pre><code class="language-php">'client_side_rules' =&gt; [
+    'required', 'email', 'min', 'max', 'between', 'confirmed',
+],
+
+'server_side_rules' =&gt; [
+    'unique', 'exists', 'password', 'current_password', 'encoding',
+],
+</code></pre>
+<p>Only adjust those lists when you are extending the package itself and you fully understand how the parser and browser runtime treat the rule.</p>
+<h2>Example environment overrides<a id="example-environment-overrides" href="#example-environment-overrides" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-ini">CLIENT_VALIDATION_AUTO_INCLUDE=true
+CLIENT_VALIDATION_ENABLE_AJAX=true
+CLIENT_VALIDATION_AJAX_TIMEOUT=7000
+CLIENT_VALIDATION_RATE_LIMIT=30
+CLIENT_VALIDATION_RATE_DECAY=60
+CLIENT_VALIDATION_MODE=blur
+CLIENT_VALIDATION_DEBOUNCE=250
+</code></pre>
+<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>See <a href="./usage.html">usage</a> for directive-level overrides.</li>
+<li>See <a href="./validation-rules.html">validation rules</a> for rule behavior and remote fallback.</li>
+<li>See <a href="./troubleshooting.html">troubleshooting</a> when configuration and runtime behavior drift apart.</li>
+</ul>
+            </article>
+
+            <footer class="docs-footer">
+                <div>
+                    <p>Last updated <time datetime="2026-05-13T08:14:00+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T08:39:45+00:00</p>
+                </div>
+                <div class="docs-footer__actions">
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/configuration.md">Edit this page</a>
+                                    </div>
+            </footer>
+
+                        <nav class="docs-pager" aria-label="Page navigation">
+                                <a class="docs-pager__link" href="installation.html">
+                    <span class="docs-pager__label">Previous</span>
+                    <strong>Installation</strong>
+                </a>
+                
+                                <a class="docs-pager__link docs-pager__link--next" href="usage.html">
+                    <span class="docs-pager__label">Next</span>
+                    <strong>Usage</strong>
+                </a>
+                            </nav>
+                    </main>
+
+            </div>
+
+    <script>
+        window.__DOCS_CONFIG__ = {"currentPage":"configuration.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup-templating.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
+    <script defer src="assets/app.js"></script>
+</body>
+</html>
