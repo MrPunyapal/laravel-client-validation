@@ -105,6 +105,7 @@ $docsConfig = [
         </aside>
 
         <main class="docs-main">
+            <?php if ($page['slug'] !== 'index'): ?>
             <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
                 <?php foreach ($breadcrumbs as $index => $breadcrumb): ?>
                 <?php if ($index > 0): ?>
@@ -113,10 +114,13 @@ $docsConfig = [
                 <a href="<?= $escape($breadcrumb['href']) ?>"><?= $escape($breadcrumb['title']) ?></a>
                 <?php endforeach; ?>
             </nav>
+            <?php endif; ?>
 
             <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
+                    <?php if ($page['slug'] !== 'index'): ?>
                     <p class="docs-content__eyebrow">Documentation</p>
+                    <?php endif; ?>
                     <h1><?= $escape($page['title']) ?></h1>
                     <p class="docs-content__lead"><?= $escape($metaDescription) ?></p>
                 </header>

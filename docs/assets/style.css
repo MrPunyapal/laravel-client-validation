@@ -104,6 +104,29 @@ kbd {
     border: 0;
 }
 
+.docs-skip-link {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 60;
+    padding: 0.7rem 0.95rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-180%);
+    transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.docs-skip-link:focus,
+.docs-skip-link:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
 .docs-background {
     position: fixed;
     inset: 0;
@@ -156,9 +179,20 @@ kbd {
 
 .docs-brand {
     display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: inherit;
+}
+
+.docs-brand__mark {
+    display: none;
+}
+
+.docs-brand__copy {
+    display: flex;
     flex-direction: column;
     gap: 0.15rem;
-    color: inherit;
+    min-width: 0;
 }
 
 .docs-brand__eyebrow,
@@ -170,6 +204,20 @@ kbd {
     font-size: 0.72rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    color: var(--muted);
+}
+
+.docs-brand__eyebrow,
+.docs-sidebar__label {
+    position: relative;
+    color: transparent;
+}
+
+.docs-brand__eyebrow::after,
+.docs-sidebar__label::after {
+    content: 'Package for Laravel';
+    position: absolute;
+    inset: 0;
     color: var(--muted);
 }
 
@@ -356,6 +404,14 @@ kbd {
     margin-bottom: 1rem;
     font-size: 0.92rem;
     color: var(--muted);
+}
+
+.docs-breadcrumbs:has(> a:only-child) {
+    display: none;
+}
+
+.docs-breadcrumbs:has(> a:only-child) + .docs-content .docs-content__eyebrow {
+    display: none;
 }
 
 .docs-breadcrumbs a {
