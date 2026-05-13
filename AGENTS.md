@@ -8,7 +8,7 @@ This repository ships package code, browser adapters, and a generated static doc
 - Static documentation source lives in `docs/md/`.
 - Documentation HTML output lives in `docs/generated/` and must never be edited manually.
 - The documentation builder is `docs/build.php`, with layout and UI in `docs/template.php` and `docs/assets/`.
-- Documentation-specific contribution rules live in `docs/AGENTS.md`. Read that file before changing anything under `docs/`.
+- All contributor and AI-agent guidance lives in this root `AGENTS.md`. Do not create or rely on nested `AGENTS.md` files for `docs/`.
 
 ## Required workflow
 
@@ -22,8 +22,7 @@ This repository ships package code, browser adapters, and a generated static doc
 ### Repository workflow changes
 
 1. Update this root `AGENTS.md` when changing project structure, supported integrations, build or test commands, generated artifact locations, or documentation workflow.
-2. Update scoped guidance files such as `docs/AGENTS.md` when their area changes.
-3. Keep commands, paths, and workflow notes in sync with `composer.json`, `package.json`, and the current repository layout.
+2. Keep commands, paths, and workflow notes in sync with `composer.json`, `package.json`, and the current repository layout.
 
 ### Documentation changes
 
@@ -31,6 +30,20 @@ This repository ships package code, browser adapters, and a generated static doc
 2. Run `php docs/build.php` or `composer docs:build`.
 3. Verify the generated HTML, search index, and sitemap in `docs/generated/`.
 4. Commit the Markdown source and the regenerated output together.
+
+### Documentation standards
+
+1. Every page in `docs/md/` should include YAML frontmatter with at least `title`, `description`, `order`, and `slug`.
+2. Use `##` and `###` headings so the builder can generate the table of contents.
+3. Include at least one practical example and explain expected behavior, not just syntax.
+4. Use fenced code blocks with a language whenever possible.
+5. Do not add a top-level Markdown `# H1`; the template renders the page title from frontmatter.
+
+### Internal documentation links
+
+1. Use relative Markdown links such as `./installation.md` and `./usage.md#hooks`.
+2. Only add heading fragments when the target heading is stable.
+3. If you rename a heading, slug, or anchor, update every dependent link in the same change.
 
 ## Project overview
 
@@ -146,8 +159,13 @@ composer docs:build
 - Use relative markdown links such as `./installation.md` or `./usage.md#hooks`.
 - Avoid adding an `# H1` to docs pages. The template renders the page title from frontmatter.
 - Keep frontmatter `title`, `description`, `order`, and `slug` accurate.
+- `sidebar_label` is optional and should only be used when the sidebar text should differ from the page title.
 - Do not rename slugs or anchors casually, because internal links, search results, and bookmarks depend on them.
 - Never patch generated HTML to “fix” a docs issue. Change the Markdown, template, assets, or builder instead.
+- Never edit `docs/generated/search-index.json`, `docs/generated/sitemap.xml`, or `docs/generated/.nojekyll` by hand.
+- Keep Markdown compatible with `league/commonmark` and GitHub-flavored Markdown.
+- Remember that `.md` links are rewritten to `.html` during generation.
+- Keep template, asset, and builder changes small and coordinated. If you change one, rebuild immediately.
 
 ## AI editing rules
 
@@ -156,7 +174,38 @@ composer docs:build
 - Do not rename anchors or headings unless the change is intentional and linked references are updated.
 - Do not break relative markdown links.
 - Do not edit generated files by hand.
+- Do not create a nested `docs/AGENTS.md`; keep agent guidance centralized in the root file.
 - Prefer small, explainable changes over broad rewrites.
+
+## Documentation style guide
+
+- Use Laravel terminology where it matches the package API.
+- Prefer practical examples over abstract descriptions.
+- Keep tone direct, specific, and contributor-friendly.
+- Match package reality. If an API is not implemented, do not document it as finished.
+- Prefer stable wording that will not force unnecessary anchor churn.
+
+## Validation documentation standards
+
+When adding or expanding validation-rule documentation, include:
+
+- purpose
+- usage example
+- supported data types
+- edge cases
+- example validation messages
+
+If the rule is remote or depends on sibling fields, say so explicitly.
+
+## Documentation review checklist
+
+Before finishing a docs change, confirm:
+
+1. Frontmatter is complete and accurate.
+2. Links resolve correctly in Markdown form.
+3. Code blocks use the correct language.
+4. `php docs/build.php` completes successfully.
+5. The generated output matches the Markdown source.
 
 ## Important patterns
 
