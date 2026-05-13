@@ -137,6 +137,12 @@
 php artisan client-validation:install
 </code></pre>
 <p>The install command publishes the package configuration and the browser bundle into <code>public/vendor/client-validation</code>.</p>
+<h2>Laravel Boost<a id="laravel-boost" href="#laravel-boost" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>If the Laravel application also uses <a href="https://laravel.com/docs/13.x/boost">Laravel Boost</a>, this package ships a third-party Boost skill.</p>
+<p>Use <code>boost:install</code> when Boost is being installed for the first time, or refresh third-party skills after package changes with:</p>
+<pre><code class="language-bash">php artisan boost:update --discover
+</code></pre>
+<p>When skills are enabled, Boost can install the <code>laravel-client-validation-development</code> skill and give AI agents package-aware guidance for Blade directives, Alpine helpers, Livewire integration, Filament setup, and remote validation.</p>
 <h2>Include the assets<a id="include-the-assets" href="#include-the-assets" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>The package ships the <code>@clientValidationAssets</code> Blade directive. It injects configuration, prefers the published local bundle, and falls back to the CDN bundle when the asset files are missing.</p>
 <pre><code class="language-php">&lt;head&gt;
@@ -175,8 +181,8 @@ php artisan client-validation:install
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T10:16:12+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T10:16:24+00:00</p>
+                    <p>Last updated <time datetime="2026-05-13T15:03:30+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T15:03:44+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/installation.md">Edit this page</a>
