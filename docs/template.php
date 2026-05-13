@@ -31,7 +31,7 @@ $docsConfig = [
     <meta property="og:title" content="<?= $escape($documentTitle) ?>">
     <meta property="og:description" content="<?= $escape($metaDescription) ?>">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="theme-color" content="#e85d43">
+    <meta name="theme-color" content="#f53003">
     <script>
         (() => {
             try {
@@ -46,6 +46,7 @@ $docsConfig = [
     <link rel="stylesheet" href="<?= $escape($paths['styles']) ?>">
 </head>
 <body>
+    <a class="docs-skip-link" href="#docs-content">Skip to content</a>
     <div class="docs-background" aria-hidden="true"></div>
     <header class="docs-header">
         <div class="docs-header__inner">
@@ -55,12 +56,15 @@ $docsConfig = [
                 <span></span>
             </button>
             <a class="docs-brand" href="<?= $escape($paths['home']) ?>">
-                <span class="docs-brand__eyebrow">Package Docs</span>
-                <span class="docs-brand__title"><?= $escape($site['name']) ?></span>
+                <span class="docs-brand__mark" aria-hidden="true">LC</span>
+                <span class="docs-brand__copy">
+                    <span class="docs-brand__eyebrow">Laravel Package</span>
+                    <span class="docs-brand__title"><?= $escape($site['name']) ?></span>
+                </span>
             </a>
             <div class="docs-search">
                 <label class="sr-only" for="docs-search-input">Search the documentation</label>
-                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search installation, rules, hooks…" autocomplete="off" data-search-input>
+                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search the docs" autocomplete="off" data-search-input>
                 <div class="docs-search__results" data-search-results hidden></div>
             </div>
             <div class="docs-header__actions">
@@ -68,7 +72,7 @@ $docsConfig = [
                 <a class="docs-action-link" href="<?= $escape($site['repository_url']) ?>">GitHub</a>
                 <?php endif; ?>
                 <a class="docs-action-link" href="<?= $escape($site['packagist_url']) ?>">Packagist</a>
-                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
                     <span data-theme-label>Theme</span>
                 </button>
             </div>
@@ -81,7 +85,7 @@ $docsConfig = [
         <aside class="docs-sidebar" data-sidebar>
             <div class="docs-sidebar__hero">
                 <div>
-                    <p class="docs-sidebar__label">Static handbook</p>
+                    <p class="docs-sidebar__label">Laravel package</p>
                     <h2><?= $escape($site['name']) ?></h2>
                     <p><?= $escape($site['tagline']) ?></p>
                 </div>
@@ -89,11 +93,9 @@ $docsConfig = [
                     <span class="docs-badge"><?= $escape($site['php_badge']) ?></span>
                     <span class="docs-badge"><?= $escape($site['laravel_badge']) ?></span>
                 </div>
-                <a class="docs-packagist-badge" href="<?= $escape($site['packagist_url']) ?>">
-                    <img src="<?= $escape($site['packagist_badge_url']) ?>" alt="Packagist version badge">
-                </a>
             </div>
 
+            <p class="docs-nav__eyebrow">Browse</p>
             <nav class="docs-nav" aria-label="Documentation navigation">
                 <?php foreach ($sidebarLinks as $item): ?>
                 <a class="docs-nav__link<?= $item['active'] ? ' is-active' : '' ?>" href="<?= $escape($item['href']) ?>"<?= $item['active'] ? ' aria-current="page"' : '' ?>>
@@ -113,9 +115,9 @@ $docsConfig = [
                 <?php endforeach; ?>
             </nav>
 
-            <article class="docs-content">
+            <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
-                    <p class="docs-content__eyebrow">Markdown source, generated HTML output</p>
+                    <p class="docs-content__eyebrow">Documentation</p>
                     <h1><?= $escape($page['title']) ?></h1>
                     <p class="docs-content__lead"><?= $escape($metaDescription) ?></p>
                 </header>
