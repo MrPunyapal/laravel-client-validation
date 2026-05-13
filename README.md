@@ -427,7 +427,7 @@ remote.setAdapter(async (field, value, rule, params) => {
 <input x-validate.live="'required|email|unique:users,email'" name="email">
 ```
 
-See [docs/RULES.md](docs/RULES.md) for full details and examples.
+See [docs/md/validation-rules.md](docs/md/validation-rules.md) for the canonical validation rules guide and examples.
 
 ---
 
