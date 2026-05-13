@@ -22,9 +22,9 @@ final class DocsBuilder
 {
     private const SOURCE_DIRECTORY = __DIR__ . '/md';
 
-    private const OUTPUT_DIRECTORY = __DIR__ . '/generated';
+    private const OUTPUT_DIRECTORY = __DIR__;
 
-    private const ASSET_DIRECTORY = __DIR__ . '/assets';
+    private const LEGACY_OUTPUT_DIRECTORY = __DIR__ . '/generated';
 
     private readonly MarkdownConverter $markdown;
 
@@ -67,8 +67,7 @@ final class DocsBuilder
 
         $neighbors = $this->buildNeighbors($pages);
 
-        $this->prepareOutputDirectory();
-        $this->copyAssets();
+        $this->prepareOutputDirectory($pages);
 
         foreach ($pages as $page) {
             $this->writePage(
@@ -315,16 +314,24 @@ final class DocsBuilder
         return in_array($className, array_filter($classes), true);
     }
 
-    private function prepareOutputDirectory(): void
+    /**
+     * @param array<int, array<string, mixed>> $pages
+     */
+    private function prepareOutputDirectory(array $pages): void
     {
-        if (is_dir(self::OUTPUT_DIRECTORY)) {
-            $this->deleteDirectoryContents(self::OUTPUT_DIRECTORY);
-            return;
+        if (! is_dir(self::OUTPUT_DIRECTORY)) {
+            throw new RuntimeException('The docs output directory does not exist.');
         }
 
-        if (! mkdir(self::OUTPUT_DIRECTORY, 0777, true) && ! is_dir(self::OUTPUT_DIRECTORY)) {
-            throw new RuntimeException('Unable to create docs/generated.');
+        if (is_dir(self::LEGACY_OUTPUT_DIRECTORY)) {
+            $this->deleteDirectoryContents(self::LEGACY_OUTPUT_DIRECTORY);
+
+            if (! rmdir(self::LEGACY_OUTPUT_DIRECTORY)) {
+                throw new RuntimeException('Unable to remove the legacy documentation output directory.');
+            }
         }
+
+        $this->deleteStaleGeneratedArtifacts($pages);
     }
 
     private function deleteDirectoryContents(string $directory): void
@@ -358,45 +365,83 @@ final class DocsBuilder
         }
     }
 
-    private function copyAssets(): void
+    /**
+     * @param array<int, array<string, mixed>> $pages
+     */
+    private function deleteStaleGeneratedArtifacts(array $pages): void
     {
-        $targetDirectory = self::OUTPUT_DIRECTORY . '/assets';
+        $expectedFiles = ['.nojekyll', 'search-index.json', 'sitemap.xml'];
 
-        if (! is_dir($targetDirectory) && ! mkdir($targetDirectory, 0777, true) && ! is_dir($targetDirectory)) {
-            throw new RuntimeException('Unable to create docs/generated/assets.');
+        foreach ($pages as $page) {
+            $expectedFiles[] = str_replace('\\', '/', ltrim((string) $page['url'], '/'));
         }
 
+        $expectedMap = array_fill_keys($expectedFiles, true);
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(self::ASSET_DIRECTORY, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST,
+            new RecursiveDirectoryIterator(self::OUTPUT_DIRECTORY, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST,
         );
 
-        foreach ($iterator as $asset) {
-            if (! $asset instanceof SplFileInfo) {
+        foreach ($iterator as $item) {
+            if (! $item instanceof SplFileInfo) {
                 continue;
             }
 
-            $relativePath = substr($asset->getPathname(), strlen(self::ASSET_DIRECTORY) + 1);
-            $relativePath = str_replace('\\', '/', $relativePath);
-            $destination = $targetDirectory . '/' . $relativePath;
+            $path = $item->getPathname();
+            $relativePath = str_replace('\\', '/', substr($path, strlen(self::OUTPUT_DIRECTORY) + 1));
 
-            if ($asset->isDir()) {
-                if (! is_dir($destination) && ! mkdir($destination, 0777, true) && ! is_dir($destination)) {
-                    throw new RuntimeException(sprintf('Unable to create asset directory [%s].', $destination));
+            if ($this->isProtectedOutputPath($relativePath)) {
+                continue;
+            }
+
+            if ($item->isDir()) {
+                $contents = scandir($path);
+
+                if ($contents === false) {
+                    throw new RuntimeException(sprintf('Unable to read output directory [%s].', $path));
+                }
+
+                if ($contents === ['.', '..']) {
+                    if (! rmdir($path)) {
+                        throw new RuntimeException(sprintf('Unable to remove stale output directory [%s].', $path));
+                    }
                 }
 
                 continue;
             }
 
-            $destinationDirectory = dirname($destination);
-            if (! is_dir($destinationDirectory) && ! mkdir($destinationDirectory, 0777, true) && ! is_dir($destinationDirectory)) {
-                throw new RuntimeException(sprintf('Unable to create asset directory [%s].', $destinationDirectory));
-            }
-
-            if (! copy($asset->getPathname(), $destination)) {
-                throw new RuntimeException(sprintf('Unable to copy asset [%s].', $relativePath));
+            if ($this->isGeneratedArtifact($relativePath) && ! isset($expectedMap[$relativePath])) {
+                if (! unlink($path)) {
+                    throw new RuntimeException(sprintf('Unable to remove stale generated file [%s].', $path));
+                }
             }
         }
+    }
+
+    private function isProtectedOutputPath(string $relativePath): bool
+    {
+        $segments = array_values(array_filter(explode('/', trim($relativePath, '/')), static fn (string $segment): bool => $segment !== ''));
+
+        if ($segments === []) {
+            return false;
+        }
+
+        if (in_array($segments[0], ['assets', 'md'], true)) {
+            return true;
+        }
+
+        return count($segments) === 1 && in_array($segments[0], ['RULES.md', 'build.php', 'template.php'], true);
+    }
+
+    private function isGeneratedArtifact(string $relativePath): bool
+    {
+        $filename = basename($relativePath);
+
+        if ($filename === '.nojekyll') {
+            return true;
+        }
+
+        return in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), ['html', 'json', 'xml'], true);
     }
 
     /**
@@ -526,7 +571,7 @@ final class DocsBuilder
         $json = json_encode($index, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
 
         if (file_put_contents(self::OUTPUT_DIRECTORY . '/search-index.json', $json) === false) {
-            throw new RuntimeException('Unable to write docs/generated/search-index.json.');
+            throw new RuntimeException('Unable to write docs/search-index.json.');
         }
     }
 
@@ -555,14 +600,14 @@ XML;
 XML;
 
         if (file_put_contents(self::OUTPUT_DIRECTORY . '/sitemap.xml', sprintf($sitemap, implode("\n", $entries))) === false) {
-            throw new RuntimeException('Unable to write docs/generated/sitemap.xml.');
+            throw new RuntimeException('Unable to write docs/sitemap.xml.');
         }
     }
 
     private function writeNoJekyll(): void
     {
         if (file_put_contents(self::OUTPUT_DIRECTORY . '/.nojekyll', '') === false) {
-            throw new RuntimeException('Unable to write docs/generated/.nojekyll.');
+            throw new RuntimeException('Unable to write docs/.nojekyll.');
         }
     }
 

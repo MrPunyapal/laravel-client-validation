@@ -56,9 +56,8 @@ $docsConfig = [
                 <span></span>
             </button>
             <a class="docs-brand" href="<?= $escape($paths['home']) ?>">
-                <span class="docs-brand__mark" aria-hidden="true">LC</span>
                 <span class="docs-brand__copy">
-                    <span class="docs-brand__eyebrow">Laravel Package</span>
+                    <span class="docs-brand__eyebrow">Package for Laravel</span>
                     <span class="docs-brand__title"><?= $escape($site['name']) ?></span>
                 </span>
             </a>
@@ -85,7 +84,7 @@ $docsConfig = [
         <aside class="docs-sidebar" data-sidebar>
             <div class="docs-sidebar__hero">
                 <div>
-                    <p class="docs-sidebar__label">Laravel package</p>
+                    <p class="docs-sidebar__label">Package for Laravel</p>
                     <h2><?= $escape($site['name']) ?></h2>
                     <p><?= $escape($site['tagline']) ?></p>
                 </div>
