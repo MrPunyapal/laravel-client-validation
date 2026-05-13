@@ -8,10 +8,10 @@ When you need to update validation-rule documentation:
 
 1. Edit [docs/md/validation-rules.md](./md/validation-rules.md).
 2. Run `php docs/build.php`.
-3. Review the generated output in `docs/generated/validation-rules.html`.
+3. Review the generated output in `docs/validation-rules.html`.
 4. Commit the Markdown source and generated HTML together.
 
-Do not edit generated HTML files by hand.
+Do not edit generated HTML files by hand. Rebuild them from Markdown.
 
 {{-- Confirmed with custom field --}}
 <input x-validate="'confirmed:repeat_email'" name="email">

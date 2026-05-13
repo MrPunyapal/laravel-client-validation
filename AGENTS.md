@@ -6,7 +6,7 @@ This repository ships package code, browser adapters, and a generated static doc
 
 - Package code lives in `src/` and `resources/js/`.
 - Static documentation source lives in `docs/md/`.
-- Documentation HTML output lives in `docs/generated/` and must never be edited manually.
+- Generated documentation output lives in `docs/*.html`, `docs/search-index.json`, `docs/sitemap.xml`, and `docs/.nojekyll`, and those files must never be edited manually.
 - The documentation builder is `docs/build.php`, with layout and UI in `docs/template.php` and `docs/assets/`.
 - All contributor and AI-agent guidance lives in this root `AGENTS.md`. Do not create or rely on nested `AGENTS.md` files for `docs/`.
 
@@ -28,7 +28,7 @@ This repository ships package code, browser adapters, and a generated static doc
 
 1. Edit Markdown files in `docs/md/`.
 2. Run `php docs/build.php` or `composer docs:build`.
-3. Verify the generated HTML, search index, and sitemap in `docs/generated/`.
+3. Verify the generated HTML, search index, and sitemap in `docs/`.
 4. Commit the Markdown source and the regenerated output together.
 
 ### Documentation standards
@@ -70,8 +70,7 @@ Laravel Client Validation converts Laravel validation rules into client-side beh
 ### Documentation system
 
 - `docs/md/*.md` files are canonical and use YAML frontmatter.
-- `docs/build.php` scans markdown, parses frontmatter, converts Markdown to HTML with `league/commonmark`, builds navigation and search metadata, and writes GitHub Pages-ready output.
-- `docs/generated/` contains generated HTML, copied assets, `.nojekyll`, `search-index.json`, and `sitemap.xml`.
+- `docs/build.php` scans markdown, parses frontmatter, converts Markdown to HTML with `league/commonmark`, builds navigation and search metadata, and writes generated HTML, `.nojekyll`, `search-index.json`, and `sitemap.xml` into `docs/`.
 - `.github/workflows/build-docs.yml` rebuilds and deploys the generated docs on pushes to `main`.
 
 ## Code style
@@ -151,7 +150,10 @@ composer docs:build
 - `node_modules/`
 - `resources/js/dist/`
 - `build/`
-- `docs/generated/`
+- `docs/*.html`
+- `docs/search-index.json`
+- `docs/sitemap.xml`
+- `docs/.nojekyll`
 
 ## Documentation guardrails
 
@@ -162,7 +164,7 @@ composer docs:build
 - `sidebar_label` is optional and should only be used when the sidebar text should differ from the page title.
 - Do not rename slugs or anchors casually, because internal links, search results, and bookmarks depend on them.
 - Never patch generated HTML to “fix” a docs issue. Change the Markdown, template, assets, or builder instead.
-- Never edit `docs/generated/search-index.json`, `docs/generated/sitemap.xml`, or `docs/generated/.nojekyll` by hand.
+- Never edit generated docs files in `docs/` by hand. Rebuild them from `docs/md/` with `php docs/build.php` instead.
 - Keep Markdown compatible with `league/commonmark` and GitHub-flavored Markdown.
 - Remember that `.md` links are rewritten to `.html` during generation.
 - Keep template, asset, and builder changes small and coordinated. If you change one, rebuild immediately.
