@@ -1,10 +1,8 @@
 name: "Update Changelog"
 
 on:
-    # Disabled - uncomment to re-enable
-    # release:
-    #     types: [released]
-    workflow_dispatch: # Manual trigger only
+    release:
+        types: [released]
 
 permissions:
     contents: write

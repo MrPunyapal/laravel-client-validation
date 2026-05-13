@@ -1,12 +1,10 @@
 name: run-tests
 
 on:
-    # Disabled - uncomment to re-enable
-    # push:
-    #     branches: [main]
-    # pull_request:
-    #     branches: [main]
-    workflow_dispatch: # Manual trigger only
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
     test:

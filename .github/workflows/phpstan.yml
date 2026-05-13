@@ -1,12 +1,10 @@
 name: PHPStan
 
 on:
-    # Disabled - uncomment to re-enable
-    # push:
-    #     paths:
-    #         - '**.php'
-    #         - 'phpstan.neon.dist'
-    workflow_dispatch: # Manual trigger only
+    push:
+        paths:
+            - '**.php'
+            - 'phpstan.neon.dist'
 
 jobs:
     phpstan:
