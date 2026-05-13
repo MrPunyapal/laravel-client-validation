@@ -33,6 +33,25 @@ composer require mrpunyapal/laravel-client-validation
 php artisan client-validation:install
 ```
 
+### Laravel Boost
+
+If your Laravel project uses [Laravel Boost](https://laravel.com/docs/13.x/boost), this package ships a third-party Boost skill for package-aware code generation and debugging.
+
+Install Boost if needed:
+
+```bash
+composer require laravel/boost --dev
+php artisan boost:install
+```
+
+If Boost is already installed in the app, refresh package-provided skills after adding or updating this package:
+
+```bash
+php artisan boost:update --discover
+```
+
+When skills are enabled, Boost can install the `laravel-client-validation-development` skill and guide AI agents toward the package's recommended Blade, Alpine, Livewire, Filament, and remote-validation patterns.
+
 ### Option B: Standalone NPM Package
 
 ```bash

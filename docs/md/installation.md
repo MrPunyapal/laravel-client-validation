@@ -22,6 +22,18 @@ php artisan client-validation:install
 
 The install command publishes the package configuration and the browser bundle into `public/vendor/client-validation`.
 
+## Laravel Boost
+
+If the Laravel application also uses [Laravel Boost](https://laravel.com/docs/13.x/boost), this package ships a third-party Boost skill.
+
+Use `boost:install` when Boost is being installed for the first time, or refresh third-party skills after package changes with:
+
+```bash
+php artisan boost:update --discover
+```
+
+When skills are enabled, Boost can install the `laravel-client-validation-development` skill and give AI agents package-aware guidance for Blade directives, Alpine helpers, Livewire integration, Filament setup, and remote validation.
+
 ## Include the assets
 
 The package ships the `@clientValidationAssets` Blade directive. It injects configuration, prefers the published local bundle, and falls back to the CDN bundle when the asset files are missing.
