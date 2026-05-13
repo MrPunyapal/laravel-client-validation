@@ -73,7 +73,6 @@ class ValidationController extends Controller
             ], 429);
         }
 
-        /** @var array<int, array{field: string, value: mixed, rule: string, parameters?: array<int, string>}> $validations */
         $validations = $request->input('validations', []);
 
         if (! is_array($validations) || $validations === []) {
@@ -87,12 +86,31 @@ class ValidationController extends Controller
         $allValid = true;
 
         foreach ($validations as $validation) {
+            if (! is_array($validation)) {
+                $results[] = [
+                    'field' => null,
+                    'valid' => false,
+                    'message' => 'Each validation entry must be an array',
+                ];
+                $allValid = false;
+
+                continue;
+            }
+
             $field = $validation['field'] ?? null;
             $value = $validation['value'] ?? null;
             $rule = $validation['rule'] ?? null;
-            $parameters = $validation['parameters'] ?? [];
+            $parameters = [];
 
-            if ($field === null || $rule === null) {
+            if (isset($validation['parameters']) && is_array($validation['parameters'])) {
+                foreach ($validation['parameters'] as $parameter) {
+                    if (is_string($parameter)) {
+                        $parameters[] = $parameter;
+                    }
+                }
+            }
+
+            if (! is_string($field) || ! is_string($rule)) {
                 $results[] = [
                     'field' => $field,
                     'valid' => false,

@@ -6,6 +6,7 @@ namespace MrPunyapal\ClientValidation\Filament;
 
 use Closure;
 
+/** @phpstan-require-extends \Filament\Forms\Components\Field */
 trait HasClientValidation
 {
     protected string|Closure|null $clientValidationRules = null;
@@ -90,17 +91,15 @@ trait HasClientValidation
     {
         $rules = [];
 
-        if (method_exists($this, 'isRequired') && $this->isRequired()) {
+        if ($this->isRequired()) {
             $rules[] = 'required';
         }
 
-        if (method_exists($this, 'getValidationRules')) {
-            $fieldRules = $this->getValidationRules();
+        $fieldRules = $this->getValidationRules();
 
-            foreach ($fieldRules as $rule) {
-                if (is_string($rule)) {
-                    $rules[] = $rule;
-                }
+        foreach ($fieldRules as $rule) {
+            if (is_string($rule)) {
+                $rules[] = $rule;
             }
         }
 

@@ -15,9 +15,9 @@ class ClientValidationPlugin implements Plugin
 
     protected string $validationMode = 'blur';
 
-    public static function make(): static
+    public static function make(): self
     {
-        return new static;
+        return new self;
     }
 
     public function getId(): string

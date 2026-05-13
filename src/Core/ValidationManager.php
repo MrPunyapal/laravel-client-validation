@@ -44,7 +44,7 @@ class ValidationManager implements ValidationManagerInterface
 
         $rules = $request->rules();
         $messages = $request->messages();
-        $attributes = method_exists($request, 'attributes') ? $request->attributes() : [];
+        $attributes = $request->attributes();
 
         return $this->createContext($rules, $messages, $attributes);
     }
