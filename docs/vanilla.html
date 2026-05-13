@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vanilla JavaScript | Laravel Client Validation</title>
+    <meta name="description" content="Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/vanilla.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/vanilla.html">
+        <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Laravel Client Validation">
+    <meta property="og:title" content="Vanilla JavaScript | Laravel Client Validation">
+    <meta property="og:description" content="Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#f53003">
+    <script>
+        (() => {
+            try {
+                const savedTheme = window.localStorage.getItem('docs-theme');
+                const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.dataset.theme = preferredTheme;
+            } catch (error) {
+                document.documentElement.dataset.theme = 'light';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <a class="docs-skip-link" href="#docs-content">Skip to content</a>
+    <div class="docs-background" aria-hidden="true"></div>
+    <header class="docs-header">
+        <div class="docs-header__inner">
+            <button class="docs-header__menu" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a class="docs-brand" href="index.html">
+                <span class="docs-brand__copy">
+                    <span class="docs-brand__eyebrow">Package for Laravel</span>
+                    <span class="docs-brand__title">Laravel Client Validation</span>
+                </span>
+            </a>
+            <div class="docs-search">
+                <label class="sr-only" for="docs-search-input">Search the documentation</label>
+                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search the docs" autocomplete="off" data-search-input>
+                <div class="docs-search__results" data-search-results hidden></div>
+            </div>
+            <div class="docs-header__actions">
+                                <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">GitHub</a>
+                                <a class="docs-action-link" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">Packagist</a>
+                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
+                    <span data-theme-label>Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-overlay" data-sidebar-overlay hidden></div>
+
+    <div class="docs-shell">
+        <aside class="docs-sidebar" data-sidebar>
+            <div class="docs-sidebar__hero">
+                <div>
+                    <p class="docs-sidebar__label">Package for Laravel</p>
+                    <h2>Laravel Client Validation</h2>
+                    <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+                </div>
+                <div class="docs-badges">
+                    <span class="docs-badge">PHP 8.2+</span>
+                    <span class="docs-badge">Laravel 12+</span>
+                </div>
+            </div>
+
+            <p class="docs-nav__eyebrow">Browse</p>
+            <nav class="docs-nav" aria-label="Documentation navigation">
+                                <a class="docs-nav__link" href="index.html">
+                    Overview                </a>
+                                <a class="docs-nav__link" href="installation.html">
+                    Installation                </a>
+                                <a class="docs-nav__link" href="configuration.html">
+                    Configuration                </a>
+                                <a class="docs-nav__link" href="usage.html">
+                    Usage                </a>
+                                <a class="docs-nav__link" href="alpine.html">
+                    Alpine.js                </a>
+                                <a class="docs-nav__link" href="livewire.html">
+                    Livewire                </a>
+                                <a class="docs-nav__link" href="filament.html">
+                    Filament                </a>
+                                <a class="docs-nav__link is-active" href="vanilla.html" aria-current="page">
+                    Vanilla JavaScript                </a>
+                                <a class="docs-nav__link" href="react.html">
+                    React                </a>
+                                <a class="docs-nav__link" href="vue.html">
+                    Vue                </a>
+                                <a class="docs-nav__link" href="inertia.html">
+                    Inertia                </a>
+                                <a class="docs-nav__link" href="validation-rules.html">
+                    Validation Rules                </a>
+                                <a class="docs-nav__link" href="custom-rules.html">
+                    Custom Rules                </a>
+                                <a class="docs-nav__link" href="testing.html">
+                    Testing                </a>
+                                <a class="docs-nav__link" href="troubleshooting.html">
+                    Troubleshooting                </a>
+                                <a class="docs-nav__link" href="examples.html">
+                    Examples                </a>
+                            </nav>
+        </aside>
+
+        <main class="docs-main">
+            <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
+                                                <a href="index.html">Documentation</a>
+                                                <span class="docs-breadcrumbs__separator">/</span>
+                                <a href="vanilla.html">Vanilla JavaScript</a>
+                            </nav>
+
+            <article class="docs-content" id="docs-content" tabindex="-1">
+                <header class="docs-content__header">
+                    <p class="docs-content__eyebrow">Documentation</p>
+                    <h1>Vanilla JavaScript</h1>
+                    <p class="docs-content__lead">Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.</p>
+                </header>
+
+                
+                <p>Use the vanilla adapter when you want client validation in a Laravel Blade page or custom frontend without Alpine, React, Vue, or Livewire.</p>
+<h2>Let the browser bundle auto-init forms<a id="let-the-browser-bundle-auto-init-forms" href="#let-the-browser-bundle-auto-init-forms" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-html">&lt;form data-validate&gt;
+    &lt;input name="email" data-rules="required|email" data-validate-on="blur"&gt;
+    &lt;input name="username" data-rules="required|alpha_dash|min:3" data-validate-on="input"&gt;
+    &lt;button type="submit"&gt;Create account&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<p>When the browser bundle is loaded, forms matching <code>form[data-validate]</code> are initialized automatically on <code>DOMContentLoaded</code>.</p>
+<h2>Create a validator programmatically<a id="create-a-validator-programmatically" href="#create-a-validator-programmatically" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-javascript">import { createFormValidator } from 'laravel-client-validation/vanilla';
+
+const form = document.querySelector('#registration-form');
+
+const validator = createFormValidator(form, {
+    onSubmit(data) {
+        console.log('Validated payload', data);
+    },
+});
+</code></pre>
+<p>Use the factory when you want to control initialization order or intercept successful submit events yourself.</p>
+<h2>Customize messages and field names<a id="customize-messages-and-field-names" href="#customize-messages-and-field-names" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-html">&lt;input
+    name="email"
+    data-rules="required|email"
+    data-message="Use a valid work email address."
+    data-attribute="work email"
+&gt;
+</code></pre>
+<p><code>data-message</code> overrides the first rule message for that field, and <code>data-attribute</code> controls the human-readable attribute name in generated messages.</p>
+<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Use <a href="./installation.html">installation</a> when the bundle itself is not loading.</li>
+<li>Open <a href="./react.html">react</a> or <a href="./vue.html">vue</a> when you need a framework-owned UI layer instead of DOM-managed errors.</li>
+<li>Keep <a href="./examples.html">examples</a> nearby for larger snippets.</li>
+</ul>
+            </article>
+
+            <footer class="docs-footer">
+                <div>
+                    <p>Last updated <time datetime="2026-05-13T09:56:49+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T09:57:46+00:00</p>
+                </div>
+                <div class="docs-footer__actions">
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/vanilla.md">Edit this page</a>
+                                    </div>
+            </footer>
+
+                        <nav class="docs-pager" aria-label="Page navigation">
+                                <a class="docs-pager__link" href="filament.html">
+                    <span class="docs-pager__label">Previous</span>
+                    <strong>Filament</strong>
+                </a>
+                
+                                <a class="docs-pager__link docs-pager__link--next" href="react.html">
+                    <span class="docs-pager__label">Next</span>
+                    <strong>React</strong>
+                </a>
+                            </nav>
+                    </main>
+
+            </div>
+
+    <script>
+        window.__DOCS_CONFIG__ = {"currentPage":"vanilla.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup-templating.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
+    <script defer src="assets/app.js"></script>
+</body>
+</html>

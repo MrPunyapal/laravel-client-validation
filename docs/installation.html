@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Testing | Laravel Client Validation</title>
-    <meta name="description" content="Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.">
-        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/testing.html">
-    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/testing.html">
+    <title>Installation | Laravel Client Validation</title>
+    <meta name="description" content="Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">
+        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/installation.html">
+    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/installation.html">
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
-    <meta property="og:title" content="Testing | Laravel Client Validation">
-    <meta property="og:description" content="Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.">
+    <meta property="og:title" content="Installation | Laravel Client Validation">
+    <meta property="og:description" content="Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -78,17 +78,31 @@
             <nav class="docs-nav" aria-label="Documentation navigation">
                                 <a class="docs-nav__link" href="index.html">
                     Overview                </a>
-                                <a class="docs-nav__link" href="installation.html">
+                                <a class="docs-nav__link is-active" href="installation.html" aria-current="page">
                     Installation                </a>
                                 <a class="docs-nav__link" href="configuration.html">
                     Configuration                </a>
                                 <a class="docs-nav__link" href="usage.html">
                     Usage                </a>
+                                <a class="docs-nav__link" href="alpine.html">
+                    Alpine.js                </a>
+                                <a class="docs-nav__link" href="livewire.html">
+                    Livewire                </a>
+                                <a class="docs-nav__link" href="filament.html">
+                    Filament                </a>
+                                <a class="docs-nav__link" href="vanilla.html">
+                    Vanilla JavaScript                </a>
+                                <a class="docs-nav__link" href="react.html">
+                    React                </a>
+                                <a class="docs-nav__link" href="vue.html">
+                    Vue                </a>
+                                <a class="docs-nav__link" href="inertia.html">
+                    Inertia                </a>
                                 <a class="docs-nav__link" href="validation-rules.html">
                     Validation Rules                </a>
                                 <a class="docs-nav__link" href="custom-rules.html">
                     Custom Rules                </a>
-                                <a class="docs-nav__link is-active" href="testing.html" aria-current="page">
+                                <a class="docs-nav__link" href="testing.html">
                     Testing                </a>
                                 <a class="docs-nav__link" href="troubleshooting.html">
                     Troubleshooting                </a>
@@ -101,51 +115,63 @@
             <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
                                                 <a href="index.html">Documentation</a>
                                                 <span class="docs-breadcrumbs__separator">/</span>
-                                <a href="testing.html">Testing</a>
+                                <a href="installation.html">Installation</a>
                             </nav>
 
             <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
                     <p class="docs-content__eyebrow">Documentation</p>
-                    <h1>Testing</h1>
-                    <p class="docs-content__lead">Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.</p>
+                    <h1>Installation</h1>
+                    <p class="docs-content__lead">Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.</p>
                 </header>
 
-                
-                <p>Package changes are safest when you validate both the runtime behavior and the generated documentation in the same branch.</p>
-<h2>PHP test suite<a id="php-test-suite" href="#php-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>Run the Pest suite from the repository root:</p>
-<pre><code class="language-bash">composer test
+
+                <p>Install Laravel Client Validation with Composer, publish the package assets, and verify the generated browser bundle is loaded before you start attaching rules to inputs.</p>
+<h2>Requirements<a id="requirements" href="#requirements" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>PHP 8.2 or newer.</li>
+<li>A Laravel application that can load package service providers.</li>
+<li>A frontend layout where Blade can render the package assets or your own script tags.</li>
+</ul>
+<h2>Install the package<a id="install-the-package" href="#install-the-package" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-bash">composer require mrpunyapal/laravel-client-validation
+php artisan client-validation:install
 </code></pre>
-<p>Use coverage when you are working on package internals or parser behavior.</p>
-<pre><code class="language-bash">composer test-coverage
+<p>The install command publishes the package configuration and the browser bundle into <code>public/vendor/client-validation</code>.</p>
+<h2>Include the assets<a id="include-the-assets" href="#include-the-assets" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The package ships the <code>@clientValidationAssets</code> Blade directive. It injects configuration, prefers the published local bundle, and falls back to the CDN bundle when the asset files are missing.</p>
+<pre><code class="language-php">&lt;head&gt;
+    @clientValidationAssets
+&lt;/head&gt;
 </code></pre>
-<h2>JavaScript test suite<a id="javascript-test-suite" href="#javascript-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>The frontend rules and adapters live in <code>resources/js</code>, so use the JavaScript suite when you change the browser runtime.</p>
-<pre><code class="language-bash">npm test
+<p>If you prefer to control configuration separately, render the configuration object and load the bundle yourself:</p>
+<pre><code class="language-php">&lt;head&gt;
+    @clientValidationConfig
+    &lt;script src="{{ asset('vendor/client-validation/client-validation.iife.js') }}"&gt;&lt;/script&gt;
+&lt;/head&gt;
 </code></pre>
-<h2>Documentation build<a id="documentation-build" href="#documentation-build" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>The documentation site is generated from Markdown and committed as HTML output.</p>
-<pre><code class="language-bash">composer docs:build
+<h2>First validation field<a id="first-validation-field" href="#first-validation-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Use Blade directives immediately after the script is present on the page.</p>
+<pre><code class="language-html">&lt;form data-validate&gt;
+    &lt;input name="email" @validateBlur('email', 'required|email')&gt;
+    &lt;input name="password" @validateSubmit('password', 'required|min:8')&gt;
+    &lt;button type="submit"&gt;Create account&lt;/button&gt;
+&lt;/form&gt;
 </code></pre>
-<p>That command runs <code>php docs/build.php</code>, regenerates <code>docs/generated</code>, refreshes the search index, and rewrites the sitemap.</p>
-<h2>Recommended contributor loop<a id="recommended-contributor-loop" href="#recommended-contributor-loop" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<ol>
-<li>Update the package code or the Markdown source in <code>docs/md</code>.</li>
-<li>Run the narrowest tests that can falsify the change.</li>
-<li>Rebuild the documentation site with <code>composer docs:build</code>.</li>
-<li>Inspect the generated HTML locally before opening a pull request.</li>
-</ol>
-<h2>Practical verification examples<a id="practical-verification-examples" href="#practical-verification-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Rule or parser change<a id="rule-or-parser-change" href="#rule-or-parser-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<pre><code class="language-bash">composer test
-npm test
-composer docs:build
+<h2>Verify the installation<a id="verify-the-installation" href="#verify-the-installation" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3>Browser smoke test<a id="browser-smoke-test" href="#browser-smoke-test" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<p>Open the form, tab out of the <code>email</code> field, and confirm that invalid values show client-side feedback before the form submits.</p>
+<h3>Remote validation smoke test<a id="remote-validation-smoke-test" href="#remote-validation-smoke-test" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<p>Remote rules such as <code>unique</code> should send requests to the validation endpoint generated from the <code>route_prefix</code> configuration.</p>
+<pre><code class="language-html">&lt;input name="email" @validateLive('email', 'required|email|unique:users,email')&gt;
 </code></pre>
-<h3>Documentation-only change<a id="documentation-only-change" href="#documentation-only-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<pre><code class="language-bash">composer docs:build
-</code></pre>
-<p>If the generated HTML or search index changes unexpectedly, compare the affected Markdown source rather than editing <code>docs/generated</code> by hand.</p>
+<p>When AJAX validation is enabled, the request targets <code>/client-validation/validate</code> by default.</p>
+<h2>Next steps<a id="next-steps" href="#next-steps" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Review <a href="./configuration.html">configuration</a> to tune debounce, AJAX, styling, and message defaults.</li>
+<li>Use <a href="./usage.html">usage</a> as the integration map, then jump to <a href="./alpine.html">alpine</a>, <a href="./livewire.html">livewire</a>, <a href="./filament.html">filament</a>, <a href="./vanilla.html">vanilla</a>, or <a href="./inertia.html">inertia</a>.</li>
+<li>Keep <a href="./troubleshooting.html">troubleshooting</a> nearby if the bundle is missing or remote rules do not fire.</li>
+</ul>
             </article>
 
             <footer class="docs-footer">
@@ -154,19 +180,19 @@ composer docs:build
                     <p>Built 2026-05-13T09:42:46+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
-                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/testing.md">Edit this page</a>
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/installation.md">Edit this page</a>
                                     </div>
             </footer>
 
                         <nav class="docs-pager" aria-label="Page navigation">
-                                <a class="docs-pager__link" href="custom-rules.html">
+                                <a class="docs-pager__link" href="index.html">
                     <span class="docs-pager__label">Previous</span>
-                    <strong>Custom Rules</strong>
+                    <strong>Laravel Client Validation</strong>
                 </a>
-                
-                                <a class="docs-pager__link docs-pager__link--next" href="troubleshooting.html">
+
+                                <a class="docs-pager__link docs-pager__link--next" href="configuration.html">
                     <span class="docs-pager__label">Next</span>
-                    <strong>Troubleshooting</strong>
+                    <strong>Configuration</strong>
                 </a>
                             </nav>
                     </main>
@@ -174,7 +200,7 @@ composer docs:build
             </div>
 
     <script>
-        window.__DOCS_CONFIG__ = {"currentPage":"testing.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+        window.__DOCS_CONFIG__ = {"currentPage":"installation.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>

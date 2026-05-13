@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Troubleshooting | Laravel Client Validation</title>
-    <meta name="description" content="Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">
-        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/troubleshooting.html">
-    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/troubleshooting.html">
+    <title>Custom Rules | Laravel Client Validation</title>
+    <meta name="description" content="Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">
+        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/custom-rules.html">
+    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/custom-rules.html">
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
-    <meta property="og:title" content="Troubleshooting | Laravel Client Validation">
-    <meta property="og:description" content="Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">
+    <meta property="og:title" content="Custom Rules | Laravel Client Validation">
+    <meta property="og:description" content="Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -84,13 +84,27 @@
                     Configuration                </a>
                                 <a class="docs-nav__link" href="usage.html">
                     Usage                </a>
+                                <a class="docs-nav__link" href="alpine.html">
+                    Alpine.js                </a>
+                                <a class="docs-nav__link" href="livewire.html">
+                    Livewire                </a>
+                                <a class="docs-nav__link" href="filament.html">
+                    Filament                </a>
+                                <a class="docs-nav__link" href="vanilla.html">
+                    Vanilla JavaScript                </a>
+                                <a class="docs-nav__link" href="react.html">
+                    React                </a>
+                                <a class="docs-nav__link" href="vue.html">
+                    Vue                </a>
+                                <a class="docs-nav__link" href="inertia.html">
+                    Inertia                </a>
                                 <a class="docs-nav__link" href="validation-rules.html">
                     Validation Rules                </a>
-                                <a class="docs-nav__link" href="custom-rules.html">
+                                <a class="docs-nav__link is-active" href="custom-rules.html" aria-current="page">
                     Custom Rules                </a>
                                 <a class="docs-nav__link" href="testing.html">
                     Testing                </a>
-                                <a class="docs-nav__link is-active" href="troubleshooting.html" aria-current="page">
+                                <a class="docs-nav__link" href="troubleshooting.html">
                     Troubleshooting                </a>
                                 <a class="docs-nav__link" href="examples.html">
                     Examples                </a>
@@ -101,84 +115,65 @@
             <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
                                                 <a href="index.html">Documentation</a>
                                                 <span class="docs-breadcrumbs__separator">/</span>
-                                <a href="troubleshooting.html">Troubleshooting</a>
+                                <a href="custom-rules.html">Custom Rules</a>
                             </nav>
 
             <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
                     <p class="docs-content__eyebrow">Documentation</p>
-                    <h1>Troubleshooting</h1>
-                    <p class="docs-content__lead">Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.</p>
+                    <h1>Custom Rules</h1>
+                    <p class="docs-content__lead">Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.</p>
                 </header>
 
-                
-                <p>Most validation failures come down to one of three causes: the browser bundle is not loaded, the field metadata was not rendered, or a remote validation request cannot reach the backend.</p>
-<h2>The browser bundle never initializes<a id="the-browser-bundle-never-initializes" href="#the-browser-bundle-never-initializes" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Symptoms<a id="symptoms" href="#symptoms" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<ul>
-<li><code>x-validate</code> or <code>data-validate</code> fields do nothing.</li>
-<li><code>window.LaravelClientValidation</code> is undefined in the console.</li>
-</ul>
-<h3>Checks<a id="checks" href="#checks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<pre><code class="language-php">@clientValidationAssets
-</code></pre>
-<ul>
-<li>Confirm the directive is rendered in the page layout.</li>
-<li>Confirm the published files exist in <code>public/vendor/client-validation</code>.</li>
-<li>Check the network tab for the package bundle or the CDN fallback.</li>
-</ul>
-<h2>Rules render, but errors never appear<a id="rules-render-but-errors-never-appear" href="#rules-render-but-errors-never-appear" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Symptoms<a id="symptoms-1" href="#symptoms-1" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<ul>
-<li>Inputs contain attributes, but no validation message is shown.</li>
-<li>Classes such as <code>is-invalid</code> or <code>validation-error</code> never appear.</li>
-</ul>
-<h3>Checks<a id="checks-1" href="#checks-1" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<pre><code class="language-php">'error_template' =&gt; [
-    'enabled' =&gt; true,
-],
 
-'field_styling' =&gt; [
-    'enabled' =&gt; true,
-],
+                <p>Custom rules work best when you decide first whether the behavior belongs in the browser, on the server, or both.</p>
+<h2>Client-side custom rules<a id="client-side-custom-rules" href="#client-side-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Use the global bundle helper or the core <code>RuleRegistry</code> to add a browser-only rule.</p>
+<pre><code class="language-javascript">LaravelClientValidation.extend('phone', (value) =&gt; {
+    if (!value) {
+        return true;
+    }
+
+    return /^\+?[\d\s-]{10,}$/.test(value);
+}, 'The :attribute must be a valid phone number.');
 </code></pre>
+<p>You can then reference the rule anywhere you already use package directives.</p>
+<pre><code class="language-html">&lt;input name="phone" @validateBlur('phone', 'required|phone')&gt;
+</code></pre>
+<h3>ES module registration<a id="es-module-registration" href="#es-module-registration" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<pre><code class="language-javascript">import { RuleRegistry } from 'laravel-client-validation/core';
+
+RuleRegistry.extend('sku', (value) =&gt; /^[A-Z]{3}-\d{4}$/.test(value), 'The :attribute must be a valid SKU.');
+</code></pre>
+<h2>Server-side custom rules<a id="server-side-custom-rules" href="#server-side-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Use the package facade when the rule depends on backend state or you want the parser to treat it as server-side by default.</p>
+<pre><code class="language-php">use MrPunyapal\ClientValidation\Facades\ClientValidation;
+
+ClientValidation::extend('strong_password', function ($attribute, $value) {
+    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/', (string) $value) === 1;
+}, 'Password must contain uppercase, lowercase, and numbers.');
+</code></pre>
+<p>The package registers that rule with Laravel's validator and classifies it as server-side unless you also provide a matching browser implementation.</p>
+<h2>Shared rule strategy<a id="shared-rule-strategy" href="#shared-rule-strategy" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>If the same rule should behave consistently in both places, keep the rule name identical and maintain one browser implementation and one Laravel implementation.</p>
+<pre><code class="language-php">$rules = [
+    'sku' =&gt; 'required|sku',
+];
+</code></pre>
+<pre><code class="language-javascript">LaravelClientValidation.extend('sku', (value) =&gt; /^[A-Z]{3}-\d{4}$/.test(value));
+</code></pre>
+<h2>Testing custom rules<a id="testing-custom-rules" href="#testing-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
-<li>Verify <code>error_template.enabled</code> or <code>field_styling.enabled</code> has not been disabled.</li>
-<li>Inspect the rendered markup and confirm the directive output is attached to the correct field.</li>
-<li>Test with a simpler rule like <code>required</code> before adding compound logic.</li>
+<li>Validate the JavaScript rule in a browser or JavaScript test.</li>
+<li>Validate the PHP rule with Laravel or package tests.</li>
+<li>Rebuild the docs with <code>php docs/build.php</code> if you document the new rule in <code>docs/md</code>.</li>
 </ul>
-<h2>Remote rules never finish<a id="remote-rules-never-finish" href="#remote-rules-never-finish" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Symptoms<a id="symptoms-2" href="#symptoms-2" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2>Documentation checklist for new rules<a id="documentation-checklist-for-new-rules" href="#documentation-checklist-for-new-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
-<li><code>unique</code> stays pending.</li>
-<li>No request reaches the Laravel application.</li>
-</ul>
-<h3>Checks<a id="checks-2" href="#checks-2" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<pre><code class="language-php">'enable_ajax_validation' =&gt; true,
-'route_prefix' =&gt; 'client-validation',
-'ajax_timeout' =&gt; 5000,
-</code></pre>
-<ul>
-<li>Confirm the validation endpoint exists at the configured prefix.</li>
-<li>Confirm the page includes the CSRF token and the route is not blocked by middleware.</li>
-<li>Increase <code>ajax_timeout</code> temporarily while debugging slow responses.</li>
-</ul>
-<h2>Cross-field rules behave inconsistently<a id="cross-field-rules-behave-inconsistently" href="#cross-field-rules-behave-inconsistently" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>Rules like <code>same</code>, <code>different</code>, <code>required_if</code>, <code>gt</code>, or <code>lte</code> depend on up-to-date sibling field values.</p>
-<pre><code class="language-html">&lt;input name="password" @validateBlur('password', 'required|min:8')&gt;
-&lt;input name="password_confirmation" @validateBlur('password_confirmation', 'required|same:password')&gt;
-</code></pre>
-<p>Use form bindings that keep both fields synchronized before the comparison runs.</p>
-<h2>The docs site looks stale<a id="the-docs-site-looks-stale" href="#the-docs-site-looks-stale" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>The generated HTML is not the canonical source. Rebuild the site from Markdown.</p>
-<pre><code class="language-bash">php docs/build.php
-</code></pre>
-<p>Then review the generated files in <code>docs/generated</code>.</p>
-<h2>Still blocked?<a id="still-blocked" href="#still-blocked" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<ul>
-<li>Compare the current form markup with the working snippets in <a href="./usage.html">usage</a> and <a href="./examples.html">examples</a>.</li>
-<li>Re-run the checks in <a href="./testing.html">testing</a>.</li>
-<li>Document the failure mode in <code>docs/md</code> once you find the root cause so the next contributor does not need to rediscover it.</li>
+<li>Link to the user-facing rule description from <a href="./validation-rules.html">validation rules</a>.</li>
+<li>Show one passing example and one failing example.</li>
+<li>State clearly whether the rule is browser-only, server-only, or shared.</li>
+<li>Avoid renaming an existing rule unless you are prepared to update every internal link and every rule string that references it.</li>
 </ul>
             </article>
 
@@ -188,19 +183,19 @@
                     <p>Built 2026-05-13T09:42:46+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
-                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/troubleshooting.md">Edit this page</a>
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/custom-rules.md">Edit this page</a>
                                     </div>
             </footer>
 
                         <nav class="docs-pager" aria-label="Page navigation">
-                                <a class="docs-pager__link" href="testing.html">
+                                <a class="docs-pager__link" href="validation-rules.html">
                     <span class="docs-pager__label">Previous</span>
-                    <strong>Testing</strong>
+                    <strong>Validation Rules</strong>
                 </a>
-                
-                                <a class="docs-pager__link docs-pager__link--next" href="examples.html">
+
+                                <a class="docs-pager__link docs-pager__link--next" href="testing.html">
                     <span class="docs-pager__label">Next</span>
-                    <strong>Examples</strong>
+                    <strong>Testing</strong>
                 </a>
                             </nav>
                     </main>
@@ -208,7 +203,7 @@
             </div>
 
     <script>
-        window.__DOCS_CONFIG__ = {"currentPage":"troubleshooting.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+        window.__DOCS_CONFIG__ = {"currentPage":"custom-rules.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>

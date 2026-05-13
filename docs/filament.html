@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Custom Rules | Laravel Client Validation</title>
-    <meta name="description" content="Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">
-        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/custom-rules.html">
-    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/custom-rules.html">
+    <title>Filament | Laravel Client Validation</title>
+    <meta name="description" content="Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/filament.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/filament.html">
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
-    <meta property="og:title" content="Custom Rules | Laravel Client Validation">
-    <meta property="og:description" content="Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">
+    <meta property="og:title" content="Filament | Laravel Client Validation">
+    <meta property="og:description" content="Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -37,9 +37,8 @@
                 <span></span>
             </button>
             <a class="docs-brand" href="index.html">
-                <span class="docs-brand__mark" aria-hidden="true">LC</span>
                 <span class="docs-brand__copy">
-                    <span class="docs-brand__eyebrow">Laravel Package</span>
+                    <span class="docs-brand__eyebrow">Package for Laravel</span>
                     <span class="docs-brand__title">Laravel Client Validation</span>
                 </span>
             </a>
@@ -64,7 +63,7 @@
         <aside class="docs-sidebar" data-sidebar>
             <div class="docs-sidebar__hero">
                 <div>
-                    <p class="docs-sidebar__label">Laravel package</p>
+                    <p class="docs-sidebar__label">Package for Laravel</p>
                     <h2>Laravel Client Validation</h2>
                     <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
                 </div>
@@ -84,9 +83,23 @@
                     Configuration                </a>
                                 <a class="docs-nav__link" href="usage.html">
                     Usage                </a>
+                                <a class="docs-nav__link" href="alpine.html">
+                    Alpine.js                </a>
+                                <a class="docs-nav__link" href="livewire.html">
+                    Livewire                </a>
+                                <a class="docs-nav__link is-active" href="filament.html" aria-current="page">
+                    Filament                </a>
+                                <a class="docs-nav__link" href="vanilla.html">
+                    Vanilla JavaScript                </a>
+                                <a class="docs-nav__link" href="react.html">
+                    React                </a>
+                                <a class="docs-nav__link" href="vue.html">
+                    Vue                </a>
+                                <a class="docs-nav__link" href="inertia.html">
+                    Inertia                </a>
                                 <a class="docs-nav__link" href="validation-rules.html">
                     Validation Rules                </a>
-                                <a class="docs-nav__link is-active" href="custom-rules.html" aria-current="page">
+                                <a class="docs-nav__link" href="custom-rules.html">
                     Custom Rules                </a>
                                 <a class="docs-nav__link" href="testing.html">
                     Testing                </a>
@@ -101,87 +114,91 @@
             <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
                                                 <a href="index.html">Documentation</a>
                                                 <span class="docs-breadcrumbs__separator">/</span>
-                                <a href="custom-rules.html">Custom Rules</a>
+                                <a href="filament.html">Filament</a>
                             </nav>
 
             <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
                     <p class="docs-content__eyebrow">Documentation</p>
-                    <h1>Custom Rules</h1>
-                    <p class="docs-content__lead">Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.</p>
+                    <h1>Filament</h1>
+                    <p class="docs-content__lead">Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.</p>
                 </header>
 
                 
-                <p>Custom rules work best when you decide first whether the behavior belongs in the browser, on the server, or both.</p>
-<h2>Client-side custom rules<a id="client-side-custom-rules" href="#client-side-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>Use the global bundle helper or the core <code>RuleRegistry</code> to add a browser-only rule.</p>
-<pre><code class="language-javascript">LaravelClientValidation.extend('phone', (value) =&gt; {
-    if (!value) {
-        return true;
+                <p>Filament support builds on the same browser runtime, but gives you a package-specific plugin and field helpers so panel forms can emit client feedback before submit.</p>
+<h2>Register the panel plugin<a id="register-the-panel-plugin" href="#register-the-panel-plugin" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-php">use Filament\Panel;
+use Filament\PanelProvider;
+use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
+
+class AdminPanelProvider extends PanelProvider
+{
+    public function panel(Panel $panel): Panel
+    {
+        return $panel-&gt;plugins([
+            ClientValidationPlugin::make()
+                -&gt;enableRemoteValidation()
+                -&gt;validationMode('live'),
+        ]);
     }
+}
+</code></pre>
+<p><code>validationMode('live')</code> makes generated <code>x-validate.live</code> bindings the default for fields handled through the package helper.</p>
+<h2>Use the built-in field wrapper<a id="use-the-built-in-field-wrapper" href="#use-the-built-in-field-wrapper" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-php">use MrPunyapal\ClientValidation\Filament\ClientValidatedField;
 
-    return /^\+?[\d\s-]{10,}$/.test(value);
-}, 'The :attribute must be a valid phone number.');
+ClientValidatedField::make('email')
+    -&gt;clientValidation('required|email|unique:users,email')
+    -&gt;clientValidationMode('live');
 </code></pre>
-<p>You can then reference the rule anywhere you already use package directives.</p>
-<pre><code class="language-html">&lt;input name="phone" @validateBlur('phone', 'required|phone')&gt;
-</code></pre>
-<h3>ES module registration<a id="es-module-registration" href="#es-module-registration" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<pre><code class="language-javascript">import { RuleRegistry } from 'laravel-client-validation/core';
+<p>Use <code>ClientValidatedField</code> when you want a drop-in field that already renders the validation wrapper view shipped with the package.</p>
+<h2>Add client validation to a custom Filament field<a id="add-client-validation-to-a-custom-filament-field" href="#add-client-validation-to-a-custom-filament-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-php">use Filament\Forms\Components\Field;
+use MrPunyapal\ClientValidation\Filament\HasClientValidation;
 
-RuleRegistry.extend('sku', (value) =&gt; /^[A-Z]{3}-\d{4}$/.test(value), 'The :attribute must be a valid SKU.');
+class PhoneField extends Field
+{
+    use HasClientValidation;
+}
 </code></pre>
-<h2>Server-side custom rules<a id="server-side-custom-rules" href="#server-side-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>Use the package facade when the rule depends on backend state or you want the parser to treat it as server-side by default.</p>
-<pre><code class="language-php">use MrPunyapal\ClientValidation\Facades\ClientValidation;
-
-ClientValidation::extend('strong_password', function ($attribute, $value) {
-    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/', (string) $value) === 1;
-}, 'Password must contain uppercase, lowercase, and numbers.');
+<p>In the Blade view for that field, render the generated attributes on the wrapper that owns the input:</p>
+<pre><code class="language-blade">&lt;div
+    @if ($hasClientValidation())
+        x-validate{{ $getClientValidationModifier() }}="{{ $getClientValidationRules() }}"
+    @endif
+&gt;
+    {{ $getChildComponentContainer() }}
+&lt;/div&gt;
 </code></pre>
-<p>The package registers that rule with Laravel's validator and classifies it as server-side unless you also provide a matching browser implementation.</p>
-<h2>Shared rule strategy<a id="shared-rule-strategy" href="#shared-rule-strategy" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>If the same rule should behave consistently in both places, keep the rule name identical and maintain one browser implementation and one Laravel implementation.</p>
-<pre><code class="language-php">$rules = [
-    'sku' =&gt; 'required|sku',
-];
-</code></pre>
-<pre><code class="language-javascript">LaravelClientValidation.extend('sku', (value) =&gt; /^[A-Z]{3}-\d{4}$/.test(value));
-</code></pre>
-<h2>Testing custom rules<a id="testing-custom-rules" href="#testing-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2>Let Filament infer rules from the field<a id="let-filament-infer-rules-from-the-field" href="#let-filament-infer-rules-from-the-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>If you call <code>withClientValidation()</code> instead of <code>clientValidation('...')</code>, the trait falls back to the field's existing required state and validation rules where possible.</p>
+<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
-<li>Validate the JavaScript rule in a browser or JavaScript test.</li>
-<li>Validate the PHP rule with Laravel or package tests.</li>
-<li>Rebuild the docs with <code>php docs/build.php</code> if you document the new rule in <code>docs/md</code>.</li>
-</ul>
-<h2>Documentation checklist for new rules<a id="documentation-checklist-for-new-rules" href="#documentation-checklist-for-new-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<ul>
-<li>Link to the user-facing rule description from <a href="./validation-rules.html">validation rules</a>.</li>
-<li>Show one passing example and one failing example.</li>
-<li>State clearly whether the rule is browser-only, server-only, or shared.</li>
-<li>Avoid renaming an existing rule unless you are prepared to update every internal link and every rule string that references it.</li>
+<li>Use <a href="./livewire.html">livewire</a> when your Filament form also needs component-level Livewire guidance.</li>
+<li>Review <a href="./configuration.html">configuration</a> for remote-validation and class defaults.</li>
+<li>Keep <a href="./examples.html">examples</a> nearby for quick copyable snippets.</li>
 </ul>
             </article>
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T09:42:32+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T09:42:46+00:00</p>
+                    <p>Last updated <time datetime="2026-05-13T09:56:49+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T09:57:46+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
-                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/custom-rules.md">Edit this page</a>
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/filament.md">Edit this page</a>
                                     </div>
             </footer>
 
                         <nav class="docs-pager" aria-label="Page navigation">
-                                <a class="docs-pager__link" href="validation-rules.html">
+                                <a class="docs-pager__link" href="livewire.html">
                     <span class="docs-pager__label">Previous</span>
-                    <strong>Validation Rules</strong>
+                    <strong>Livewire</strong>
                 </a>
                 
-                                <a class="docs-pager__link docs-pager__link--next" href="testing.html">
+                                <a class="docs-pager__link docs-pager__link--next" href="vanilla.html">
                     <span class="docs-pager__label">Next</span>
-                    <strong>Testing</strong>
+                    <strong>Vanilla JavaScript</strong>
                 </a>
                             </nav>
                     </main>
@@ -189,7 +206,7 @@ ClientValidation::extend('strong_password', function ($attribute, $value) {
             </div>
 
     <script>
-        window.__DOCS_CONFIG__ = {"currentPage":"custom-rules.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+        window.__DOCS_CONFIG__ = {"currentPage":"filament.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>

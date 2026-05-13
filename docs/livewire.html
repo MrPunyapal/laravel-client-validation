@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Examples | Laravel Client Validation</title>
-    <meta name="description" content="Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">
-        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/examples.html">
-    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/examples.html">
+    <title>Livewire | Laravel Client Validation</title>
+    <meta name="description" content="Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/livewire.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/livewire.html">
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
-    <meta property="og:title" content="Examples | Laravel Client Validation">
-    <meta property="og:description" content="Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">
+    <meta property="og:title" content="Livewire | Laravel Client Validation">
+    <meta property="og:description" content="Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -37,9 +37,8 @@
                 <span></span>
             </button>
             <a class="docs-brand" href="index.html">
-                <span class="docs-brand__mark" aria-hidden="true">LC</span>
                 <span class="docs-brand__copy">
-                    <span class="docs-brand__eyebrow">Laravel Package</span>
+                    <span class="docs-brand__eyebrow">Package for Laravel</span>
                     <span class="docs-brand__title">Laravel Client Validation</span>
                 </span>
             </a>
@@ -64,7 +63,7 @@
         <aside class="docs-sidebar" data-sidebar>
             <div class="docs-sidebar__hero">
                 <div>
-                    <p class="docs-sidebar__label">Laravel package</p>
+                    <p class="docs-sidebar__label">Package for Laravel</p>
                     <h2>Laravel Client Validation</h2>
                     <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
                 </div>
@@ -84,6 +83,20 @@
                     Configuration                </a>
                                 <a class="docs-nav__link" href="usage.html">
                     Usage                </a>
+                                <a class="docs-nav__link" href="alpine.html">
+                    Alpine.js                </a>
+                                <a class="docs-nav__link is-active" href="livewire.html" aria-current="page">
+                    Livewire                </a>
+                                <a class="docs-nav__link" href="filament.html">
+                    Filament                </a>
+                                <a class="docs-nav__link" href="vanilla.html">
+                    Vanilla JavaScript                </a>
+                                <a class="docs-nav__link" href="react.html">
+                    React                </a>
+                                <a class="docs-nav__link" href="vue.html">
+                    Vue                </a>
+                                <a class="docs-nav__link" href="inertia.html">
+                    Inertia                </a>
                                 <a class="docs-nav__link" href="validation-rules.html">
                     Validation Rules                </a>
                                 <a class="docs-nav__link" href="custom-rules.html">
@@ -92,7 +105,7 @@
                     Testing                </a>
                                 <a class="docs-nav__link" href="troubleshooting.html">
                     Troubleshooting                </a>
-                                <a class="docs-nav__link is-active" href="examples.html" aria-current="page">
+                                <a class="docs-nav__link" href="examples.html">
                     Examples                </a>
                             </nav>
         </aside>
@@ -101,60 +114,19 @@
             <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
                                                 <a href="index.html">Documentation</a>
                                                 <span class="docs-breadcrumbs__separator">/</span>
-                                <a href="examples.html">Examples</a>
+                                <a href="livewire.html">Livewire</a>
                             </nav>
 
             <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
                     <p class="docs-content__eyebrow">Documentation</p>
-                    <h1>Examples</h1>
-                    <p class="docs-content__lead">Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.</p>
+                    <h1>Livewire</h1>
+                    <p class="docs-content__lead">Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.</p>
                 </header>
 
                 
-                <p>Use these examples as starting points when you need a practical integration rather than a conceptual overview.</p>
-<h2>Blade data-attribute form<a id="blade-data-attribute-form" href="#blade-data-attribute-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<pre><code class="language-html">&lt;form data-validate&gt;
-    &lt;label&gt;
-        Email
-        &lt;input name="email" @validateBlur('email', 'required|email')&gt;
-    &lt;/label&gt;
-
-    &lt;label&gt;
-        Username
-        &lt;input name="username" @validateLive('username', 'required|alpha_dash|min:3|max:20')&gt;
-    &lt;/label&gt;
-
-    &lt;label&gt;
-        Password
-        &lt;input type="password" name="password" @validateSubmit('password', 'required|min:8|confirmed')&gt;
-    &lt;/label&gt;
-
-    &lt;button type="submit"&gt;Create account&lt;/button&gt;
-&lt;/form&gt;
-</code></pre>
-<h2>Alpine.js registration form<a id="alpinejs-registration-form" href="#alpinejs-registration-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<pre><code class="language-html">&lt;div x-data="validation({
-    rules: {
-        email: 'required|email|unique:users,email',
-        password: 'required|min:8|confirmed',
-        password_confirmation: 'required',
-    },
-})"&gt;
-    &lt;form @submit.prevent="submit(async (payload) =&gt; fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-    }))"&gt;
-        &lt;input x-model="form.email" @blur="validate('email')" name="email"&gt;
-        &lt;p x-show="hasError('email')" x-text="error('email')"&gt;&lt;/p&gt;
-
-        &lt;input type="password" x-model="form.password" @blur="validate('password')" name="password"&gt;
-        &lt;p x-show="hasError('password')" x-text="error('password')"&gt;&lt;/p&gt;
-    &lt;/form&gt;
-&lt;/div&gt;
-</code></pre>
-<h2>Livewire component<a id="livewire-component" href="#livewire-component" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+                <p>Livewire integration has two layers: the PHP trait keeps the server rules central, and the browser adapter lets fields fail fast before a Livewire request leaves the page. The JavaScript adapter supports both Livewire 3 and Livewire 4.</p>
+<h2>Add the Livewire trait<a id="add-the-livewire-trait" href="#add-the-livewire-trait" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-php">use Livewire\Component;
 use MrPunyapal\ClientValidation\Livewire\WithClientValidation;
 
@@ -166,70 +138,72 @@ class CreateUser extends Component
     public string $password = '';
     public string $password_confirmation = '';
 
-    protected $rules = [
-        'email' =&gt; 'required|email',
+    protected array $rules = [
+        'email' =&gt; 'required|email|unique:users,email',
         'password' =&gt; 'required|min:8|confirmed',
     ];
 }
 </code></pre>
-<h2>Filament panel plugin<a id="filament-panel-plugin" href="#filament-panel-plugin" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<pre><code class="language-php">use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
+<p><code>WithClientValidation</code> exposes computed properties such as <code>$this-&gt;clientRules</code>, <code>$this-&gt;clientMessages</code>, and <code>$this-&gt;clientValidationData</code> so the same component rules can be reused in the browser.</p>
+<h2>Validate fields in the Blade view<a id="validate-fields-in-the-blade-view" href="#validate-fields-in-the-blade-view" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-blade">@php($clientRules = json_decode($this-&gt;clientRules, true))
 
-ClientValidationPlugin::make()
-    -&gt;enableRemoteValidation()
-    -&gt;validationMode('live');
+&lt;div x-data="{ clientRules: @js($clientRules) }"&gt;
+    &lt;input
+        wire:model.live="email"
+        name="email"
+        x-wire-validate.live="clientRules.email"
+    &gt;
+
+    &lt;span class="validation-error" data-error="email"&gt;&lt;/span&gt;
+&lt;/div&gt;
 </code></pre>
-<h2>Programmatic validator for a custom frontend<a id="programmatic-validator-for-a-custom-frontend" href="#programmatic-validator-for-a-custom-frontend" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<pre><code class="language-javascript">import { LaravelValidator } from 'laravel-client-validation/core';
-
-const validator = new LaravelValidator({
-    rules: {
-        email: 'required|email',
-        age: 'nullable|integer|min:18',
-    },
-});
-
-const result = await validator.validateAll({
-    email: 'demo@example.com',
-    age: '21',
-});
-
-console.log(result.valid, result.errors);
+<p><code>x-wire-validate</code> uses the same trigger model as <code>x-validate</code>: blur by default, <code>.live</code> for debounced typing feedback. The field still keeps its normal <code>wire:model</code> binding.</p>
+<h2>Use explicit rules when you only need one field<a id="use-explicit-rules-when-you-only-need-one-field" href="#use-explicit-rules-when-you-only-need-one-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-html">&lt;input
+    wire:model.blur="email"
+    name="email"
+    x-wire-validate="'required|email|unique:users,email'"
+&gt;
 </code></pre>
-<h2>Example file locations in this repository<a id="example-file-locations-in-this-repository" href="#example-file-locations-in-this-repository" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>The package already ships demonstration files under the <code>examples/</code> directory.</p>
+<p>This is useful when the rules are small or when you are incrementally adopting the package inside an existing component.</p>
+<h2>Listen for client-validation events<a id="listen-for-client-validation-events" href="#listen-for-client-validation-events" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The Livewire adapter dispatches <code>client-validation-error</code> and <code>client-validation-cleared</code> events back to the component. Use them when you need to sync custom UI or logging around client-side failures.</p>
+<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
-<li><code>examples/alpine-demo.blade.php</code></li>
-<li><code>examples/vanilla-demo.blade.php</code></li>
-<li><code>examples/livewire-demo.blade.php</code></li>
-<li><code>examples/demo.blade.php</code></li>
+<li>Open <a href="./filament.html">filament</a> for the panel-specific helper layer.</li>
+<li>Use <a href="./troubleshooting.html">troubleshooting</a> when Livewire requests and client validation drift apart.</li>
+<li>Check <a href="./examples.html">examples</a> for compact component snippets.</li>
 </ul>
-<p>Use those files when you need a larger end-to-end reference while updating <a href="./usage.html">usage</a> or <a href="./validation-rules.html">validation rules</a>.</p>
             </article>
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T09:42:32+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T09:42:46+00:00</p>
+                    <p>Last updated <time datetime="2026-05-13T09:56:49+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T09:57:46+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
-                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/examples.md">Edit this page</a>
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/livewire.md">Edit this page</a>
                                     </div>
             </footer>
 
                         <nav class="docs-pager" aria-label="Page navigation">
-                                <a class="docs-pager__link" href="troubleshooting.html">
+                                <a class="docs-pager__link" href="alpine.html">
                     <span class="docs-pager__label">Previous</span>
-                    <strong>Troubleshooting</strong>
+                    <strong>Alpine.js</strong>
                 </a>
                 
+                                <a class="docs-pager__link docs-pager__link--next" href="filament.html">
+                    <span class="docs-pager__label">Next</span>
+                    <strong>Filament</strong>
+                </a>
                             </nav>
                     </main>
 
             </div>
 
     <script>
-        window.__DOCS_CONFIG__ = {"currentPage":"examples.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+        window.__DOCS_CONFIG__ = {"currentPage":"livewire.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>

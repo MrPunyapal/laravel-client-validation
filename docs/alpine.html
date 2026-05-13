@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Installation | Laravel Client Validation</title>
-    <meta name="description" content="Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">
-        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/installation.html">
-    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/installation.html">
+    <title>Alpine.js | Laravel Client Validation</title>
+    <meta name="description" content="Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">
+        <link rel="canonical" href="https://mrpunyapal.github.io/laravel-client-validation/alpine.html">
+    <meta property="og:url" content="https://mrpunyapal.github.io/laravel-client-validation/alpine.html">
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
-    <meta property="og:title" content="Installation | Laravel Client Validation">
-    <meta property="og:description" content="Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">
+    <meta property="og:title" content="Alpine.js | Laravel Client Validation">
+    <meta property="og:description" content="Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -37,9 +37,8 @@
                 <span></span>
             </button>
             <a class="docs-brand" href="index.html">
-                <span class="docs-brand__mark" aria-hidden="true">LC</span>
                 <span class="docs-brand__copy">
-                    <span class="docs-brand__eyebrow">Laravel Package</span>
+                    <span class="docs-brand__eyebrow">Package for Laravel</span>
                     <span class="docs-brand__title">Laravel Client Validation</span>
                 </span>
             </a>
@@ -64,7 +63,7 @@
         <aside class="docs-sidebar" data-sidebar>
             <div class="docs-sidebar__hero">
                 <div>
-                    <p class="docs-sidebar__label">Laravel package</p>
+                    <p class="docs-sidebar__label">Package for Laravel</p>
                     <h2>Laravel Client Validation</h2>
                     <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
                 </div>
@@ -78,12 +77,26 @@
             <nav class="docs-nav" aria-label="Documentation navigation">
                                 <a class="docs-nav__link" href="index.html">
                     Overview                </a>
-                                <a class="docs-nav__link is-active" href="installation.html" aria-current="page">
+                                <a class="docs-nav__link" href="installation.html">
                     Installation                </a>
                                 <a class="docs-nav__link" href="configuration.html">
                     Configuration                </a>
                                 <a class="docs-nav__link" href="usage.html">
                     Usage                </a>
+                                <a class="docs-nav__link is-active" href="alpine.html" aria-current="page">
+                    Alpine.js                </a>
+                                <a class="docs-nav__link" href="livewire.html">
+                    Livewire                </a>
+                                <a class="docs-nav__link" href="filament.html">
+                    Filament                </a>
+                                <a class="docs-nav__link" href="vanilla.html">
+                    Vanilla JavaScript                </a>
+                                <a class="docs-nav__link" href="react.html">
+                    React                </a>
+                                <a class="docs-nav__link" href="vue.html">
+                    Vue                </a>
+                                <a class="docs-nav__link" href="inertia.html">
+                    Inertia                </a>
                                 <a class="docs-nav__link" href="validation-rules.html">
                     Validation Rules                </a>
                                 <a class="docs-nav__link" href="custom-rules.html">
@@ -101,84 +114,87 @@
             <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
                                                 <a href="index.html">Documentation</a>
                                                 <span class="docs-breadcrumbs__separator">/</span>
-                                <a href="installation.html">Installation</a>
+                                <a href="alpine.html">Alpine.js</a>
                             </nav>
 
             <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
                     <p class="docs-content__eyebrow">Documentation</p>
-                    <h1>Installation</h1>
-                    <p class="docs-content__lead">Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.</p>
+                    <h1>Alpine.js</h1>
+                    <p class="docs-content__lead">Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.</p>
                 </header>
 
                 
-                <p>Install Laravel Client Validation with Composer, publish the package assets, and verify the generated browser bundle is loaded before you start attaching rules to inputs.</p>
-<h2>Requirements<a id="requirements" href="#requirements" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+                <p>Alpine.js is the shortest path from Laravel rule strings to interactive browser feedback. The package supports both field-level directives and a form-scoped <code>validation()</code> helper.</p>
+<h2>Register the adapter<a id="register-the-adapter" href="#register-the-adapter" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-javascript">import Alpine from 'alpinejs';
+import registerAlpine from 'laravel-client-validation/alpine';
+
+window.Alpine = Alpine;
+registerAlpine(Alpine);
+Alpine.start();
+</code></pre>
+<p>If you load the browser bundle through <code>@clientValidationAssets</code>, the package auto-registers Alpine integration when Alpine boots.</p>
+<h2>Validate individual fields<a id="validate-individual-fields" href="#validate-individual-fields" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-html">&lt;input name="email" x-validate="'required|email'"&gt;
+&lt;input name="username" x-validate.live="'required|alpha_dash|min:3'"&gt;
+&lt;input type="password" name="password" x-validate.submit="'required|min:8|confirmed'"&gt;
+</code></pre>
+<p><code>x-validate</code> validates on blur by default. <code>.live</code> adds debounced input validation and <code>.submit</code> blocks form submission until the field passes.</p>
+<h2>Manage a full Alpine form<a id="manage-a-full-alpine-form" href="#manage-a-full-alpine-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-html">&lt;div x-data="validation({
+    rules: {
+        email: 'required|email|unique:users,email',
+        password: 'required|min:8',
+        password_confirmation: 'required|same:password',
+    },
+    messages: {
+        'password.min': 'Use at least eight characters.',
+    },
+})"&gt;
+    &lt;form @submit.prevent="submit(async (payload) =&gt; await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    }))"&gt;
+        &lt;input x-model="form.email" @input="validateLive('email')" @blur="validate('email')" name="email"&gt;
+        &lt;p x-show="hasError('email')" x-text="error('email')"&gt;&lt;/p&gt;
+
+        &lt;input type="password" x-model="form.password" @blur="validate('password')" name="password"&gt;
+        &lt;p x-show="hasError('password')" x-text="error('password')"&gt;&lt;/p&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+</code></pre>
+<p>The helper keeps touched state, per-field errors, and debounced remote validation in one Alpine object. Use <code>stateClass(field)</code> when you want to map the package validity state into your own utility classes.</p>
+<h2>Cross-field and remote rules<a id="cross-field-and-remote-rules" href="#cross-field-and-remote-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Rules such as <code>same</code>, <code>different</code>, <code>required_if</code>, and <code>unique</code> work best when every sibling value lives in the same <code>form</code> object so Alpine always passes the latest state into the validator.</p>
+<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
-<li>PHP 8.2 or newer.</li>
-<li>A Laravel application that can load package service providers.</li>
-<li>A frontend layout where Blade can render the package assets or your own script tags.</li>
-</ul>
-<h2>Install the package<a id="install-the-package" href="#install-the-package" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<pre><code class="language-bash">composer require mrpunyapal/laravel-client-validation
-php artisan client-validation:install
-</code></pre>
-<p>The install command publishes the package configuration and the browser bundle into <code>public/vendor/client-validation</code>.</p>
-<h2>Include the assets<a id="include-the-assets" href="#include-the-assets" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>The package ships the <code>@clientValidationAssets</code> Blade directive. It injects configuration, prefers the published local bundle, and falls back to the CDN bundle when the asset files are missing.</p>
-<pre><code class="language-php">&lt;head&gt;
-    @clientValidationAssets
-&lt;/head&gt;
-</code></pre>
-<p>If you prefer to control configuration separately, render the configuration object and load the bundle yourself:</p>
-<pre><code class="language-php">&lt;head&gt;
-    @clientValidationConfig
-    &lt;script src="{{ asset('vendor/client-validation/client-validation.iife.js') }}"&gt;&lt;/script&gt;
-&lt;/head&gt;
-</code></pre>
-<h2>First validation field<a id="first-validation-field" href="#first-validation-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>Use Blade directives immediately after the script is present on the page.</p>
-<pre><code class="language-html">&lt;form data-validate&gt;
-    &lt;input name="email" @validateBlur('email', 'required|email')&gt;
-    &lt;input name="password" @validateSubmit('password', 'required|min:8')&gt;
-    &lt;button type="submit"&gt;Create account&lt;/button&gt;
-&lt;/form&gt;
-</code></pre>
-<h2>Verify the installation<a id="verify-the-installation" href="#verify-the-installation" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Browser smoke test<a id="browser-smoke-test" href="#browser-smoke-test" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<p>Open the form, tab out of the <code>email</code> field, and confirm that invalid values show client-side feedback before the form submits.</p>
-<h3>Remote validation smoke test<a id="remote-validation-smoke-test" href="#remote-validation-smoke-test" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<p>Remote rules such as <code>unique</code> should send requests to the validation endpoint generated from the <code>route_prefix</code> configuration.</p>
-<pre><code class="language-html">&lt;input name="email" @validateLive('email', 'required|email|unique:users,email')&gt;
-</code></pre>
-<p>When AJAX validation is enabled, the request targets <code>/client-validation/validate</code> by default.</p>
-<h2>Next steps<a id="next-steps" href="#next-steps" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<ul>
-<li>Review <a href="./configuration.html">configuration</a> to tune debounce, AJAX, styling, and message defaults.</li>
-<li>Move to <a href="./usage.html">usage</a> for Blade, Alpine, and programmatic validation patterns.</li>
-<li>Keep <a href="./troubleshooting.html">troubleshooting</a> nearby if the bundle is missing or remote rules do not fire.</li>
+<li>Use <a href="./installation.html">installation</a> to bootstrap the bundle in Blade layouts.</li>
+<li>Keep <a href="./usage.html">usage</a> nearby for the cross-framework model.</li>
+<li>Open <a href="./examples.html">examples</a> when you need larger Blade snippets.</li>
 </ul>
             </article>
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T09:42:32+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T09:42:46+00:00</p>
+                    <p>Last updated <time datetime="2026-05-13T09:56:49+00:00">May 13, 2026</time></p>
+                    <p>Built 2026-05-13T09:57:46+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
-                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/installation.md">Edit this page</a>
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/alpine.md">Edit this page</a>
                                     </div>
             </footer>
 
                         <nav class="docs-pager" aria-label="Page navigation">
-                                <a class="docs-pager__link" href="index.html">
+                                <a class="docs-pager__link" href="usage.html">
                     <span class="docs-pager__label">Previous</span>
-                    <strong>Laravel Client Validation</strong>
+                    <strong>Usage</strong>
                 </a>
                 
-                                <a class="docs-pager__link docs-pager__link--next" href="configuration.html">
+                                <a class="docs-pager__link docs-pager__link--next" href="livewire.html">
                     <span class="docs-pager__label">Next</span>
-                    <strong>Configuration</strong>
+                    <strong>Livewire</strong>
                 </a>
                             </nav>
                     </main>
@@ -186,7 +202,7 @@ php artisan client-validation:install
             </div>
 
     <script>
-        window.__DOCS_CONFIG__ = {"currentPage":"installation.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+        window.__DOCS_CONFIG__ = {"currentPage":"alpine.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>

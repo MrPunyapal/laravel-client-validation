@@ -10,7 +10,7 @@
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
     <meta property="og:title" content="Laravel Client Validation Docs">
-    <meta property="og:description" content="Build responsive Laravel-fluent forms with markdown-authored documentation, generated HTML pages, and GitHub Pages deployment.">
+    <meta property="og:description" content="Build responsive Laravel-fluent forms with markdown-authored documentation and generated HTML published from docs/.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -84,6 +84,20 @@
                     Configuration                </a>
                                 <a class="docs-nav__link" href="usage.html">
                     Usage                </a>
+                                <a class="docs-nav__link" href="alpine.html">
+                    Alpine.js                </a>
+                                <a class="docs-nav__link" href="livewire.html">
+                    Livewire                </a>
+                                <a class="docs-nav__link" href="filament.html">
+                    Filament                </a>
+                                <a class="docs-nav__link" href="vanilla.html">
+                    Vanilla JavaScript                </a>
+                                <a class="docs-nav__link" href="react.html">
+                    React                </a>
+                                <a class="docs-nav__link" href="vue.html">
+                    Vue                </a>
+                                <a class="docs-nav__link" href="inertia.html">
+                    Inertia                </a>
                                 <a class="docs-nav__link" href="validation-rules.html">
                     Validation Rules                </a>
                                 <a class="docs-nav__link" href="custom-rules.html">
@@ -106,10 +120,10 @@
                 <header class="docs-content__header">
                     <p class="docs-content__eyebrow">Documentation</p>
                     <h1>Laravel Client Validation</h1>
-                    <p class="docs-content__lead">Build responsive Laravel-fluent forms with markdown-authored documentation, generated HTML pages, and GitHub Pages deployment.</p>
+                    <p class="docs-content__lead">Build responsive Laravel-fluent forms with markdown-authored documentation and generated HTML published from docs/.</p>
                 </header>
 
-                
+
                 <p>Laravel Client Validation brings familiar Laravel validation rules into the browser so forms can respond immediately without maintaining a second rule set by hand.</p>
 <h2>Why this package exists<a id="why-this-package-exists" href="#why-this-package-exists" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
@@ -139,7 +153,12 @@ php artisan client-validation:install
 <ul>
 <li>Start with <a href="./installation.html">installation</a> if you are onboarding the package into a Laravel app.</li>
 <li>Review <a href="./configuration.html">configuration</a> before changing default validation modes, messages, AJAX, or styling.</li>
-<li>Use <a href="./usage.html">usage</a> for Blade directives, Alpine integration, and remote-validation flow.</li>
+<li>Use <a href="./usage.html">usage</a> for the shared validation model and the integration map.</li>
+<li>Reach for <a href="./alpine.html">alpine</a> when you want <code>x-validate</code> directives or the <code>validation()</code> Alpine helper.</li>
+<li>Use <a href="./livewire.html">livewire</a> for <code>WithClientValidation</code>, <code>x-wire-validate</code>, and client-side pre-validation in Livewire components.</li>
+<li>Open <a href="./filament.html">filament</a> when your forms run inside a Filament panel or custom field.</li>
+<li>Pick <a href="./vanilla.html">vanilla</a>, <a href="./react.html">react</a>, or <a href="./vue.html">vue</a> for browser-adapter usage outside Blade-first forms.</li>
+<li>Keep <a href="./inertia.html">inertia</a> nearby when your Laravel app uses Inertia with React or Vue.</li>
 <li>Keep <a href="./validation-rules.html">validation rules</a> nearby when auditing client-side parity.</li>
 <li>Reach for <a href="./custom-rules.html">custom rules</a> when the default rule set is not enough.</li>
 <li>Run the checks in <a href="./testing.html">testing</a> before publishing a package release.</li>
@@ -148,14 +167,14 @@ php artisan client-validation:install
 </ul>
 <h2>Supported integration styles<a id="supported-integration-styles" href="#supported-integration-styles" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <h3>Blade and Alpine.js<a id="blade-and-alpinejs" href="#blade-and-alpinejs" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<p>The package exposes Blade directives like <code>@rules</code>, <code>@validateBlur</code>, and <code>@validateLive</code>, alongside Alpine helpers and <code>x-validate</code> directives.</p>
+<p>The package exposes Blade directives like <code>@rules</code>, <code>@validateBlur</code>, and <code>@validateLive</code>, alongside Alpine helpers and <code>x-validate</code> directives. Use the dedicated <a href="./alpine.html">alpine</a> page for the directive modes, <code>validation()</code> helper, and field-state patterns.</p>
 <pre><code class="language-html">&lt;form data-validate&gt;
     &lt;input name="email" @rules('email', 'required|email')&gt;
     &lt;input name="username" @validateLive('username', 'required|alpha_dash|min:3')&gt;
 &lt;/form&gt;
 </code></pre>
 <h3>Livewire and Filament<a id="livewire-and-filament" href="#livewire-and-filament" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<p>Livewire components can use <code>WithClientValidation</code>, while Filament panels can install <code>ClientValidationPlugin</code> and field traits for form-level feedback.</p>
+<p>Livewire components can use <code>WithClientValidation</code>, while Filament panels can install <code>ClientValidationPlugin</code> and field traits for form-level feedback. The dedicated <a href="./livewire.html">livewire</a> and <a href="./filament.html">filament</a> pages cover those package-specific integration surfaces.</p>
 <pre><code class="language-php">use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
 
 $panel-&gt;plugins([
@@ -163,7 +182,7 @@ $panel-&gt;plugins([
 ]);
 </code></pre>
 <h3>Vanilla JavaScript<a id="vanilla-javascript" href="#vanilla-javascript" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<p>If you only need client-side validation in a custom frontend, the core validator and adapters are available from the browser bundle or ES module entrypoints.</p>
+<p>If you only need client-side validation in a custom frontend, the core validator and adapters are available from the browser bundle or ES module entrypoints. Use the adapter-specific guides for <a href="./vanilla.html">vanilla JavaScript</a>, <a href="./react.html">React</a>, <a href="./vue.html">Vue</a>, and <a href="./inertia.html">Inertia</a>.</p>
 <pre><code class="language-javascript">import { LaravelValidator } from 'laravel-client-validation/core';
 
 const validator = new LaravelValidator({
@@ -173,10 +192,10 @@ const validator = new LaravelValidator({
 });
 </code></pre>
 <h2>How the docs site is generated<a id="how-the-docs-site-is-generated" href="#how-the-docs-site-is-generated" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>This repository keeps Markdown as the source of truth. The generated site in <code>docs/generated</code> is rebuilt from the following command:</p>
+<p>This repository keeps Markdown as the source of truth. The generated site lives directly in <code>docs/</code> and is rebuilt from the following command:</p>
 <pre><code class="language-bash">php docs/build.php
 </code></pre>
-<p>The builder reads frontmatter from every file in <code>docs/md</code>, generates the sidebar and previous or next navigation automatically, writes a JSON search index, and copies the assets used by the generated pages.</p>
+<p>The builder reads frontmatter from every file in <code>docs/md</code>, generates the sidebar and previous or next navigation automatically, writes a JSON search index and sitemap into <code>docs/</code>, and reuses the checked-in assets from <code>docs/assets</code>. Never edit the generated HTML files by hand.</p>
             </article>
 
             <footer class="docs-footer">
@@ -191,7 +210,7 @@ const validator = new LaravelValidator({
 
                         <nav class="docs-pager" aria-label="Page navigation">
                                 <span></span>
-                
+
                                 <a class="docs-pager__link docs-pager__link--next" href="installation.html">
                     <span class="docs-pager__label">Next</span>
                     <strong>Installation</strong>
