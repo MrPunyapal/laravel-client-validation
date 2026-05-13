@@ -72,5 +72,5 @@ When AJAX validation is enabled, the request targets `/client-validation/validat
 ## Next steps
 
 - Review [configuration](./configuration.md) to tune debounce, AJAX, styling, and message defaults.
-- Move to [usage](./usage.md) for Blade, Alpine, and programmatic validation patterns.
+- Use [usage](./usage.md) as the integration map, then jump to [alpine](./alpine.md), [livewire](./livewire.md), [filament](./filament.md), [vanilla](./vanilla.md), or [inertia](./inertia.md).
 - Keep [troubleshooting](./troubleshooting.md) nearby if the bundle is missing or remote rules do not fire.

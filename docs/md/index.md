@@ -1,6 +1,6 @@
 ---
 title: Laravel Client Validation
-description: Build responsive Laravel-fluent forms with markdown-authored documentation, generated HTML pages, and GitHub Pages deployment.
+description: Build responsive Laravel-fluent forms with markdown-authored documentation and generated HTML published from docs/.
 order: 1
 slug: index
 sidebar_label: Overview
@@ -43,7 +43,12 @@ Then render the package assets in a Blade layout:
 
 - Start with [installation](./installation.md) if you are onboarding the package into a Laravel app.
 - Review [configuration](./configuration.md) before changing default validation modes, messages, AJAX, or styling.
-- Use [usage](./usage.md) for Blade directives, Alpine integration, and remote-validation flow.
+- Use [usage](./usage.md) for the shared validation model and the integration map.
+- Reach for [alpine](./alpine.md) when you want `x-validate` directives or the `validation()` Alpine helper.
+- Use [livewire](./livewire.md) for `WithClientValidation`, `x-wire-validate`, and client-side pre-validation in Livewire components.
+- Open [filament](./filament.md) when your forms run inside a Filament panel or custom field.
+- Pick [vanilla](./vanilla.md), [react](./react.md), or [vue](./vue.md) for browser-adapter usage outside Blade-first forms.
+- Keep [inertia](./inertia.md) nearby when your Laravel app uses Inertia with React or Vue.
 - Keep [validation rules](./validation-rules.md) nearby when auditing client-side parity.
 - Reach for [custom rules](./custom-rules.md) when the default rule set is not enough.
 - Run the checks in [testing](./testing.md) before publishing a package release.
@@ -54,7 +59,7 @@ Then render the package assets in a Blade layout:
 
 ### Blade and Alpine.js
 
-The package exposes Blade directives like `@rules`, `@validateBlur`, and `@validateLive`, alongside Alpine helpers and `x-validate` directives.
+The package exposes Blade directives like `@rules`, `@validateBlur`, and `@validateLive`, alongside Alpine helpers and `x-validate` directives. Use the dedicated [alpine](./alpine.md) page for the directive modes, `validation()` helper, and field-state patterns.
 
 ```html
 <form data-validate>
@@ -65,7 +70,7 @@ The package exposes Blade directives like `@rules`, `@validateBlur`, and `@valid
 
 ### Livewire and Filament
 
-Livewire components can use `WithClientValidation`, while Filament panels can install `ClientValidationPlugin` and field traits for form-level feedback.
+Livewire components can use `WithClientValidation`, while Filament panels can install `ClientValidationPlugin` and field traits for form-level feedback. The dedicated [livewire](./livewire.md) and [filament](./filament.md) pages cover those package-specific integration surfaces.
 
 ```php
 use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
@@ -77,7 +82,7 @@ $panel->plugins([
 
 ### Vanilla JavaScript
 
-If you only need client-side validation in a custom frontend, the core validator and adapters are available from the browser bundle or ES module entrypoints.
+If you only need client-side validation in a custom frontend, the core validator and adapters are available from the browser bundle or ES module entrypoints. Use the adapter-specific guides for [vanilla JavaScript](./vanilla.md), [React](./react.md), [Vue](./vue.md), and [Inertia](./inertia.md).
 
 ```javascript
 import { LaravelValidator } from 'laravel-client-validation/core';
@@ -91,10 +96,10 @@ const validator = new LaravelValidator({
 
 ## How the docs site is generated
 
-This repository keeps Markdown as the source of truth. The generated site in `docs/generated` is rebuilt from the following command:
+This repository keeps Markdown as the source of truth. The generated site lives directly in `docs/` and is rebuilt from the following command:
 
 ```bash
 php docs/build.php
 ```
 
-The builder reads frontmatter from every file in `docs/md`, generates the sidebar and previous or next navigation automatically, writes a JSON search index, and copies the assets used by the generated pages.
+The builder reads frontmatter from every file in `docs/md`, generates the sidebar and previous or next navigation automatically, writes a JSON search index and sitemap into `docs/`, and reuses the checked-in assets from `docs/assets`. Never edit the generated HTML files by hand.

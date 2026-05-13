@@ -1,54 +1,28 @@
 ---
 title: Usage
-description: Apply Laravel Client Validation through Blade directives, Alpine.js helpers, remote validation, and programmatic validators.
+description: Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.
 order: 4
 slug: usage
 ---
 
-Laravel Client Validation supports multiple integration styles, but the core idea is always the same: define rules once, choose a validation trigger, and let the package run client-side checks before falling back to the server when needed.
+Laravel Client Validation supports multiple integration styles, but the core idea stays the same: keep Laravel-style rule strings as the source of truth, pick when validation should run, and let remote rules fall through to Laravel when the browser needs backend context.
 
-## Blade directives
+## Shared building blocks
 
-For server-rendered Laravel applications, the Blade directives are the fastest way to attach metadata to a field.
+- The rule grammar matches Laravel validation strings.
+- Trigger modes map cleanly across integrations: `blur` by default, `live` or `input` for immediate feedback, and `submit` or `form` when validation should block submission.
+- Remote rules such as `unique` and `exists` still travel through the Laravel endpoint when `enable_ajax_validation` is enabled.
 
-```html
-<form data-validate>
-    <input name="email" @rules('email', 'required|email', ['mode' => 'blur'])>
-    <input name="username" @validateLive('username', 'required|alpha_dash|min:3')>
-    <input name="password" @validateSubmit('password', 'required|min:8|confirmed')>
-</form>
-```
+## Choose an integration page
 
-Use the explicit shorthand that matches the interaction you want. That keeps your templates readable when scanning large forms.
+- Use [alpine](./alpine.md) for Blade directives, `x-validate`, and the `validation()` helper.
+- Use [livewire](./livewire.md) for `WithClientValidation`, `x-wire-validate`, and client-side pre-validation in Livewire components.
+- Use [filament](./filament.md) for panel plugin setup, `ClientValidatedField`, and custom Filament field traits.
+- Use [vanilla](./vanilla.md) when you want data attributes or imperative browser validation without a framework.
+- Use [react](./react.md) and [vue](./vue.md) for the shipped SPA adapters.
+- Use [inertia](./inertia.md) when your Laravel app uses Inertia with React or Vue. There is no dedicated Inertia adapter yet, so that page shows the supported composition pattern.
 
-## Alpine.js forms
-
-The package exposes Alpine-friendly helpers for form state and field-level feedback.
-
-```html
-<div x-data="validation({
-    rules: {
-        email: 'required|email',
-        password: 'required|min:8',
-        password_confirmation: 'required|same:password',
-    },
-    messages: {
-        'password.min': 'Use at least eight characters.',
-    },
-})">
-    <form @submit.prevent="submit(async (data) => console.log(data))">
-        <input x-model="form.email" @blur="validate('email')" name="email">
-        <p x-show="hasError('email')" x-text="error('email')"></p>
-
-        <input type="password" x-model="form.password" @blur="validate('password')" name="password">
-        <p x-show="hasError('password')" x-text="error('password')"></p>
-    </form>
-</div>
-```
-
-## Remote validation flow
-
-Rules such as `unique` and `exists` stay server-backed. The browser bundle sends them to the package route when `enable_ajax_validation` is enabled.
+## Shared remote-validation flow
 
 ```html
 <input name="email" @validateLive('email', 'required|email|unique:users,email')>
@@ -56,9 +30,9 @@ Rules such as `unique` and `exists` stay server-backed. The browser bundle sends
 
 With the default configuration, the request is posted to `client-validation/validate`.
 
-## Programmatic validation
+## Programmatic validator
 
-You can also work with the validator directly in JavaScript.
+Every adapter ultimately wraps the same core validator.
 
 ```javascript
 import { LaravelValidator } from 'laravel-client-validation/core';
@@ -90,24 +64,6 @@ const validator = new LaravelClientValidation.Validator({ rules });
 validator
     .beforeValidate(({ data }) => console.log('Validating', data))
     .afterValidate(({ valid, errors }) => console.log('Done', valid, errors));
-```
-
-## Livewire and Filament
-
-The package includes dedicated integration layers for Livewire and Filament, but the rule grammar stays the same.
-
-```php
-use MrPunyapal\ClientValidation\Livewire\WithClientValidation;
-
-class CreateUser extends Component
-{
-    use WithClientValidation;
-
-    protected $rules = [
-        'email' => 'required|email',
-        'password' => 'required|min:8|confirmed',
-    ];
-}
 ```
 
 ## Related pages

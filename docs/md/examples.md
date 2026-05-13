@@ -1,11 +1,13 @@
 ---
 title: Examples
 description: Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.
-order: 9
+order: 16
 slug: examples
 ---
 
 Use these examples as starting points when you need a practical integration rather than a conceptual overview.
+
+If you want framework-specific guidance before lifting a snippet, start with [alpine](./alpine.md), [livewire](./livewire.md), [filament](./filament.md), [vanilla](./vanilla.md), [react](./react.md), [vue](./vue.md), or [inertia](./inertia.md).
 
 ## Blade data-attribute form
 

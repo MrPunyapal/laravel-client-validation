@@ -1,7 +1,7 @@
 ---
 title: Testing
 description: Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.
-order: 7
+order: 14
 slug: testing
 ---
 
@@ -37,7 +37,7 @@ The documentation site is generated from Markdown and committed as HTML output.
 composer docs:build
 ```
 
-That command runs `php docs/build.php`, regenerates `docs/generated`, refreshes the search index, and rewrites the sitemap.
+That command runs `php docs/build.php`, regenerates the committed HTML files in `docs/`, refreshes the search index, and rewrites the sitemap.
 
 ## Recommended contributor loop
 
@@ -62,4 +62,4 @@ composer docs:build
 composer docs:build
 ```
 
-If the generated HTML or search index changes unexpectedly, compare the affected Markdown source rather than editing `docs/generated` by hand.
+If the generated HTML or search index changes unexpectedly, compare the affected Markdown source rather than editing files in `docs/` by hand.

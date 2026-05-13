@@ -1,7 +1,7 @@
 ---
 title: Custom Rules
 description: Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.
-order: 6
+order: 13
 slug: custom-rules
 ---
 

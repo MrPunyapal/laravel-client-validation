@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting
 description: Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.
-order: 8
+order: 15
 slug: troubleshooting
 ---
 
@@ -85,7 +85,7 @@ The generated HTML is not the canonical source. Rebuild the site from Markdown.
 php docs/build.php
 ```
 
-Then review the generated files in `docs/generated`.
+Then review the generated files in `docs/`.
 
 ## Still blocked?
 

@@ -1,7 +1,7 @@
 ---
 title: Validation Rules
 description: Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.
-order: 5
+order: 12
 slug: validation-rules
 ---
 
