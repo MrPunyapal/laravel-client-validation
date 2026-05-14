@@ -1,6 +1,6 @@
 ---
 title: Laravel Client Validation
-description: Build responsive Laravel-fluent forms with markdown-authored documentation and generated HTML published from docs/.
+description: Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.
 order: 1
 slug: index
 sidebar_label: Overview
@@ -13,7 +13,6 @@ Laravel Client Validation brings familiar Laravel validation rules into the brow
 - Keep Laravel-style validation rules close to the UI.
 - Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.
 - Fall back to AJAX when a rule depends on the server, such as `unique` or `exists`.
-- Ship contributor-friendly documentation from plain Markdown files in `docs/md`.
 
 ## Quick start
 
@@ -93,13 +92,3 @@ const validator = new LaravelValidator({
     },
 });
 ```
-
-## How the docs site is generated
-
-This repository keeps Markdown as the source of truth. The generated site lives directly in `docs/` and is rebuilt from the following command:
-
-```bash
-php docs/build.php
-```
-
-The builder reads frontmatter from every file in `docs/md`, generates the sidebar and previous or next navigation automatically, writes a JSON search index and sitemap into `docs/`, and reuses the checked-in assets from `docs/assets`. Never edit the generated HTML files by hand.

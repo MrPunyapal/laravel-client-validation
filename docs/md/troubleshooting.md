@@ -77,18 +77,7 @@ Rules like `same`, `different`, `required_if`, `gt`, or `lte` depend on up-to-da
 
 Use form bindings that keep both fields synchronized before the comparison runs.
 
-## The docs site looks stale
-
-The generated HTML is not the canonical source. Rebuild the site from Markdown.
-
-```bash
-php docs/build.php
-```
-
-Then review the generated files in `docs/`.
-
 ## Still blocked?
 
 - Compare the current form markup with the working snippets in [usage](./usage.md) and [examples](./examples.md).
 - Re-run the checks in [testing](./testing.md).
-- Document the failure mode in `docs/md` once you find the root cause so the next contributor does not need to rediscover it.

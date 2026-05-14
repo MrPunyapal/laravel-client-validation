@@ -67,7 +67,6 @@ LaravelClientValidation.extend('sku', (value) => /^[A-Z]{3}-\d{4}$/.test(value))
 
 - Validate the JavaScript rule in a browser or JavaScript test.
 - Validate the PHP rule with Laravel or package tests.
-- Rebuild the docs with `php docs/build.php` if you document the new rule in `docs/md`.
 
 ## Documentation checklist for new rules
 
