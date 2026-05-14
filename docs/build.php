@@ -219,6 +219,7 @@ final class DocsBuilder
 
         $xpath = new DOMXPath($document);
         $this->rewriteMarkdownLinks($xpath);
+        $this->normalizeHeadingAnchors($xpath);
         $headings = $this->extractHeadings($xpath);
 
         $root = $xpath->query('//*[@id="docs-fragment"]')->item(0);
@@ -256,6 +257,33 @@ final class DocsBuilder
 
             if ($rewritten !== null && $rewritten !== $href) {
                 $link->setAttribute('href', $rewritten);
+            }
+        }
+    }
+
+    private function normalizeHeadingAnchors(DOMXPath $xpath): void
+    {
+        foreach ($xpath->query('//*[@id="docs-fragment"]//*[self::h2 or self::h3]') as $heading) {
+            if (! $heading instanceof DOMElement) {
+                continue;
+            }
+
+            $headingId = trim($heading->getAttribute('id'));
+            $anchor = $xpath->query('.//a[contains(concat(" ", normalize-space(@class), " "), " heading-anchor ")][@id][1]', $heading)?->item(0);
+
+            if (! $anchor instanceof DOMElement) {
+                continue;
+            }
+
+            $anchorId = trim($anchor->getAttribute('id'));
+
+            if ($headingId === '' && $anchorId !== '') {
+                $heading->setAttribute('id', $anchorId);
+                $headingId = $anchorId;
+            }
+
+            if ($headingId !== '' && $anchorId === $headingId) {
+                $anchor->removeAttribute('id');
             }
         }
     }
