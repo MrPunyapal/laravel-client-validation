@@ -124,38 +124,50 @@
                     <p class="docs-content__lead">Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#php-test-suite">PHP test suite</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#javascript-test-suite">JavaScript test suite</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-build">Documentation build</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#recommended-contributor-loop">Recommended contributor loop</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#practical-verification-examples">Practical verification examples</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#rule-or-parser-change">Rule or parser change</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#documentation-only-change">Documentation-only change</a>
+                                            </nav>
+                </details>
                 
                 <p>Package changes are safest when you validate both the runtime behavior and the generated documentation in the same branch.</p>
-<h2>PHP test suite<a id="php-test-suite" href="#php-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="php-test-suite">PHP test suite<a href="#php-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Run the Pest suite from the repository root:</p>
 <pre><code class="language-bash">composer test
 </code></pre>
 <p>Use coverage when you are working on package internals or parser behavior.</p>
 <pre><code class="language-bash">composer test-coverage
 </code></pre>
-<h2>JavaScript test suite<a id="javascript-test-suite" href="#javascript-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="javascript-test-suite">JavaScript test suite<a href="#javascript-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>The frontend rules and adapters live in <code>resources/js</code>, so use the JavaScript suite when you change the browser runtime.</p>
 <pre><code class="language-bash">npm test
 </code></pre>
-<h2>Documentation build<a id="documentation-build" href="#documentation-build" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="documentation-build">Documentation build<a href="#documentation-build" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>The documentation site is generated from Markdown and committed as HTML output.</p>
 <pre><code class="language-bash">composer docs:build
 </code></pre>
 <p>That command runs <code>php docs/build.php</code>, regenerates the committed HTML files in <code>docs/</code>, refreshes the search index, and rewrites the sitemap.</p>
-<h2>Recommended contributor loop<a id="recommended-contributor-loop" href="#recommended-contributor-loop" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="recommended-contributor-loop">Recommended contributor loop<a href="#recommended-contributor-loop" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ol>
 <li>Update the package code or the Markdown source in <code>docs/md</code>.</li>
 <li>Run the narrowest tests that can falsify the change.</li>
 <li>Rebuild the documentation site with <code>composer docs:build</code>.</li>
 <li>Inspect the generated HTML locally before opening a pull request.</li>
 </ol>
-<h2>Practical verification examples<a id="practical-verification-examples" href="#practical-verification-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Rule or parser change<a id="rule-or-parser-change" href="#rule-or-parser-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2 id="practical-verification-examples">Practical verification examples<a href="#practical-verification-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="rule-or-parser-change">Rule or parser change<a href="#rule-or-parser-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-bash">composer test
 npm test
 composer docs:build
 </code></pre>
-<h3>Documentation-only change<a id="documentation-only-change" href="#documentation-only-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="documentation-only-change">Documentation-only change<a href="#documentation-only-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-bash">composer docs:build
 </code></pre>
 <p>If the generated HTML or search index changes unexpectedly, compare the affected Markdown source rather than editing files in <code>docs/</code> by hand.</p>
@@ -163,8 +175,8 @@ composer docs:build
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/testing.md">Edit this page</a>
@@ -184,6 +196,27 @@ composer docs:build
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#php-test-suite" data-toc-link>
+                        PHP test suite                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#javascript-test-suite" data-toc-link>
+                        JavaScript test suite                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-build" data-toc-link>
+                        Documentation build                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#recommended-contributor-loop" data-toc-link>
+                        Recommended contributor loop                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#practical-verification-examples" data-toc-link>
+                        Practical verification examples                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#rule-or-parser-change" data-toc-link>
+                        Rule or parser change                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#documentation-only-change" data-toc-link>
+                        Documentation-only change                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

@@ -118,16 +118,29 @@
                     <p class="docs-content__lead">Build responsive Laravel-fluent forms with markdown-authored documentation and generated HTML published from docs/.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#why-this-package-exists">Why this package exists</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#quick-start">Quick start</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-map">Documentation map</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#supported-integration-styles">Supported integration styles</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#blade-and-alpinejs">Blade and Alpine.js</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#livewire-and-filament">Livewire and Filament</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#vanilla-javascript">Vanilla JavaScript</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#how-the-docs-site-is-generated">How the docs site is generated</a>
+                                            </nav>
+                </details>
                 
                 <p>Laravel Client Validation brings familiar Laravel validation rules into the browser so forms can respond immediately without maintaining a second rule set by hand.</p>
-<h2>Why this package exists<a id="why-this-package-exists" href="#why-this-package-exists" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="why-this-package-exists">Why this package exists<a href="#why-this-package-exists" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Keep Laravel-style validation rules close to the UI.</li>
 <li>Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.</li>
 <li>Fall back to AJAX when a rule depends on the server, such as <code>unique</code> or <code>exists</code>.</li>
 <li>Ship contributor-friendly documentation from plain Markdown files in <code>docs/md</code>.</li>
 </ul>
-<h2>Quick start<a id="quick-start" href="#quick-start" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="quick-start">Quick start<a href="#quick-start" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Install the package and publish the configuration and browser assets:</p>
 <pre><code class="language-bash">composer require mrpunyapal/laravel-client-validation
 php artisan client-validation:install
@@ -144,7 +157,7 @@ php artisan client-validation:install
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<h2>Documentation map<a id="documentation-map" href="#documentation-map" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="documentation-map">Documentation map<a href="#documentation-map" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Start with <a href="./installation.html">installation</a> if you are onboarding the package into a Laravel app.</li>
 <li>Review <a href="./configuration.html">configuration</a> before changing default validation modes, messages, AJAX, or styling.</li>
@@ -160,15 +173,15 @@ php artisan client-validation:install
 <li>Check <a href="./troubleshooting.html">troubleshooting</a> when a directive, rule, or AJAX request does not behave as expected.</li>
 <li>Browse <a href="./examples.html">examples</a> for practical Laravel snippets you can adapt directly.</li>
 </ul>
-<h2>Supported integration styles<a id="supported-integration-styles" href="#supported-integration-styles" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Blade and Alpine.js<a id="blade-and-alpinejs" href="#blade-and-alpinejs" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2 id="supported-integration-styles">Supported integration styles<a href="#supported-integration-styles" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="blade-and-alpinejs">Blade and Alpine.js<a href="#blade-and-alpinejs" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <p>The package exposes Blade directives like <code>@rules</code>, <code>@validateBlur</code>, and <code>@validateLive</code>, alongside Alpine helpers and <code>x-validate</code> directives. Use the dedicated <a href="./alpine.html">alpine</a> page for the directive modes, <code>validation()</code> helper, and field-state patterns.</p>
 <pre><code class="language-html">&lt;form data-validate&gt;
     &lt;input name="email" @rules('email', 'required|email')&gt;
     &lt;input name="username" @validateLive('username', 'required|alpha_dash|min:3')&gt;
 &lt;/form&gt;
 </code></pre>
-<h3>Livewire and Filament<a id="livewire-and-filament" href="#livewire-and-filament" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="livewire-and-filament">Livewire and Filament<a href="#livewire-and-filament" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <p>Livewire components can use <code>WithClientValidation</code>, while Filament panels can install <code>ClientValidationPlugin</code> and field traits for form-level feedback. The dedicated <a href="./livewire.html">livewire</a> and <a href="./filament.html">filament</a> pages cover those package-specific integration surfaces.</p>
 <pre><code class="language-php">use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
 
@@ -176,7 +189,7 @@ $panel-&gt;plugins([
     ClientValidationPlugin::make()-&gt;validationMode('live'),
 ]);
 </code></pre>
-<h3>Vanilla JavaScript<a id="vanilla-javascript" href="#vanilla-javascript" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="vanilla-javascript">Vanilla JavaScript<a href="#vanilla-javascript" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <p>If you only need client-side validation in a custom frontend, the core validator and adapters are available from the browser bundle or ES module entrypoints. Use the adapter-specific guides for <a href="./vanilla.html">vanilla JavaScript</a>, <a href="./react.html">React</a>, <a href="./vue.html">Vue</a>, and <a href="./inertia.html">Inertia</a>.</p>
 <pre><code class="language-javascript">import { LaravelValidator } from 'laravel-client-validation/core';
 
@@ -186,7 +199,7 @@ const validator = new LaravelValidator({
     },
 });
 </code></pre>
-<h2>How the docs site is generated<a id="how-the-docs-site-is-generated" href="#how-the-docs-site-is-generated" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="how-the-docs-site-is-generated">How the docs site is generated<a href="#how-the-docs-site-is-generated" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>This repository keeps Markdown as the source of truth. The generated site lives directly in <code>docs/</code> and is rebuilt from the following command:</p>
 <pre><code class="language-bash">php docs/build.php
 </code></pre>
@@ -195,8 +208,8 @@ const validator = new LaravelValidator({
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/index.md">Edit this page</a>
@@ -213,6 +226,29 @@ const validator = new LaravelValidator({
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#why-this-package-exists" data-toc-link>
+                        Why this package exists                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#quick-start" data-toc-link>
+                        Quick start                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-map" data-toc-link>
+                        Documentation map                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#supported-integration-styles" data-toc-link>
+                        Supported integration styles                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#blade-and-alpinejs" data-toc-link>
+                        Blade and Alpine.js                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#livewire-and-filament" data-toc-link>
+                        Livewire and Filament                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#vanilla-javascript" data-toc-link>
+                        Vanilla JavaScript                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#how-the-docs-site-is-generated" data-toc-link>
+                        How the docs site is generated                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

@@ -124,16 +124,34 @@
                     <p class="docs-content__lead">Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#rule-parity-at-a-glance">Rule parity at a glance</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#common-client-side-categories">Common client-side categories</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#core-and-string-rules">Core and string rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#numeric-and-size-rules">Numeric and size rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#comparison-and-conditional-rules">Comparison and conditional rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#date-network-and-file-rules">Date, network, and file rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#remote-rules">Remote rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#usage-examples">Usage examples</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#typical-account-form">Typical account form</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#array-date-and-file-examples">Array, date, and file examples</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#edge-cases-and-expected-behavior">Edge cases and expected behavior</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#message-placeholders">Message placeholders</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#when-documenting-a-new-rule">When documenting a new rule</a>
+                                            </nav>
+                </details>
                 
                 <p>Laravel Client Validation currently ships broad client-side coverage and a smaller set of explicitly remote rules. Use this page as the working overview when deciding whether a rule can stay in the browser or must hit the backend.</p>
-<h2>Rule parity at a glance<a id="rule-parity-at-a-glance" href="#rule-parity-at-a-glance" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="rule-parity-at-a-glance">Rule parity at a glance<a href="#rule-parity-at-a-glance" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Client-side rules: 104</li>
 <li>Remote rules: 5 primary rules handled through AJAX</li>
 <li>Rule source lists: <code>config/client-validation.php</code>, <code>resources/js/core/rules</code>, and <code>resources/js/core/RuleRegistry.js</code></li>
 </ul>
-<h2>Common client-side categories<a id="common-client-side-categories" href="#common-client-side-categories" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Core and string rules<a id="core-and-string-rules" href="#core-and-string-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2 id="common-client-side-categories">Common client-side categories<a href="#common-client-side-categories" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="core-and-string-rules">Core and string rules<a href="#core-and-string-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <table>
 <thead>
 <tr>
@@ -176,7 +194,7 @@
 </tr>
 </tbody>
 </table>
-<h3>Numeric and size rules<a id="numeric-and-size-rules" href="#numeric-and-size-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="numeric-and-size-rules">Numeric and size rules<a href="#numeric-and-size-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <table>
 <thead>
 <tr>
@@ -219,7 +237,7 @@
 </tr>
 </tbody>
 </table>
-<h3>Comparison and conditional rules<a id="comparison-and-conditional-rules" href="#comparison-and-conditional-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="comparison-and-conditional-rules">Comparison and conditional rules<a href="#comparison-and-conditional-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <table>
 <thead>
 <tr>
@@ -262,7 +280,7 @@
 </tr>
 </tbody>
 </table>
-<h3>Date, network, and file rules<a id="date-network-and-file-rules" href="#date-network-and-file-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="date-network-and-file-rules">Date, network, and file rules<a href="#date-network-and-file-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <table>
 <thead>
 <tr>
@@ -305,7 +323,7 @@
 </tr>
 </tbody>
 </table>
-<h2>Remote rules<a id="remote-rules" href="#remote-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="remote-rules">Remote rules<a href="#remote-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Remote rules are intentionally delegated to the server because they depend on application state or backend facilities.</p>
 <table>
 <thead>
@@ -344,25 +362,25 @@
 </tbody>
 </table>
 <p>If a remote rule never fires, check <a href="./troubleshooting.html">troubleshooting</a> for route, CSRF, or timeout issues.</p>
-<h2>Usage examples<a id="usage-examples" href="#usage-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Typical account form<a id="typical-account-form" href="#typical-account-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2 id="usage-examples">Usage examples<a href="#usage-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="typical-account-form">Typical account form<a href="#typical-account-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-html">&lt;input name="name" @validateBlur('name', 'required|string|min:2|max:50')&gt;
 &lt;input name="email" @validateLive('email', 'required|email|unique:users,email')&gt;
 &lt;input name="password" @validateSubmit('password', 'required|min:8|confirmed')&gt;
 </code></pre>
-<h3>Array, date, and file examples<a id="array-date-and-file-examples" href="#array-date-and-file-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="array-date-and-file-examples">Array, date, and file examples<a href="#array-date-and-file-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-html">&lt;input name="timezone" @rules('timezone', 'required|timezone')&gt;
 &lt;input name="launch_date" @rules('launch_date', 'required|date|after_or_equal:today')&gt;
 &lt;input type="file" name="avatar" @rules('avatar', 'file|image|mimes:jpg,png|dimensions:min_width=256,min_height=256')&gt;
 </code></pre>
-<h2>Edge cases and expected behavior<a id="edge-cases-and-expected-behavior" href="#edge-cases-and-expected-behavior" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="edge-cases-and-expected-behavior">Edge cases and expected behavior<a href="#edge-cases-and-expected-behavior" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li><code>nullable</code> allows empty input but does not skip other rules when the value is non-empty.</li>
 <li>Rules that compare against sibling fields, such as <code>same</code>, <code>different</code>, <code>gt</code>, or <code>required_if</code>, depend on the form data already being available to the validator.</li>
 <li>Remote rules still need normal Laravel validation messages and backend authorization to be correct.</li>
 <li>File rules depend on browser-provided <code>File</code> objects, so they should be tested in a real browser flow rather than only in isolated unit tests.</li>
 </ul>
-<h2>Message placeholders<a id="message-placeholders" href="#message-placeholders" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="message-placeholders">Message placeholders<a href="#message-placeholders" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Default browser messages use the same placeholder vocabulary Laravel developers expect, such as <code>:attribute</code>, <code>:min</code>, <code>:max</code>, <code>:other</code>, and <code>:values</code>.</p>
 <pre><code class="language-php">'messages' =&gt; [
     'required' =&gt; 'The :attribute field is required.',
@@ -370,7 +388,7 @@
     'unique' =&gt; 'The :attribute has already been taken.',
 ],
 </code></pre>
-<h2>When documenting a new rule<a id="when-documenting-a-new-rule" href="#when-documenting-a-new-rule" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="when-documenting-a-new-rule">When documenting a new rule<a href="#when-documenting-a-new-rule" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Explain the rule purpose in one sentence.</li>
 <li>Include a realistic Laravel rule string.</li>
@@ -382,8 +400,8 @@
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/validation-rules.md">Edit this page</a>
@@ -403,6 +421,39 @@
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#rule-parity-at-a-glance" data-toc-link>
+                        Rule parity at a glance                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#common-client-side-categories" data-toc-link>
+                        Common client-side categories                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#core-and-string-rules" data-toc-link>
+                        Core and string rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#numeric-and-size-rules" data-toc-link>
+                        Numeric and size rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#comparison-and-conditional-rules" data-toc-link>
+                        Comparison and conditional rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#date-network-and-file-rules" data-toc-link>
+                        Date, network, and file rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#remote-rules" data-toc-link>
+                        Remote rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#usage-examples" data-toc-link>
+                        Usage examples                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#typical-account-form" data-toc-link>
+                        Typical account form                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#array-date-and-file-examples" data-toc-link>
+                        Array, date, and file examples                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#edge-cases-and-expected-behavior" data-toc-link>
+                        Edge cases and expected behavior                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#message-placeholders" data-toc-link>
+                        Message placeholders                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#when-documenting-a-new-rule" data-toc-link>
+                        When documenting a new rule                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

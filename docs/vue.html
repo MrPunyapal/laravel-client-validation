@@ -124,9 +124,18 @@
                     <p class="docs-content__lead">Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#register-the-plugin">Register the plugin</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#use-the-directive-in-a-component">Use the directive in a component</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#use-an-imperative-validator-with-your-own-state">Use an imperative validator with your own state</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages">Related pages</a>
+                                            </nav>
+                </details>
                 
                 <p>The Vue adapter works best when you choose one of two styles: DOM-driven <code>v-validate</code> directives for quick forms, or an imperative validator instance that you wrap in your own Vue reactivity.</p>
-<h2>Register the plugin<a id="register-the-plugin" href="#register-the-plugin" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="register-the-plugin">Register the plugin<a href="#register-the-plugin" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-javascript">import { createApp } from 'vue';
 import { VueValidationPlugin } from 'laravel-client-validation/vue';
 import App from './App.vue';
@@ -141,7 +150,7 @@ app.use(VueValidationPlugin, {
 
 app.mount('#app');
 </code></pre>
-<h2>Use the directive in a component<a id="use-the-directive-in-a-component" href="#use-the-directive-in-a-component" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="use-the-directive-in-a-component">Use the directive in a component<a href="#use-the-directive-in-a-component" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-vue">&lt;template&gt;
     &lt;form @submit.prevent="submit"&gt;
         &lt;input v-model="form.email" v-validate.live="'required|email'" name="email"&gt;
@@ -166,7 +175,7 @@ function submit() {
 &lt;/script&gt;
 </code></pre>
 <p>The directive updates classes and nearby error containers directly, so it is a good fit when you want package-managed DOM feedback with minimal component code.</p>
-<h2>Use an imperative validator with your own state<a id="use-an-imperative-validator-with-your-own-state" href="#use-an-imperative-validator-with-your-own-state" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="use-an-imperative-validator-with-your-own-state">Use an imperative validator with your own state<a href="#use-an-imperative-validator-with-your-own-state" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-javascript">import { createVueValidator } from 'laravel-client-validation/vue';
 
 const validator = createVueValidator({
@@ -182,7 +191,7 @@ const result = await validator.validateAll({
 });
 </code></pre>
 <p>Wrap <code>getError()</code>, <code>hasError()</code>, and <code>getAllErrors()</code> in your own refs or computed properties when you want Vue-controlled error rendering instead of DOM updates.</p>
-<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="related-pages">Related pages<a href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Use <a href="./inertia.html">inertia</a> when the Vue form lives inside an Inertia page.</li>
 <li>Open <a href="./vanilla.html">vanilla</a> for DOM-first validation outside Vue.</li>
@@ -192,8 +201,8 @@ const result = await validator.validateAll({
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/vue.md">Edit this page</a>
@@ -213,6 +222,21 @@ const result = await validator.validateAll({
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#register-the-plugin" data-toc-link>
+                        Register the plugin                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#use-the-directive-in-a-component" data-toc-link>
+                        Use the directive in a component                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#use-an-imperative-validator-with-your-own-state" data-toc-link>
+                        Use an imperative validator with your own state                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages" data-toc-link>
+                        Related pages                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

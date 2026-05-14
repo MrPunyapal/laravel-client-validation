@@ -124,15 +124,32 @@
                     <p class="docs-content__lead">Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#the-browser-bundle-never-initializes">The browser bundle never initializes</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#symptoms">Symptoms</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#checks">Checks</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#rules-render-but-errors-never-appear">Rules render, but errors never appear</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#symptoms-1">Symptoms</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#checks-1">Checks</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#remote-rules-never-finish">Remote rules never finish</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#symptoms-2">Symptoms</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#checks-2">Checks</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#cross-field-rules-behave-inconsistently">Cross-field rules behave inconsistently</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#the-docs-site-looks-stale">The docs site looks stale</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#still-blocked">Still blocked?</a>
+                                            </nav>
+                </details>
                 
                 <p>Most validation failures come down to one of three causes: the browser bundle is not loaded, the field metadata was not rendered, or a remote validation request cannot reach the backend.</p>
-<h2>The browser bundle never initializes<a id="the-browser-bundle-never-initializes" href="#the-browser-bundle-never-initializes" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Symptoms<a id="symptoms" href="#symptoms" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2 id="the-browser-bundle-never-initializes">The browser bundle never initializes<a href="#the-browser-bundle-never-initializes" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="symptoms">Symptoms<a href="#symptoms" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <ul>
 <li><code>x-validate</code> or <code>data-validate</code> fields do nothing.</li>
 <li><code>window.LaravelClientValidation</code> is undefined in the console.</li>
 </ul>
-<h3>Checks<a id="checks" href="#checks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="checks">Checks<a href="#checks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-php">@clientValidationAssets
 </code></pre>
 <ul>
@@ -140,13 +157,13 @@
 <li>Confirm the published files exist in <code>public/vendor/client-validation</code>.</li>
 <li>Check the network tab for the package bundle or the CDN fallback.</li>
 </ul>
-<h2>Rules render, but errors never appear<a id="rules-render-but-errors-never-appear" href="#rules-render-but-errors-never-appear" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Symptoms<a id="symptoms-1" href="#symptoms-1" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2 id="rules-render-but-errors-never-appear">Rules render, but errors never appear<a href="#rules-render-but-errors-never-appear" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="symptoms-1">Symptoms<a href="#symptoms-1" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <ul>
 <li>Inputs contain attributes, but no validation message is shown.</li>
 <li>Classes such as <code>is-invalid</code> or <code>validation-error</code> never appear.</li>
 </ul>
-<h3>Checks<a id="checks-1" href="#checks-1" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="checks-1">Checks<a href="#checks-1" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-php">'error_template' =&gt; [
     'enabled' =&gt; true,
 ],
@@ -160,13 +177,13 @@
 <li>Inspect the rendered markup and confirm the directive output is attached to the correct field.</li>
 <li>Test with a simpler rule like <code>required</code> before adding compound logic.</li>
 </ul>
-<h2>Remote rules never finish<a id="remote-rules-never-finish" href="#remote-rules-never-finish" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Symptoms<a id="symptoms-2" href="#symptoms-2" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2 id="remote-rules-never-finish">Remote rules never finish<a href="#remote-rules-never-finish" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="symptoms-2">Symptoms<a href="#symptoms-2" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <ul>
 <li><code>unique</code> stays pending.</li>
 <li>No request reaches the Laravel application.</li>
 </ul>
-<h3>Checks<a id="checks-2" href="#checks-2" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="checks-2">Checks<a href="#checks-2" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-php">'enable_ajax_validation' =&gt; true,
 'route_prefix' =&gt; 'client-validation',
 'ajax_timeout' =&gt; 5000,
@@ -176,18 +193,18 @@
 <li>Confirm the page includes the CSRF token and the route is not blocked by middleware.</li>
 <li>Increase <code>ajax_timeout</code> temporarily while debugging slow responses.</li>
 </ul>
-<h2>Cross-field rules behave inconsistently<a id="cross-field-rules-behave-inconsistently" href="#cross-field-rules-behave-inconsistently" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="cross-field-rules-behave-inconsistently">Cross-field rules behave inconsistently<a href="#cross-field-rules-behave-inconsistently" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Rules like <code>same</code>, <code>different</code>, <code>required_if</code>, <code>gt</code>, or <code>lte</code> depend on up-to-date sibling field values.</p>
 <pre><code class="language-html">&lt;input name="password" @validateBlur('password', 'required|min:8')&gt;
 &lt;input name="password_confirmation" @validateBlur('password_confirmation', 'required|same:password')&gt;
 </code></pre>
 <p>Use form bindings that keep both fields synchronized before the comparison runs.</p>
-<h2>The docs site looks stale<a id="the-docs-site-looks-stale" href="#the-docs-site-looks-stale" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="the-docs-site-looks-stale">The docs site looks stale<a href="#the-docs-site-looks-stale" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>The generated HTML is not the canonical source. Rebuild the site from Markdown.</p>
 <pre><code class="language-bash">php docs/build.php
 </code></pre>
 <p>Then review the generated files in <code>docs/</code>.</p>
-<h2>Still blocked?<a id="still-blocked" href="#still-blocked" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="still-blocked">Still blocked?<a href="#still-blocked" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Compare the current form markup with the working snippets in <a href="./usage.html">usage</a> and <a href="./examples.html">examples</a>.</li>
 <li>Re-run the checks in <a href="./testing.html">testing</a>.</li>
@@ -197,8 +214,8 @@
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/troubleshooting.md">Edit this page</a>
@@ -218,6 +235,37 @@
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#the-browser-bundle-never-initializes" data-toc-link>
+                        The browser bundle never initializes                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#symptoms" data-toc-link>
+                        Symptoms                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#checks" data-toc-link>
+                        Checks                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#rules-render-but-errors-never-appear" data-toc-link>
+                        Rules render, but errors never appear                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#symptoms-1" data-toc-link>
+                        Symptoms                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#checks-1" data-toc-link>
+                        Checks                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#remote-rules-never-finish" data-toc-link>
+                        Remote rules never finish                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#symptoms-2" data-toc-link>
+                        Symptoms                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#checks-2" data-toc-link>
+                        Checks                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#cross-field-rules-behave-inconsistently" data-toc-link>
+                        Cross-field rules behave inconsistently                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#the-docs-site-looks-stale" data-toc-link>
+                        The docs site looks stale                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#still-blocked" data-toc-link>
+                        Still blocked?                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

@@ -124,9 +124,19 @@
                     <p class="docs-content__lead">Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#register-the-panel-plugin">Register the panel plugin</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#use-the-built-in-field-wrapper">Use the built-in field wrapper</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#add-client-validation-to-a-custom-filament-field">Add client validation to a custom Filament field</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#let-filament-infer-rules-from-the-field">Let Filament infer rules from the field</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages">Related pages</a>
+                                            </nav>
+                </details>
                 
                 <p>Filament support builds on the same browser runtime, but gives you a package-specific plugin and field helpers so panel forms can emit client feedback before submit.</p>
-<h2>Register the panel plugin<a id="register-the-panel-plugin" href="#register-the-panel-plugin" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="register-the-panel-plugin">Register the panel plugin<a href="#register-the-panel-plugin" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-php">use Filament\Panel;
 use Filament\PanelProvider;
 use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
@@ -144,7 +154,7 @@ class AdminPanelProvider extends PanelProvider
 }
 </code></pre>
 <p><code>validationMode('live')</code> makes generated <code>x-validate.live</code> bindings the default for fields handled through the package helper.</p>
-<h2>Use the built-in field wrapper<a id="use-the-built-in-field-wrapper" href="#use-the-built-in-field-wrapper" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="use-the-built-in-field-wrapper">Use the built-in field wrapper<a href="#use-the-built-in-field-wrapper" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-php">use MrPunyapal\ClientValidation\Filament\ClientValidatedField;
 
 ClientValidatedField::make('email')
@@ -152,7 +162,7 @@ ClientValidatedField::make('email')
     -&gt;clientValidationMode('live');
 </code></pre>
 <p>Use <code>ClientValidatedField</code> when you want a drop-in field that already renders the validation wrapper view shipped with the package.</p>
-<h2>Add client validation to a custom Filament field<a id="add-client-validation-to-a-custom-filament-field" href="#add-client-validation-to-a-custom-filament-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="add-client-validation-to-a-custom-filament-field">Add client validation to a custom Filament field<a href="#add-client-validation-to-a-custom-filament-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-php">use Filament\Forms\Components\Field;
 use MrPunyapal\ClientValidation\Filament\HasClientValidation;
 
@@ -170,9 +180,9 @@ class PhoneField extends Field
     {{ $getChildComponentContainer() }}
 &lt;/div&gt;
 </code></pre>
-<h2>Let Filament infer rules from the field<a id="let-filament-infer-rules-from-the-field" href="#let-filament-infer-rules-from-the-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="let-filament-infer-rules-from-the-field">Let Filament infer rules from the field<a href="#let-filament-infer-rules-from-the-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>If you call <code>withClientValidation()</code> instead of <code>clientValidation('...')</code>, the trait falls back to the field's existing required state and validation rules where possible.</p>
-<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="related-pages">Related pages<a href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Use <a href="./livewire.html">livewire</a> when your Filament form also needs component-level Livewire guidance.</li>
 <li>Review <a href="./configuration.html">configuration</a> for remote-validation and class defaults.</li>
@@ -182,8 +192,8 @@ class PhoneField extends Field
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/filament.md">Edit this page</a>
@@ -203,6 +213,23 @@ class PhoneField extends Field
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#register-the-panel-plugin" data-toc-link>
+                        Register the panel plugin                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#use-the-built-in-field-wrapper" data-toc-link>
+                        Use the built-in field wrapper                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#add-client-validation-to-a-custom-filament-field" data-toc-link>
+                        Add client validation to a custom Filament field                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#let-filament-infer-rules-from-the-field" data-toc-link>
+                        Let Filament infer rules from the field                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages" data-toc-link>
+                        Related pages                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>
