@@ -267,8 +267,22 @@ final class DocsBuilder
     {
         $headings = [];
 
-        foreach ($xpath->query('//*[@id="docs-fragment"]//*[self::h2 or self::h3][@id]') as $heading) {
+        foreach ($xpath->query('//*[@id="docs-fragment"]//*[self::h2 or self::h3]') as $heading) {
             if (! $heading instanceof DOMElement) {
+                continue;
+            }
+
+            $id = trim($heading->getAttribute('id'));
+
+            if ($id === '') {
+                $anchor = $xpath->query('.//a[contains(concat(" ", normalize-space(@class), " "), " heading-anchor ")][@id][1]', $heading)?->item(0);
+
+                if ($anchor instanceof DOMElement) {
+                    $id = trim($anchor->getAttribute('id'));
+                }
+            }
+
+            if ($id === '') {
                 continue;
             }
 
@@ -279,7 +293,7 @@ final class DocsBuilder
             }
 
             $headings[] = [
-                'id' => $heading->getAttribute('id'),
+                'id' => $id,
                 'level' => (int) substr($heading->tagName, 1),
                 'title' => $title,
             ];
