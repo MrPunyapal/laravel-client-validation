@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting
 description: Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.
-order: 15
+order: 16
 slug: troubleshooting
 ---
 

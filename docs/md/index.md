@@ -51,6 +51,7 @@ Then render the package assets in a Blade layout:
 - Keep [validation rules](./validation-rules.md) nearby when auditing client-side parity.
 - Reach for [custom rules](./custom-rules.md) when the default rule set is not enough.
 - Run the checks in [testing](./testing.md) before publishing a package release.
+- Open [documentation workflow](./documentation-workflow.md) when you are changing Markdown pages, the docs template, or generated site output.
 - Check [troubleshooting](./troubleshooting.md) when a directive, rule, or AJAX request does not behave as expected.
 - Browse [examples](./examples.md) for practical Laravel snippets you can adapt directly.
 

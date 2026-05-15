@@ -29,6 +29,10 @@ The frontend rules and adapters live in `resources/js`, so use the JavaScript su
 npm test
 ```
 
+## Documentation changes
+
+If you change Markdown pages, the docs template, or shared docs assets, follow the separate [documentation workflow](./documentation-workflow.md) so the generated site stays in sync.
+
 ## Recommended contributor loop
 
 1. Update the package code or the relevant documentation.
