@@ -124,9 +124,20 @@
                     <p class="docs-content__lead">Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#client-side-custom-rules">Client-side custom rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#es-module-registration">ES module registration</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#server-side-custom-rules">Server-side custom rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#shared-rule-strategy">Shared rule strategy</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#testing-custom-rules">Testing custom rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-checklist-for-new-rules">Documentation checklist for new rules</a>
+                                            </nav>
+                </details>
                 
                 <p>Custom rules work best when you decide first whether the behavior belongs in the browser, on the server, or both.</p>
-<h2>Client-side custom rules<a id="client-side-custom-rules" href="#client-side-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="client-side-custom-rules">Client-side custom rules<a href="#client-side-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Use the global bundle helper or the core <code>RuleRegistry</code> to add a browser-only rule.</p>
 <pre><code class="language-javascript">LaravelClientValidation.extend('phone', (value) =&gt; {
     if (!value) {
@@ -139,12 +150,12 @@
 <p>You can then reference the rule anywhere you already use package directives.</p>
 <pre><code class="language-html">&lt;input name="phone" @validateBlur('phone', 'required|phone')&gt;
 </code></pre>
-<h3>ES module registration<a id="es-module-registration" href="#es-module-registration" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="es-module-registration">ES module registration<a href="#es-module-registration" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-javascript">import { RuleRegistry } from 'laravel-client-validation/core';
 
 RuleRegistry.extend('sku', (value) =&gt; /^[A-Z]{3}-\d{4}$/.test(value), 'The :attribute must be a valid SKU.');
 </code></pre>
-<h2>Server-side custom rules<a id="server-side-custom-rules" href="#server-side-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="server-side-custom-rules">Server-side custom rules<a href="#server-side-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Use the package facade when the rule depends on backend state or you want the parser to treat it as server-side by default.</p>
 <pre><code class="language-php">use MrPunyapal\ClientValidation\Facades\ClientValidation;
 
@@ -153,7 +164,7 @@ ClientValidation::extend('strong_password', function ($attribute, $value) {
 }, 'Password must contain uppercase, lowercase, and numbers.');
 </code></pre>
 <p>The package registers that rule with Laravel's validator and classifies it as server-side unless you also provide a matching browser implementation.</p>
-<h2>Shared rule strategy<a id="shared-rule-strategy" href="#shared-rule-strategy" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="shared-rule-strategy">Shared rule strategy<a href="#shared-rule-strategy" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>If the same rule should behave consistently in both places, keep the rule name identical and maintain one browser implementation and one Laravel implementation.</p>
 <pre><code class="language-php">$rules = [
     'sku' =&gt; 'required|sku',
@@ -161,13 +172,13 @@ ClientValidation::extend('strong_password', function ($attribute, $value) {
 </code></pre>
 <pre><code class="language-javascript">LaravelClientValidation.extend('sku', (value) =&gt; /^[A-Z]{3}-\d{4}$/.test(value));
 </code></pre>
-<h2>Testing custom rules<a id="testing-custom-rules" href="#testing-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="testing-custom-rules">Testing custom rules<a href="#testing-custom-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Validate the JavaScript rule in a browser or JavaScript test.</li>
 <li>Validate the PHP rule with Laravel or package tests.</li>
 <li>Rebuild the docs with <code>php docs/build.php</code> if you document the new rule in <code>docs/md</code>.</li>
 </ul>
-<h2>Documentation checklist for new rules<a id="documentation-checklist-for-new-rules" href="#documentation-checklist-for-new-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="documentation-checklist-for-new-rules">Documentation checklist for new rules<a href="#documentation-checklist-for-new-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Link to the user-facing rule description from <a href="./validation-rules.html">validation rules</a>.</li>
 <li>Show one passing example and one failing example.</li>
@@ -178,8 +189,8 @@ ClientValidation::extend('strong_password', function ($attribute, $value) {
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/custom-rules.md">Edit this page</a>
@@ -199,6 +210,25 @@ ClientValidation::extend('strong_password', function ($attribute, $value) {
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#client-side-custom-rules" data-toc-link>
+                        Client-side custom rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#es-module-registration" data-toc-link>
+                        ES module registration                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#server-side-custom-rules" data-toc-link>
+                        Server-side custom rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#shared-rule-strategy" data-toc-link>
+                        Shared rule strategy                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#testing-custom-rules" data-toc-link>
+                        Testing custom rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-checklist-for-new-rules" data-toc-link>
+                        Documentation checklist for new rules                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

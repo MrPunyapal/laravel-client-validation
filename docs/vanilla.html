@@ -124,9 +124,18 @@
                     <p class="docs-content__lead">Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#let-the-browser-bundle-auto-init-forms">Let the browser bundle auto-init forms</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#create-a-validator-programmatically">Create a validator programmatically</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#customize-messages-and-field-names">Customize messages and field names</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages">Related pages</a>
+                                            </nav>
+                </details>
                 
                 <p>Use the vanilla adapter when you want client validation in a Laravel Blade page or custom frontend without Alpine, React, Vue, or Livewire.</p>
-<h2>Let the browser bundle auto-init forms<a id="let-the-browser-bundle-auto-init-forms" href="#let-the-browser-bundle-auto-init-forms" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="let-the-browser-bundle-auto-init-forms">Let the browser bundle auto-init forms<a href="#let-the-browser-bundle-auto-init-forms" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-html">&lt;form data-validate&gt;
     &lt;input name="email" data-rules="required|email" data-validate-on="blur"&gt;
     &lt;input name="username" data-rules="required|alpha_dash|min:3" data-validate-on="input"&gt;
@@ -134,7 +143,7 @@
 &lt;/form&gt;
 </code></pre>
 <p>When the browser bundle is loaded, forms matching <code>form[data-validate]</code> are initialized automatically on <code>DOMContentLoaded</code>.</p>
-<h2>Create a validator programmatically<a id="create-a-validator-programmatically" href="#create-a-validator-programmatically" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="create-a-validator-programmatically">Create a validator programmatically<a href="#create-a-validator-programmatically" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-javascript">import { createFormValidator } from 'laravel-client-validation/vanilla';
 
 const form = document.querySelector('#registration-form');
@@ -146,7 +155,7 @@ const validator = createFormValidator(form, {
 });
 </code></pre>
 <p>Use the factory when you want to control initialization order or intercept successful submit events yourself.</p>
-<h2>Customize messages and field names<a id="customize-messages-and-field-names" href="#customize-messages-and-field-names" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="customize-messages-and-field-names">Customize messages and field names<a href="#customize-messages-and-field-names" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-html">&lt;input
     name="email"
     data-rules="required|email"
@@ -155,7 +164,7 @@ const validator = createFormValidator(form, {
 &gt;
 </code></pre>
 <p><code>data-message</code> overrides the first rule message for that field, and <code>data-attribute</code> controls the human-readable attribute name in generated messages.</p>
-<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="related-pages">Related pages<a href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Use <a href="./installation.html">installation</a> when the bundle itself is not loading.</li>
 <li>Open <a href="./react.html">react</a> or <a href="./vue.html">vue</a> when you need a framework-owned UI layer instead of DOM-managed errors.</li>
@@ -165,8 +174,8 @@ const validator = createFormValidator(form, {
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/vanilla.md">Edit this page</a>
@@ -186,6 +195,21 @@ const validator = createFormValidator(form, {
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#let-the-browser-bundle-auto-init-forms" data-toc-link>
+                        Let the browser bundle auto-init forms                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#create-a-validator-programmatically" data-toc-link>
+                        Create a validator programmatically                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#customize-messages-and-field-names" data-toc-link>
+                        Customize messages and field names                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages" data-toc-link>
+                        Related pages                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

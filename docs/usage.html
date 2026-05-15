@@ -124,15 +124,26 @@
                     <p class="docs-content__lead">Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#shared-building-blocks">Shared building blocks</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#choose-an-integration-page">Choose an integration page</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#shared-remote-validation-flow">Shared remote-validation flow</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#programmatic-validator">Programmatic validator</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#validation-hooks">Validation hooks</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages">Related pages</a>
+                                            </nav>
+                </details>
                 
                 <p>Laravel Client Validation supports multiple integration styles, but the core idea stays the same: keep Laravel-style rule strings as the source of truth, pick when validation should run, and let remote rules fall through to Laravel when the browser needs backend context.</p>
-<h2>Shared building blocks<a id="shared-building-blocks" href="#shared-building-blocks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="shared-building-blocks">Shared building blocks<a href="#shared-building-blocks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>The rule grammar matches Laravel validation strings.</li>
 <li>Trigger modes map cleanly across integrations: <code>blur</code> by default, <code>live</code> or <code>input</code> for immediate feedback, and <code>submit</code> or <code>form</code> when validation should block submission.</li>
 <li>Remote rules such as <code>unique</code> and <code>exists</code> still travel through the Laravel endpoint when <code>enable_ajax_validation</code> is enabled.</li>
 </ul>
-<h2>Choose an integration page<a id="choose-an-integration-page" href="#choose-an-integration-page" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="choose-an-integration-page">Choose an integration page<a href="#choose-an-integration-page" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Use <a href="./alpine.html">alpine</a> for Blade directives, <code>x-validate</code>, and the <code>validation()</code> helper.</li>
 <li>Use <a href="./livewire.html">livewire</a> for <code>WithClientValidation</code>, <code>x-wire-validate</code>, and client-side pre-validation in Livewire components.</li>
@@ -141,11 +152,11 @@
 <li>Use <a href="./react.html">react</a> and <a href="./vue.html">vue</a> for the shipped SPA adapters.</li>
 <li>Use <a href="./inertia.html">inertia</a> when your Laravel app uses Inertia with React or Vue. There is no dedicated Inertia adapter yet, so that page shows the supported composition pattern.</li>
 </ul>
-<h2>Shared remote-validation flow<a id="shared-remote-validation-flow" href="#shared-remote-validation-flow" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="shared-remote-validation-flow">Shared remote-validation flow<a href="#shared-remote-validation-flow" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-html">&lt;input name="email" @validateLive('email', 'required|email|unique:users,email')&gt;
 </code></pre>
 <p>With the default configuration, the request is posted to <code>client-validation/validate</code>.</p>
-<h2>Programmatic validator<a id="programmatic-validator" href="#programmatic-validator" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="programmatic-validator">Programmatic validator<a href="#programmatic-validator" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Every adapter ultimately wraps the same core validator.</p>
 <pre><code class="language-javascript">import { LaravelValidator } from 'laravel-client-validation/core';
 
@@ -165,7 +176,7 @@ const formResult = await validator.validateAll({
     password: 'secret123',
 });
 </code></pre>
-<h2>Validation hooks<a id="validation-hooks" href="#validation-hooks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="validation-hooks">Validation hooks<a href="#validation-hooks" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Hook into form lifecycle events when you need analytics, UI transitions, or custom logging.</p>
 <pre><code class="language-javascript">const validator = new LaravelClientValidation.Validator({ rules });
 
@@ -173,7 +184,7 @@ validator
     .beforeValidate(({ data }) =&gt; console.log('Validating', data))
     .afterValidate(({ valid, errors }) =&gt; console.log('Done', valid, errors));
 </code></pre>
-<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="related-pages">Related pages<a href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Use <a href="./examples.html">examples</a> for larger snippets.</li>
 <li>Review <a href="./custom-rules.html">custom rules</a> when built-in rules are not sufficient.</li>
@@ -183,8 +194,8 @@ validator
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/usage.md">Edit this page</a>
@@ -204,6 +215,25 @@ validator
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#shared-building-blocks" data-toc-link>
+                        Shared building blocks                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#choose-an-integration-page" data-toc-link>
+                        Choose an integration page                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#shared-remote-validation-flow" data-toc-link>
+                        Shared remote-validation flow                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#programmatic-validator" data-toc-link>
+                        Programmatic validator                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#validation-hooks" data-toc-link>
+                        Validation hooks                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages" data-toc-link>
+                        Related pages                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

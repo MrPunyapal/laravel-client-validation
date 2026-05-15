@@ -124,26 +124,40 @@
                     <p class="docs-content__lead">Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#requirements">Requirements</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#install-the-package">Install the package</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#laravel-boost">Laravel Boost</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#include-the-assets">Include the assets</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#first-validation-field">First validation field</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#verify-the-installation">Verify the installation</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#browser-smoke-test">Browser smoke test</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#remote-validation-smoke-test">Remote validation smoke test</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#next-steps">Next steps</a>
+                                            </nav>
+                </details>
                 
                 <p>Install Laravel Client Validation with Composer, publish the package assets, and verify the generated browser bundle is loaded before you start attaching rules to inputs.</p>
-<h2>Requirements<a id="requirements" href="#requirements" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="requirements">Requirements<a href="#requirements" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>PHP 8.2 or newer.</li>
 <li>A Laravel application that can load package service providers.</li>
 <li>A frontend layout where Blade can render the package assets or your own script tags.</li>
 </ul>
-<h2>Install the package<a id="install-the-package" href="#install-the-package" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="install-the-package">Install the package<a href="#install-the-package" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-bash">composer require mrpunyapal/laravel-client-validation
 php artisan client-validation:install
 </code></pre>
 <p>The install command publishes the package configuration and the browser bundle into <code>public/vendor/client-validation</code>.</p>
-<h2>Laravel Boost<a id="laravel-boost" href="#laravel-boost" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="laravel-boost">Laravel Boost<a href="#laravel-boost" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>If the Laravel application also uses <a href="https://laravel.com/docs/13.x/boost">Laravel Boost</a>, this package ships a third-party Boost skill.</p>
 <p>Use <code>boost:install</code> when Boost is being installed for the first time, or refresh third-party skills after package changes with:</p>
 <pre><code class="language-bash">php artisan boost:update --discover
 </code></pre>
 <p>When skills are enabled, Boost can install the <code>laravel-client-validation-development</code> skill and give AI agents package-aware guidance for Blade directives, Alpine helpers, Livewire integration, Filament setup, and remote validation.</p>
-<h2>Include the assets<a id="include-the-assets" href="#include-the-assets" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="include-the-assets">Include the assets<a href="#include-the-assets" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>The package ships the <code>@clientValidationAssets</code> Blade directive. It injects configuration, prefers the published local bundle, and falls back to the CDN bundle when the asset files are missing.</p>
 <pre><code class="language-php">&lt;head&gt;
     @clientValidationAssets
@@ -155,7 +169,7 @@ php artisan client-validation:install
     &lt;script src="{{ asset('vendor/client-validation/client-validation.iife.js') }}"&gt;&lt;/script&gt;
 &lt;/head&gt;
 </code></pre>
-<h2>First validation field<a id="first-validation-field" href="#first-validation-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="first-validation-field">First validation field<a href="#first-validation-field" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Use Blade directives immediately after the script is present on the page.</p>
 <pre><code class="language-html">&lt;form data-validate&gt;
     &lt;input name="email" @validateBlur('email', 'required|email')&gt;
@@ -163,15 +177,15 @@ php artisan client-validation:install
     &lt;button type="submit"&gt;Create account&lt;/button&gt;
 &lt;/form&gt;
 </code></pre>
-<h2>Verify the installation<a id="verify-the-installation" href="#verify-the-installation" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3>Browser smoke test<a id="browser-smoke-test" href="#browser-smoke-test" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h2 id="verify-the-installation">Verify the installation<a href="#verify-the-installation" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="browser-smoke-test">Browser smoke test<a href="#browser-smoke-test" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <p>Open the form, tab out of the <code>email</code> field, and confirm that invalid values show client-side feedback before the form submits.</p>
-<h3>Remote validation smoke test<a id="remote-validation-smoke-test" href="#remote-validation-smoke-test" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<h3 id="remote-validation-smoke-test">Remote validation smoke test<a href="#remote-validation-smoke-test" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <p>Remote rules such as <code>unique</code> should send requests to the validation endpoint generated from the <code>route_prefix</code> configuration.</p>
 <pre><code class="language-html">&lt;input name="email" @validateLive('email', 'required|email|unique:users,email')&gt;
 </code></pre>
 <p>When AJAX validation is enabled, the request targets <code>/client-validation/validate</code> by default.</p>
-<h2>Next steps<a id="next-steps" href="#next-steps" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="next-steps">Next steps<a href="#next-steps" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Review <a href="./configuration.html">configuration</a> to tune debounce, AJAX, styling, and message defaults.</li>
 <li>Use <a href="./usage.html">usage</a> as the integration map, then jump to <a href="./alpine.html">alpine</a>, <a href="./livewire.html">livewire</a>, <a href="./filament.html">filament</a>, <a href="./vanilla.html">vanilla</a>, or <a href="./inertia.html">inertia</a>.</li>
@@ -181,8 +195,8 @@ php artisan client-validation:install
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/installation.md">Edit this page</a>
@@ -202,6 +216,31 @@ php artisan client-validation:install
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#requirements" data-toc-link>
+                        Requirements                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#install-the-package" data-toc-link>
+                        Install the package                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#laravel-boost" data-toc-link>
+                        Laravel Boost                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#include-the-assets" data-toc-link>
+                        Include the assets                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#first-validation-field" data-toc-link>
+                        First validation field                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#verify-the-installation" data-toc-link>
+                        Verify the installation                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#browser-smoke-test" data-toc-link>
+                        Browser smoke test                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#remote-validation-smoke-test" data-toc-link>
+                        Remote validation smoke test                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#next-steps" data-toc-link>
+                        Next steps                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

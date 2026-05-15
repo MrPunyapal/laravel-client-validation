@@ -124,9 +124,19 @@
                     <p class="docs-content__lead">Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#register-the-adapter">Register the adapter</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#validate-individual-fields">Validate individual fields</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#manage-a-full-alpine-form">Manage a full Alpine form</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#cross-field-and-remote-rules">Cross-field and remote rules</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages">Related pages</a>
+                                            </nav>
+                </details>
                 
                 <p>Alpine.js is the shortest path from Laravel rule strings to interactive browser feedback. The package supports both field-level directives and a form-scoped <code>validation()</code> helper.</p>
-<h2>Register the adapter<a id="register-the-adapter" href="#register-the-adapter" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="register-the-adapter">Register the adapter<a href="#register-the-adapter" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-javascript">import Alpine from 'alpinejs';
 import registerAlpine from 'laravel-client-validation/alpine';
 
@@ -135,13 +145,13 @@ registerAlpine(Alpine);
 Alpine.start();
 </code></pre>
 <p>If you load the browser bundle through <code>@clientValidationAssets</code>, the package auto-registers Alpine integration when Alpine boots.</p>
-<h2>Validate individual fields<a id="validate-individual-fields" href="#validate-individual-fields" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="validate-individual-fields">Validate individual fields<a href="#validate-individual-fields" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-html">&lt;input name="email" x-validate="'required|email'"&gt;
 &lt;input name="username" x-validate.live="'required|alpha_dash|min:3'"&gt;
 &lt;input type="password" name="password" x-validate.submit="'required|min:8|confirmed'"&gt;
 </code></pre>
 <p><code>x-validate</code> validates on blur by default. <code>.live</code> adds debounced input validation and <code>.submit</code> blocks form submission until the field passes.</p>
-<h2>Manage a full Alpine form<a id="manage-a-full-alpine-form" href="#manage-a-full-alpine-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="manage-a-full-alpine-form">Manage a full Alpine form<a href="#manage-a-full-alpine-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-html">&lt;div x-data="validation({
     rules: {
         email: 'required|email|unique:users,email',
@@ -166,9 +176,9 @@ Alpine.start();
 &lt;/div&gt;
 </code></pre>
 <p>The helper keeps touched state, per-field errors, and debounced remote validation in one Alpine object. Use <code>stateClass(field)</code> when you want to map the package validity state into your own utility classes.</p>
-<h2>Cross-field and remote rules<a id="cross-field-and-remote-rules" href="#cross-field-and-remote-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="cross-field-and-remote-rules">Cross-field and remote rules<a href="#cross-field-and-remote-rules" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Rules such as <code>same</code>, <code>different</code>, <code>required_if</code>, and <code>unique</code> work best when every sibling value lives in the same <code>form</code> object so Alpine always passes the latest state into the validator.</p>
-<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="related-pages">Related pages<a href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Use <a href="./installation.html">installation</a> to bootstrap the bundle in Blade layouts.</li>
 <li>Keep <a href="./usage.html">usage</a> nearby for the cross-framework model.</li>
@@ -178,8 +188,8 @@ Alpine.start();
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/alpine.md">Edit this page</a>
@@ -199,6 +209,23 @@ Alpine.start();
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#register-the-adapter" data-toc-link>
+                        Register the adapter                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#validate-individual-fields" data-toc-link>
+                        Validate individual fields                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#manage-a-full-alpine-form" data-toc-link>
+                        Manage a full Alpine form                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#cross-field-and-remote-rules" data-toc-link>
+                        Cross-field and remote rules                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages" data-toc-link>
+                        Related pages                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>

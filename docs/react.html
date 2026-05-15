@@ -124,9 +124,17 @@
                     <p class="docs-content__lead">Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.</p>
                 </header>
 
+                                <details class="docs-mobile-toc">
+                    <summary>On this page</summary>
+                    <nav class="docs-mobile-toc__links" aria-label="On this page">
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#create-one-validator-instance-per-form">Create one validator instance per form</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#validate-before-submit">Validate before submit</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages">Related pages</a>
+                                            </nav>
+                </details>
                 
                 <p>The React adapter exposes helper functions rather than a full React state library. Keep the validator instance stable, subscribe to changes, and drive your own component state from that subscription.</p>
-<h2>Create one validator instance per form<a id="create-one-validator-instance-per-form" href="#create-one-validator-instance-per-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="create-one-validator-instance-per-form">Create one validator instance per form<a href="#create-one-validator-instance-per-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-jsx">import { useEffect, useRef, useState } from 'react';
 import {
     createFieldProps,
@@ -171,7 +179,7 @@ export default function RegisterForm() {
 }
 </code></pre>
 <p><code>createFieldProps()</code> can generate blur and change handlers, but you still own controlled input values and the React render cycle.</p>
-<h2>Validate before submit<a id="validate-before-submit" href="#validate-before-submit" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="validate-before-submit">Validate before submit<a href="#validate-before-submit" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-javascript">const result = await validator.validateAll(form);
 
 if (result.valid) {
@@ -179,7 +187,7 @@ if (result.valid) {
 }
 </code></pre>
 <p>This is the easiest place to keep client-side feedback and Laravel server validation in the same submit flow.</p>
-<h2>Related pages<a id="related-pages" href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="related-pages">Related pages<a href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Use <a href="./inertia.html">inertia</a> when the React form lives inside an Inertia page.</li>
 <li>Open <a href="./usage.html">usage</a> for the shared rule and remote-validation model.</li>
@@ -189,8 +197,8 @@ if (result.valid) {
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-13T15:57:50+00:00">May 13, 2026</time></p>
-                    <p>Built 2026-05-13T15:58:08+00:00</p>
+                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
+                    <p>Built 2026-05-14T15:37:37+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/react.md">Edit this page</a>
@@ -210,6 +218,19 @@ if (result.valid) {
                             </nav>
                     </main>
 
+                <aside class="docs-toc" aria-label="On this page">
+            <div class="docs-panel">
+                <p class="docs-panel__eyebrow">On this page</p>
+                <nav class="docs-toc__links">
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#create-one-validator-instance-per-form" data-toc-link>
+                        Create one validator instance per form                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#validate-before-submit" data-toc-link>
+                        Validate before submit                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages" data-toc-link>
+                        Related pages                    </a>
+                                    </nav>
+            </div>
+        </aside>
             </div>
 
     <script>
