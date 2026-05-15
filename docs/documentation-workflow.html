@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Vue | Laravel Client Validation</title>
-    <meta name="description" content="Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">
-        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/vue.html">
-    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/vue.html">
+    <title>Documentation Workflow | Laravel Client Validation</title>
+    <meta name="description" content="Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">
+        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/documentation-workflow.html">
+    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/documentation-workflow.html">
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
-    <meta property="og:title" content="Vue | Laravel Client Validation">
-    <meta property="og:description" content="Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">
+    <meta property="og:title" content="Documentation Workflow | Laravel Client Validation">
+    <meta property="og:description" content="Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -93,7 +93,7 @@
                     Vanilla JavaScript                </a>
                                 <a class="docs-nav__link" href="react.html">
                     React                </a>
-                                <a class="docs-nav__link is-active" href="vue.html" aria-current="page">
+                                <a class="docs-nav__link" href="vue.html">
                     Vue                </a>
                                 <a class="docs-nav__link" href="inertia.html">
                     Inertia                </a>
@@ -103,7 +103,7 @@
                     Custom Rules                </a>
                                 <a class="docs-nav__link" href="testing.html">
                     Testing                </a>
-                                <a class="docs-nav__link" href="documentation-workflow.html">
+                                <a class="docs-nav__link is-active" href="documentation-workflow.html" aria-current="page">
                     Documentation Workflow                </a>
                                 <a class="docs-nav__link" href="troubleshooting.html">
                     Troubleshooting                </a>
@@ -116,89 +116,76 @@
                         <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
                                                 <a href="index.html">Documentation</a>
                                                 <span class="docs-breadcrumbs__separator">/</span>
-                                <a href="vue.html">Vue</a>
+                                <a href="documentation-workflow.html">Documentation Workflow</a>
                             </nav>
             
             <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
                                         <p class="docs-content__eyebrow">Documentation</p>
-                                        <h1>Vue</h1>
-                    <p class="docs-content__lead">Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.</p>
+                                        <h1>Documentation Workflow</h1>
+                    <p class="docs-content__lead">Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.</p>
                 </header>
 
                                 <details class="docs-mobile-toc">
                     <summary>On this page</summary>
                     <nav class="docs-mobile-toc__links" aria-label="On this page">
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#register-the-plugin">Register the plugin</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#use-the-directive-in-a-component">Use the directive in a component</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#use-an-imperative-validator-with-your-own-state">Use an imperative validator with your own state</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages">Related pages</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#what-the-builder-reads">What the builder reads</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#how-to-rebuild-the-site">How to rebuild the site</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#what-the-builder-writes">What the builder writes</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#practical-example">Practical example</a>
+                                                <a class="docs-toc__link docs-toc__link--level-3" href="#updating-a-docs-page">Updating a docs page</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#editing-guidelines">Editing guidelines</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#build-failures">Build failures</a>
                                             </nav>
                 </details>
                 
-                <p>The Vue adapter works best when you choose one of two styles: DOM-driven <code>v-validate</code> directives for quick forms, or an imperative validator instance that you wrap in your own Vue reactivity.</p>
-<h2 id="register-the-plugin">Register the plugin<a href="#register-the-plugin" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<pre><code class="language-javascript">import { createApp } from 'vue';
-import { VueValidationPlugin } from 'laravel-client-validation/vue';
-import App from './App.vue';
-
-const app = createApp(App);
-
-app.use(VueValidationPlugin, {
-    debounce: 300,
-    validClass: 'border-green-500',
-    invalidClass: 'border-red-500',
-});
-
-app.mount('#app');
-</code></pre>
-<h2 id="use-the-directive-in-a-component">Use the directive in a component<a href="#use-the-directive-in-a-component" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<pre><code class="language-vue">&lt;template&gt;
-    &lt;form @submit.prevent="submit"&gt;
-        &lt;input v-model="form.email" v-validate.live="'required|email'" name="email"&gt;
-        &lt;span class="validation-error" data-error="email"&gt;&lt;/span&gt;
-
-        &lt;input v-model="form.password" v-validate="'required|min:8'" type="password" name="password"&gt;
-        &lt;span class="validation-error" data-error="password"&gt;&lt;/span&gt;
-    &lt;/form&gt;
-&lt;/template&gt;
-
-&lt;script setup&gt;
-import { reactive } from 'vue';
-
-const form = reactive({
-    email: '',
-    password: '',
-});
-
-function submit() {
-    // Let the validator update the DOM before posting the form.
-}
-&lt;/script&gt;
-</code></pre>
-<p>The directive updates classes and nearby error containers directly, so it is a good fit when you want package-managed DOM feedback with minimal component code.</p>
-<h2 id="use-an-imperative-validator-with-your-own-state">Use an imperative validator with your own state<a href="#use-an-imperative-validator-with-your-own-state" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<pre><code class="language-javascript">import { createVueValidator } from 'laravel-client-validation/vue';
-
-const validator = createVueValidator({
-    rules: {
-        email: 'required|email',
-        password: 'required|min:8',
-    },
-});
-
-const result = await validator.validateAll({
-    email: form.email,
-    password: form.password,
-});
-</code></pre>
-<p>Wrap <code>getError()</code>, <code>hasError()</code>, and <code>getAllErrors()</code> in your own refs or computed properties when you want Vue-controlled error rendering instead of DOM updates.</p>
-<h2 id="related-pages">Related pages<a href="#related-pages" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+                <p>Use this page when you are changing the documentation source, the docs template, or the docs build process itself.</p>
+<h2 id="what-the-builder-reads">What the builder reads<a href="#what-the-builder-reads" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>The docs builder assembles the site from three canonical inputs:</p>
 <ul>
-<li>Use <a href="./inertia.html">inertia</a> when the Vue form lives inside an Inertia page.</li>
-<li>Open <a href="./vanilla.html">vanilla</a> for DOM-first validation outside Vue.</li>
-<li>Keep <a href="./examples.html">examples</a> nearby for compact snippets.</li>
+<li>Markdown pages in <code>docs/md</code>.</li>
+<li>The layout and navigation shell in <code>docs/template.php</code>.</li>
+<li>Shared frontend assets in <code>docs/assets</code>.</li>
 </ul>
+<p>Each Markdown page should keep its frontmatter accurate so the builder can generate the correct title, description, sidebar label, and navigation order.</p>
+<h2 id="how-to-rebuild-the-site">How to rebuild the site<a href="#how-to-rebuild-the-site" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>Run the Composer script from the repository root:</p>
+<pre><code class="language-bash">composer docs:build
+</code></pre>
+<p>You can also run the builder directly:</p>
+<pre><code class="language-bash">php docs/build.php
+</code></pre>
+<p>Both commands rebuild the checked-in documentation site.</p>
+<h2 id="what-the-builder-writes">What the builder writes<a href="#what-the-builder-writes" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>After a successful build, the generated output is refreshed in <code>docs/</code>.</p>
+<ul>
+<li>Each Markdown page becomes a matching HTML page such as <code>docs/usage.html</code>.</li>
+<li>The search index is rewritten in <code>docs/search-index.json</code>.</li>
+<li>The sitemap is rewritten in <code>docs/sitemap.xml</code>.</li>
+<li>The GitHub Pages marker file is rewritten in <code>docs/.nojekyll</code>.</li>
+</ul>
+<p>The builder also rewrites internal Markdown links like <code>./usage.md</code> to their generated <code>.html</code> targets and rebuilds the sidebar plus previous or next page navigation from frontmatter order.</p>
+<h2 id="practical-example">Practical example<a href="#practical-example" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h3 id="updating-a-docs-page">Updating a docs page<a href="#updating-a-docs-page" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
+<p>If you change <code>docs/md/usage.md</code>, rebuild the site before you finish the change:</p>
+<pre><code class="language-bash">composer docs:build
+</code></pre>
+<p>Expected result:</p>
+<ul>
+<li><code>docs/usage.html</code> reflects the Markdown changes.</li>
+<li>Navigation and search metadata stay in sync with the updated page.</li>
+</ul>
+<h2 id="editing-guidelines">Editing guidelines<a href="#editing-guidelines" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<ul>
+<li>Edit the Markdown source, template, or assets rather than patching generated HTML by hand.</li>
+<li>Keep relative Markdown links in the <code>.md</code> form so the builder can rewrite them.</li>
+<li>Rebuild immediately after changing page order, slugs, headings, or internal links.</li>
+</ul>
+<h2 id="build-failures">Build failures<a href="#build-failures" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>If the builder fails before rendering pages, install the repository dependencies first:</p>
+<pre><code class="language-bash">composer install
+</code></pre>
+<p>Then rerun the docs build command. For broader package validation after documentation changes, continue with the checks in <a href="./testing.html">testing</a>.</p>
             </article>
 
             <footer class="docs-footer">
@@ -207,19 +194,19 @@ const result = await validator.validateAll({
                     <p>Built 2026-05-15T19:16:44+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
-                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/vue.md">Edit this page</a>
+                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/documentation-workflow.md">Edit this page</a>
                                     </div>
             </footer>
 
                         <nav class="docs-pager" aria-label="Page navigation">
-                                <a class="docs-pager__link" href="react.html">
+                                <a class="docs-pager__link" href="testing.html">
                     <span class="docs-pager__label">Previous</span>
-                    <strong>React</strong>
+                    <strong>Testing</strong>
                 </a>
                 
-                                <a class="docs-pager__link docs-pager__link--next" href="inertia.html">
+                                <a class="docs-pager__link docs-pager__link--next" href="troubleshooting.html">
                     <span class="docs-pager__label">Next</span>
-                    <strong>Inertia</strong>
+                    <strong>Troubleshooting</strong>
                 </a>
                             </nav>
                     </main>
@@ -228,21 +215,27 @@ const result = await validator.validateAll({
             <div class="docs-panel">
                 <p class="docs-panel__eyebrow">On this page</p>
                 <nav class="docs-toc__links">
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#register-the-plugin" data-toc-link>
-                        Register the plugin                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#use-the-directive-in-a-component" data-toc-link>
-                        Use the directive in a component                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#use-an-imperative-validator-with-your-own-state" data-toc-link>
-                        Use an imperative validator with your own state                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages" data-toc-link>
-                        Related pages                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#what-the-builder-reads" data-toc-link>
+                        What the builder reads                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#how-to-rebuild-the-site" data-toc-link>
+                        How to rebuild the site                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#what-the-builder-writes" data-toc-link>
+                        What the builder writes                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#practical-example" data-toc-link>
+                        Practical example                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-3" href="#updating-a-docs-page" data-toc-link>
+                        Updating a docs page                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#editing-guidelines" data-toc-link>
+                        Editing guidelines                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#build-failures" data-toc-link>
+                        Build failures                    </a>
                                     </nav>
             </div>
         </aside>
             </div>
 
     <script>
-        window.__DOCS_CONFIG__ = {"currentPage":"vue.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
+        window.__DOCS_CONFIG__ = {"currentPage":"documentation-workflow.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>

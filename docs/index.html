@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel Client Validation Docs</title>
-    <meta name="description" content="Build responsive Laravel-fluent forms with markdown-authored documentation and generated HTML published from docs/.">
+    <meta name="description" content="Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">
         <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/">
     <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/">
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
     <meta property="og:title" content="Laravel Client Validation Docs">
-    <meta property="og:description" content="Build responsive Laravel-fluent forms with markdown-authored documentation and generated HTML published from docs/.">
+    <meta property="og:description" content="Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -103,6 +103,8 @@
                     Custom Rules                </a>
                                 <a class="docs-nav__link" href="testing.html">
                     Testing                </a>
+                                <a class="docs-nav__link" href="documentation-workflow.html">
+                    Documentation Workflow                </a>
                                 <a class="docs-nav__link" href="troubleshooting.html">
                     Troubleshooting                </a>
                                 <a class="docs-nav__link" href="examples.html">
@@ -115,7 +117,7 @@
             <article class="docs-content" id="docs-content" tabindex="-1">
                 <header class="docs-content__header">
                                         <h1>Laravel Client Validation</h1>
-                    <p class="docs-content__lead">Build responsive Laravel-fluent forms with markdown-authored documentation and generated HTML published from docs/.</p>
+                    <p class="docs-content__lead">Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.</p>
                 </header>
 
                                 <details class="docs-mobile-toc">
@@ -128,7 +130,6 @@
                                                 <a class="docs-toc__link docs-toc__link--level-3" href="#blade-and-alpinejs">Blade and Alpine.js</a>
                                                 <a class="docs-toc__link docs-toc__link--level-3" href="#livewire-and-filament">Livewire and Filament</a>
                                                 <a class="docs-toc__link docs-toc__link--level-3" href="#vanilla-javascript">Vanilla JavaScript</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#how-the-docs-site-is-generated">How the docs site is generated</a>
                                             </nav>
                 </details>
                 
@@ -138,7 +139,6 @@
 <li>Keep Laravel-style validation rules close to the UI.</li>
 <li>Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.</li>
 <li>Fall back to AJAX when a rule depends on the server, such as <code>unique</code> or <code>exists</code>.</li>
-<li>Ship contributor-friendly documentation from plain Markdown files in <code>docs/md</code>.</li>
 </ul>
 <h2 id="quick-start">Quick start<a href="#quick-start" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Install the package and publish the configuration and browser assets:</p>
@@ -170,6 +170,7 @@ php artisan client-validation:install
 <li>Keep <a href="./validation-rules.html">validation rules</a> nearby when auditing client-side parity.</li>
 <li>Reach for <a href="./custom-rules.html">custom rules</a> when the default rule set is not enough.</li>
 <li>Run the checks in <a href="./testing.html">testing</a> before publishing a package release.</li>
+<li>Open <a href="./documentation-workflow.html">documentation workflow</a> when you are changing Markdown pages, the docs template, or generated site output.</li>
 <li>Check <a href="./troubleshooting.html">troubleshooting</a> when a directive, rule, or AJAX request does not behave as expected.</li>
 <li>Browse <a href="./examples.html">examples</a> for practical Laravel snippets you can adapt directly.</li>
 </ul>
@@ -199,17 +200,12 @@ const validator = new LaravelValidator({
     },
 });
 </code></pre>
-<h2 id="how-the-docs-site-is-generated">How the docs site is generated<a href="#how-the-docs-site-is-generated" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>This repository keeps Markdown as the source of truth. The generated site lives directly in <code>docs/</code> and is rebuilt from the following command:</p>
-<pre><code class="language-bash">php docs/build.php
-</code></pre>
-<p>The builder reads frontmatter from every file in <code>docs/md</code>, generates the sidebar and previous or next navigation automatically, writes a JSON search index and sitemap into <code>docs/</code>, and reuses the checked-in assets from <code>docs/assets</code>. Never edit the generated HTML files by hand.</p>
             </article>
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
-                    <p>Built 2026-05-14T15:37:37+00:00</p>
+                    <p>Last updated <time datetime="2026-05-15T19:16:30+00:00">May 15, 2026</time></p>
+                    <p>Built 2026-05-15T19:16:44+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/index.md">Edit this page</a>
@@ -244,8 +240,6 @@ const validator = new LaravelValidator({
                         Livewire and Filament                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-3" href="#vanilla-javascript" data-toc-link>
                         Vanilla JavaScript                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#how-the-docs-site-is-generated" data-toc-link>
-                        How the docs site is generated                    </a>
                                     </nav>
             </div>
         </aside>

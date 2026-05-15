@@ -103,6 +103,8 @@
                     Custom Rules                </a>
                                 <a class="docs-nav__link" href="testing.html">
                     Testing                </a>
+                                <a class="docs-nav__link" href="documentation-workflow.html">
+                    Documentation Workflow                </a>
                                 <a class="docs-nav__link is-active" href="troubleshooting.html" aria-current="page">
                     Troubleshooting                </a>
                                 <a class="docs-nav__link" href="examples.html">
@@ -137,7 +139,6 @@
                                                 <a class="docs-toc__link docs-toc__link--level-3" href="#symptoms-2">Symptoms</a>
                                                 <a class="docs-toc__link docs-toc__link--level-3" href="#checks-2">Checks</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#cross-field-rules-behave-inconsistently">Cross-field rules behave inconsistently</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#the-docs-site-looks-stale">The docs site looks stale</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#still-blocked">Still blocked?</a>
                                             </nav>
                 </details>
@@ -199,23 +200,17 @@
 &lt;input name="password_confirmation" @validateBlur('password_confirmation', 'required|same:password')&gt;
 </code></pre>
 <p>Use form bindings that keep both fields synchronized before the comparison runs.</p>
-<h2 id="the-docs-site-looks-stale">The docs site looks stale<a href="#the-docs-site-looks-stale" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>The generated HTML is not the canonical source. Rebuild the site from Markdown.</p>
-<pre><code class="language-bash">php docs/build.php
-</code></pre>
-<p>Then review the generated files in <code>docs/</code>.</p>
 <h2 id="still-blocked">Still blocked?<a href="#still-blocked" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
 <li>Compare the current form markup with the working snippets in <a href="./usage.html">usage</a> and <a href="./examples.html">examples</a>.</li>
 <li>Re-run the checks in <a href="./testing.html">testing</a>.</li>
-<li>Document the failure mode in <code>docs/md</code> once you find the root cause so the next contributor does not need to rediscover it.</li>
 </ul>
             </article>
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
-                    <p>Built 2026-05-14T15:37:37+00:00</p>
+                    <p>Last updated <time datetime="2026-05-15T19:16:30+00:00">May 15, 2026</time></p>
+                    <p>Built 2026-05-15T19:16:44+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/troubleshooting.md">Edit this page</a>
@@ -223,9 +218,9 @@
             </footer>
 
                         <nav class="docs-pager" aria-label="Page navigation">
-                                <a class="docs-pager__link" href="testing.html">
+                                <a class="docs-pager__link" href="documentation-workflow.html">
                     <span class="docs-pager__label">Previous</span>
-                    <strong>Testing</strong>
+                    <strong>Documentation Workflow</strong>
                 </a>
                 
                                 <a class="docs-pager__link docs-pager__link--next" href="examples.html">
@@ -259,8 +254,6 @@
                         Checks                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#cross-field-rules-behave-inconsistently" data-toc-link>
                         Cross-field rules behave inconsistently                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#the-docs-site-looks-stale" data-toc-link>
-                        The docs site looks stale                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#still-blocked" data-toc-link>
                         Still blocked?                    </a>
                                     </nav>
