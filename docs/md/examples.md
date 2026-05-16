@@ -56,6 +56,34 @@ If you want framework-specific guidance before lifting a snippet, start with [al
 </div>
 ```
 
+## FormRequest-backed Blade form
+
+```php
+use App\Http\Requests\CreateUserRequest;
+use MrPunyapal\ClientValidation\Facades\ClientValidation;
+
+public function create()
+{
+    return view('users.create', [
+        'validation' => ClientValidation::fromRequest(CreateUserRequest::class),
+    ]);
+}
+```
+
+```blade
+<div x-data="validation(@js($validation))">
+    <form @submit.prevent="submit(async (payload) => await saveUser(payload))">
+        <input x-model="form.name" @blur="validate('name')" name="name">
+        <p x-show="hasError('name')" x-text="error('name')"></p>
+
+        <input x-model="form.email" @blur="validate('email')" name="email">
+        <p x-show="hasError('email')" x-text="error('email')"></p>
+    </form>
+</div>
+```
+
+This keeps the Laravel `FormRequest` as the source of truth while still exposing parsed client rules, custom messages, and remote-validation metadata to the browser.
+
 ## Livewire component
 
 ```php

@@ -69,7 +69,7 @@ public function create()
 ```
 
 ```blade
-<div x-data="validation(@json($validation))">
+<div x-data="validation(@js($validation))">
     <input x-model="form.email" @blur="validate('email')">
     <span x-text="error('email')" x-show="hasError('email')"></span>
 </div>

@@ -12,6 +12,7 @@ Laravel Client Validation supports multiple integration styles, but the core ide
 - The rule grammar matches Laravel validation strings.
 - Trigger modes map cleanly across integrations: `blur` by default, `live` or `input` for immediate feedback, and `submit` or `form` when validation should block submission.
 - Remote rules such as `unique` and `exists` still travel through the Laravel endpoint when `enable_ajax_validation` is enabled.
+- Existing Laravel `FormRequest` classes can be turned into an Alpine-ready payload with `ClientValidation::payloadFromRequest()`.
 
 ## Choose an integration page
 
@@ -29,6 +30,36 @@ Laravel Client Validation supports multiple integration styles, but the core ide
 ```
 
 With the default configuration, the request is posted to `client-validation/validate`.
+
+## Reuse a FormRequest
+
+If your form already uses a Laravel `FormRequest`, keep that request as the source of truth instead of rewriting the same rules in Blade or JavaScript.
+
+```php
+use App\Http\Requests\CreateUserRequest;
+use MrPunyapal\ClientValidation\Facades\ClientValidation;
+
+public function create()
+{
+    $validation = ClientValidation::fromRequest(CreateUserRequest::class);
+
+    return view('users.create', compact('validation'));
+}
+```
+
+```blade
+<div x-data="validation(@js($validation))">
+    <form @submit.prevent="submit(async (payload) => await saveUser(payload))">
+        <input x-model="form.email" @blur="validate('email')" name="email">
+        <p x-show="hasError('email')" x-text="error('email')"></p>
+
+        <input type="password" x-model="form.password" @blur="validate('password')" name="password">
+        <p x-show="hasError('password')" x-text="error('password')"></p>
+    </form>
+</div>
+```
+
+The payload includes parsed client rules, AJAX-backed rules, custom messages, attribute names, and browser config derived from the request's `rules()`, `messages()`, and `attributes()` methods. Rules such as `unique` and `exists` still validate through the remote endpoint when the browser needs Laravel context.
 
 ## Programmatic validator
 

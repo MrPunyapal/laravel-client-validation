@@ -20,29 +20,25 @@ class ClientValidation
     ) {}
 
     /**
-     * Generate validation data from a FormRequest class.
+     * Generate client validation payload from a FormRequest class.
      *
      * @param string|FormRequest $request FormRequest class name or instance
-     * @return array<string, string> JSON-encoded validation components
+     * @return array{rules: array<string, array<int, string>>, ajax_rules: array<string, array{server: array<int, string>, client: array<int, string>}>, messages: array<string, string>, attributes: array<string, string>, config: array<string, mixed>}
      */
     public function fromRequest(string|FormRequest $request): array
     {
-        $context = $this->manager->fromRequest($request);
-
-        return $this->contextToJsonArray($context);
+        return $this->manager->fromRequest($request)->toClientPayload();
     }
 
     /**
-     * Generate validation data from a Livewire component.
+     * Generate client validation payload from a Livewire component.
      *
      * @param object $component Livewire component instance
-     * @return array<string, string> JSON-encoded validation components
+     * @return array{rules: array<string, array<int, string>>, ajax_rules: array<string, array{server: array<int, string>, client: array<int, string>}>, messages: array<string, string>, attributes: array<string, string>, config: array<string, mixed>}
      */
     public function fromLivewire(object $component): array
     {
-        $context = $this->manager->fromLivewireComponent($component);
-
-        return $this->contextToJsonArray($context);
+        return $this->manager->fromLivewireComponent($component)->toClientPayload();
     }
 
     /**
@@ -220,22 +216,6 @@ class ClientValidation
     public function extendClientSide(string $rule, string $jsValidator): void
     {
         $this->manager->extendClientSide($rule, $jsValidator);
-    }
-
-    /**
-     * Convert a ValidationContext to JSON array format.
-     *
-     * @return array<string, string>
-     */
-    private function contextToJsonArray(\MrPunyapal\ClientValidation\Core\ValidationContext $context): array
-    {
-        return [
-            'rules' => json_encode($context->getRules()->toClientRules(), JSON_THROW_ON_ERROR),
-            'ajax_rules' => json_encode($context->getRules()->toAjaxRules(), JSON_THROW_ON_ERROR),
-            'messages' => json_encode($context->getMessages(), JSON_THROW_ON_ERROR),
-            'attributes' => json_encode($context->getAttributes(), JSON_THROW_ON_ERROR),
-            'config' => json_encode($context->getClientConfig(), JSON_THROW_ON_ERROR),
-        ];
     }
 
     /**

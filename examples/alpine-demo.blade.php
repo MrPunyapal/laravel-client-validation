@@ -304,7 +304,7 @@ Supports both client-side validation and remote (AJAX) validation.
                 Rules extracted from a Laravel FormRequest class and passed to the view.
             </p>
 
-            <div x-data="@alpineValidation($validation['rules'], $validation['messages'] ?? [], $validation['attributes'] ?? [])">
+            <div x-data="validation(@js($validation))">
                 {{-- Form fields here --}}
             </div>
         </section>

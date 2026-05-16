@@ -352,7 +352,7 @@ public function create()
 ### In Blade
 
 ```blade
-<div x-data="validation(@json($validation))">
+<div x-data="validation(@js($validation))">
     {{-- Form fields --}}
 </div>
 ```
