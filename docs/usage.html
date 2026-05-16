@@ -132,6 +132,7 @@
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#shared-building-blocks">Shared building blocks</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#choose-an-integration-page">Choose an integration page</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#shared-remote-validation-flow">Shared remote-validation flow</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#reuse-a-formrequest">Reuse a FormRequest</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#programmatic-validator">Programmatic validator</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#validation-hooks">Validation hooks</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#related-pages">Related pages</a>
@@ -144,6 +145,7 @@
 <li>The rule grammar matches Laravel validation strings.</li>
 <li>Trigger modes map cleanly across integrations: <code>blur</code> by default, <code>live</code> or <code>input</code> for immediate feedback, and <code>submit</code> or <code>form</code> when validation should block submission.</li>
 <li>Remote rules such as <code>unique</code> and <code>exists</code> still travel through the Laravel endpoint when <code>enable_ajax_validation</code> is enabled.</li>
+<li>Existing Laravel <code>FormRequest</code> classes can be turned into an Alpine-ready payload with <code>ClientValidation::payloadFromRequest()</code>.</li>
 </ul>
 <h2 id="choose-an-integration-page">Choose an integration page<a href="#choose-an-integration-page" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ul>
@@ -158,6 +160,29 @@
 <pre><code class="language-html">&lt;input name="email" @validateLive('email', 'required|email|unique:users,email')&gt;
 </code></pre>
 <p>With the default configuration, the request is posted to <code>client-validation/validate</code>.</p>
+<h2 id="reuse-a-formrequest">Reuse a FormRequest<a href="#reuse-a-formrequest" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>If your form already uses a Laravel <code>FormRequest</code>, keep that request as the source of truth instead of rewriting the same rules in Blade or JavaScript.</p>
+<pre><code class="language-php">use App\Http\Requests\CreateUserRequest;
+use MrPunyapal\ClientValidation\Facades\ClientValidation;
+
+public function create()
+{
+    $validation = ClientValidation::fromRequest(CreateUserRequest::class);
+
+    return view('users.create', compact('validation'));
+}
+</code></pre>
+<pre><code class="language-blade">&lt;div x-data="validation(@js($validation))"&gt;
+    &lt;form @submit.prevent="submit(async (payload) =&gt; await saveUser(payload))"&gt;
+        &lt;input x-model="form.email" @blur="validate('email')" name="email"&gt;
+        &lt;p x-show="hasError('email')" x-text="error('email')"&gt;&lt;/p&gt;
+
+        &lt;input type="password" x-model="form.password" @blur="validate('password')" name="password"&gt;
+        &lt;p x-show="hasError('password')" x-text="error('password')"&gt;&lt;/p&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+</code></pre>
+<p>The payload includes parsed client rules, AJAX-backed rules, custom messages, attribute names, and browser config derived from the request's <code>rules()</code>, <code>messages()</code>, and <code>attributes()</code> methods. Rules such as <code>unique</code> and <code>exists</code> still validate through the remote endpoint when the browser needs Laravel context.</p>
 <h2 id="programmatic-validator">Programmatic validator<a href="#programmatic-validator" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Every adapter ultimately wraps the same core validator.</p>
 <pre><code class="language-javascript">import { LaravelValidator } from 'laravel-client-validation/core';
@@ -196,8 +221,8 @@ validator
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-15T19:16:30+00:00">May 15, 2026</time></p>
-                    <p>Built 2026-05-15T19:16:44+00:00</p>
+                    <p>Last updated <time datetime="2026-05-16T14:12:31+00:00">May 16, 2026</time></p>
+                    <p>Built 2026-05-16T14:12:46+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/usage.md">Edit this page</a>
@@ -227,6 +252,8 @@ validator
                         Choose an integration page                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#shared-remote-validation-flow" data-toc-link>
                         Shared remote-validation flow                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#reuse-a-formrequest" data-toc-link>
+                        Reuse a FormRequest                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#programmatic-validator" data-toc-link>
                         Programmatic validator                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#validation-hooks" data-toc-link>
