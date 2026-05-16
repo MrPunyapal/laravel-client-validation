@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Testing | Laravel Client Validation</title>
-    <meta name="description" content="Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.">
+    <meta name="description" content="Validate package changes with Pest and JavaScript tests before merging updates.">
         <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/testing.html">
     <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/testing.html">
         <meta property="og:type" content="website">
     <meta property="og:site_name" content="Laravel Client Validation">
     <meta property="og:title" content="Testing | Laravel Client Validation">
-    <meta property="og:description" content="Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.">
+    <meta property="og:description" content="Validate package changes with Pest and JavaScript tests before merging updates.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#f53003">
     <script>
@@ -103,6 +103,8 @@
                     Custom Rules                </a>
                                 <a class="docs-nav__link is-active" href="testing.html" aria-current="page">
                     Testing                </a>
+                                <a class="docs-nav__link" href="documentation-workflow.html">
+                    Documentation Workflow                </a>
                                 <a class="docs-nav__link" href="troubleshooting.html">
                     Troubleshooting                </a>
                                 <a class="docs-nav__link" href="examples.html">
@@ -121,7 +123,7 @@
                 <header class="docs-content__header">
                                         <p class="docs-content__eyebrow">Documentation</p>
                                         <h1>Testing</h1>
-                    <p class="docs-content__lead">Validate package changes with Pest, JavaScript tests, and the documentation builder before merging changes.</p>
+                    <p class="docs-content__lead">Validate package changes with Pest and JavaScript tests before merging updates.</p>
                 </header>
 
                                 <details class="docs-mobile-toc">
@@ -129,15 +131,14 @@
                     <nav class="docs-mobile-toc__links" aria-label="On this page">
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#php-test-suite">PHP test suite</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#javascript-test-suite">JavaScript test suite</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-build">Documentation build</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-changes">Documentation changes</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#recommended-contributor-loop">Recommended contributor loop</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#practical-verification-examples">Practical verification examples</a>
                                                 <a class="docs-toc__link docs-toc__link--level-3" href="#rule-or-parser-change">Rule or parser change</a>
-                                                <a class="docs-toc__link docs-toc__link--level-3" href="#documentation-only-change">Documentation-only change</a>
                                             </nav>
                 </details>
                 
-                <p>Package changes are safest when you validate both the runtime behavior and the generated documentation in the same branch.</p>
+                <p>Package changes are safest when you validate both the PHP and browser runtime behavior in the same branch.</p>
 <h2 id="php-test-suite">PHP test suite<a href="#php-test-suite" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <p>Run the Pest suite from the repository root:</p>
 <pre><code class="language-bash">composer test
@@ -149,34 +150,26 @@
 <p>The frontend rules and adapters live in <code>resources/js</code>, so use the JavaScript suite when you change the browser runtime.</p>
 <pre><code class="language-bash">npm test
 </code></pre>
-<h2 id="documentation-build">Documentation build<a href="#documentation-build" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<p>The documentation site is generated from Markdown and committed as HTML output.</p>
-<pre><code class="language-bash">composer docs:build
-</code></pre>
-<p>That command runs <code>php docs/build.php</code>, regenerates the committed HTML files in <code>docs/</code>, refreshes the search index, and rewrites the sitemap.</p>
+<h2 id="documentation-changes">Documentation changes<a href="#documentation-changes" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<p>If you change Markdown pages, the docs template, or shared docs assets, follow the separate <a href="./documentation-workflow.html">documentation workflow</a> so the generated site stays in sync.</p>
 <h2 id="recommended-contributor-loop">Recommended contributor loop<a href="#recommended-contributor-loop" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <ol>
-<li>Update the package code or the Markdown source in <code>docs/md</code>.</li>
+<li>Update the package code or the relevant documentation.</li>
 <li>Run the narrowest tests that can falsify the change.</li>
-<li>Rebuild the documentation site with <code>composer docs:build</code>.</li>
-<li>Inspect the generated HTML locally before opening a pull request.</li>
+<li>Run any affected browser checks when a rule or adapter changes.</li>
+<li>Inspect the changed behavior before opening a pull request.</li>
 </ol>
 <h2 id="practical-verification-examples">Practical verification examples<a href="#practical-verification-examples" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <h3 id="rule-or-parser-change">Rule or parser change<a href="#rule-or-parser-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
 <pre><code class="language-bash">composer test
 npm test
-composer docs:build
 </code></pre>
-<h3 id="documentation-only-change">Documentation-only change<a href="#documentation-only-change" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<pre><code class="language-bash">composer docs:build
-</code></pre>
-<p>If the generated HTML or search index changes unexpectedly, compare the affected Markdown source rather than editing files in <code>docs/</code> by hand.</p>
             </article>
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-14T15:37:18+00:00">May 14, 2026</time></p>
-                    <p>Built 2026-05-14T15:37:37+00:00</p>
+                    <p>Last updated <time datetime="2026-05-15T19:16:30+00:00">May 15, 2026</time></p>
+                    <p>Built 2026-05-15T19:16:44+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/testing.md">Edit this page</a>
@@ -189,9 +182,9 @@ composer docs:build
                     <strong>Custom Rules</strong>
                 </a>
                 
-                                <a class="docs-pager__link docs-pager__link--next" href="troubleshooting.html">
+                                <a class="docs-pager__link docs-pager__link--next" href="documentation-workflow.html">
                     <span class="docs-pager__label">Next</span>
-                    <strong>Troubleshooting</strong>
+                    <strong>Documentation Workflow</strong>
                 </a>
                             </nav>
                     </main>
@@ -204,16 +197,14 @@ composer docs:build
                         PHP test suite                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#javascript-test-suite" data-toc-link>
                         JavaScript test suite                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-build" data-toc-link>
-                        Documentation build                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-changes" data-toc-link>
+                        Documentation changes                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#recommended-contributor-loop" data-toc-link>
                         Recommended contributor loop                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#practical-verification-examples" data-toc-link>
                         Practical verification examples                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-3" href="#rule-or-parser-change" data-toc-link>
                         Rule or parser change                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-3" href="#documentation-only-change" data-toc-link>
-                        Documentation-only change                    </a>
                                     </nav>
             </div>
         </aside>
