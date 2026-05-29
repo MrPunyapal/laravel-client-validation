@@ -131,6 +131,7 @@
                     <nav class="docs-mobile-toc__links" aria-label="On this page">
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#blade-data-attribute-form">Blade data-attribute form</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#alpinejs-registration-form">Alpine.js registration form</a>
+                                                <a class="docs-toc__link docs-toc__link--level-2" href="#formrequest-backed-blade-form">FormRequest-backed Blade form</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#livewire-component">Livewire component</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#filament-panel-plugin">Filament panel plugin</a>
                                                 <a class="docs-toc__link docs-toc__link--level-2" href="#programmatic-validator-for-a-custom-frontend">Programmatic validator for a custom frontend</a>
@@ -181,6 +182,28 @@
     &lt;/form&gt;
 &lt;/div&gt;
 </code></pre>
+<h2 id="formrequest-backed-blade-form">FormRequest-backed Blade form<a href="#formrequest-backed-blade-form" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<pre><code class="language-php">use App\Http\Requests\CreateUserRequest;
+use MrPunyapal\ClientValidation\Facades\ClientValidation;
+
+public function create()
+{
+    return view('users.create', [
+        'validation' =&gt; ClientValidation::fromRequest(CreateUserRequest::class),
+    ]);
+}
+</code></pre>
+<pre><code class="language-blade">&lt;div x-data="validation(@js($validation))"&gt;
+    &lt;form @submit.prevent="submit(async (payload) =&gt; await saveUser(payload))"&gt;
+        &lt;input x-model="form.name" @blur="validate('name')" name="name"&gt;
+        &lt;p x-show="hasError('name')" x-text="error('name')"&gt;&lt;/p&gt;
+
+        &lt;input x-model="form.email" @blur="validate('email')" name="email"&gt;
+        &lt;p x-show="hasError('email')" x-text="error('email')"&gt;&lt;/p&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+</code></pre>
+<p>This keeps the Laravel <code>FormRequest</code> as the source of truth while still exposing parsed client rules, custom messages, and remote-validation metadata to the browser.</p>
 <h2 id="livewire-component">Livewire component<a href="#livewire-component" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
 <pre><code class="language-php">use Livewire\Component;
 use MrPunyapal\ClientValidation\Livewire\WithClientValidation;
@@ -236,8 +259,8 @@ console.log(result.valid, result.errors);
 
             <footer class="docs-footer">
                 <div>
-                    <p>Last updated <time datetime="2026-05-15T19:16:30+00:00">May 15, 2026</time></p>
-                    <p>Built 2026-05-15T19:16:44+00:00</p>
+                    <p>Last updated <time datetime="2026-05-16T14:12:31+00:00">May 16, 2026</time></p>
+                    <p>Built 2026-05-16T14:12:46+00:00</p>
                 </div>
                 <div class="docs-footer__actions">
                                         <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/examples.md">Edit this page</a>
@@ -261,6 +284,8 @@ console.log(result.valid, result.errors);
                         Blade data-attribute form                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#alpinejs-registration-form" data-toc-link>
                         Alpine.js registration form                    </a>
+                                        <a class="docs-toc__link docs-toc__link--level-2" href="#formrequest-backed-blade-form" data-toc-link>
+                        FormRequest-backed Blade form                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#livewire-component" data-toc-link>
                         Livewire component                    </a>
                                         <a class="docs-toc__link docs-toc__link--level-2" href="#filament-panel-plugin" data-toc-link>
