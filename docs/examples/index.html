@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="../assets/app.css">
+    <script src="../assets/app.js" defer></script>
+</head>
+<body data-docsmith-root="../">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
+            </div>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="" href="../" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="../installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="" href="../configuration/" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="../usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="" href="../alpine/" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="" href="../livewire/" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="../filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="" href="../vanilla/" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="../react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="" href="../vue/" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="" href="../inertia/" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="" href="../validation-rules/" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="../custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="../testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="../documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="../troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="active" href="./" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
+        </aside>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Examples</h1>
+                    <p class="doc-description">Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.</p>
+                </header>
+                <div class="doc-body">
+                    <p>Use these examples as starting points when you need a practical integration rather than a conceptual overview.</p>
+<p>If you want framework-specific guidance before lifting a snippet, start with <a href="./alpine.md">alpine</a>, <a href="./livewire.md">livewire</a>, <a href="./filament.md">filament</a>, <a href="./vanilla.md">vanilla</a>, <a href="./react.md">react</a>, <a href="./vue.md">vue</a>, or <a href="./inertia.md">inertia</a>.</p>
+<h2 id="blade-data-attribute-form">Blade data-attribute form</h2>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-validate</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+        Email
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span> @<span class="hljs-attr">validateBlur</span>('<span class="hljs-attr">email</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">email</span>')&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+        Username
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"username"</span> @<span class="hljs-attr">validateLive</span>('<span class="hljs-attr">username</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">alpha_dash</span>|<span class="hljs-attr">min:3</span>|<span class="hljs-attr">max:20</span>')&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+        Password
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"password"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span> @<span class="hljs-attr">validateSubmit</span>('<span class="hljs-attr">password</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">min:8</span>|<span class="hljs-attr">confirmed</span>')&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>&gt;</span>Create account<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+</code></pre>
+<h2 id="alpine-js-registration-form">Alpine.js registration form</h2>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">x-data</span>=<span class="hljs-string">"validation({
+    rules: {
+        email: 'required|email|unique:users,email',
+        password: 'required|min:8|confirmed',
+        password_confirmation: 'required',
+    },
+})"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> @<span class="hljs-attr">submit.prevent</span>=<span class="hljs-string">"submit(async (payload) =&gt; fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    }))"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">x-model</span>=<span class="hljs-string">"form.email"</span> @<span class="hljs-attr">blur</span>=<span class="hljs-string">"validate('email')"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">x-show</span>=<span class="hljs-string">"hasError('email')"</span> <span class="hljs-attr">x-text</span>=<span class="hljs-string">"error('email')"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"password"</span> <span class="hljs-attr">x-model</span>=<span class="hljs-string">"form.password"</span> @<span class="hljs-attr">blur</span>=<span class="hljs-string">"validate('password')"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">x-show</span>=<span class="hljs-string">"hasError('password')"</span> <span class="hljs-attr">x-text</span>=<span class="hljs-string">"error('password')"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<h2 id="formrequest-backed-blade-form">FormRequest-backed Blade form</h2>
+<pre><code class="hljs language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">App</span>\<span class="hljs-title">Http</span>\<span class="hljs-title">Requests</span>\<span class="hljs-title">CreateUserRequest</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">MrPunyapal</span>\<span class="hljs-title">ClientValidation</span>\<span class="hljs-title">Facades</span>\<span class="hljs-title">ClientValidation</span>;
+
+<span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">return</span> view(<span class="hljs-string">'users.create'</span>, [
+        <span class="hljs-string">'validation'</span> =&gt; ClientValidation::fromRequest(CreateUserRequest::class),
+    ]);
+}
+</code></pre>
+<pre><code class="language-blade">&lt;div x-data="validation(@js($validation))"&gt;
+    &lt;form @submit.prevent="submit(async (payload) =&gt; await saveUser(payload))"&gt;
+        &lt;input x-model="form.name" @blur="validate('name')" name="name"&gt;
+        &lt;p x-show="hasError('name')" x-text="error('name')"&gt;&lt;/p&gt;
+
+        &lt;input x-model="form.email" @blur="validate('email')" name="email"&gt;
+        &lt;p x-show="hasError('email')" x-text="error('email')"&gt;&lt;/p&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+</code></pre>
+<p>This keeps the Laravel <code>FormRequest</code> as the source of truth while still exposing parsed client rules, custom messages, and remote-validation metadata to the browser.</p>
+<h2 id="livewire-component">Livewire component</h2>
+<pre><code class="hljs language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">Livewire</span>\<span class="hljs-title">Component</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">MrPunyapal</span>\<span class="hljs-title">ClientValidation</span>\<span class="hljs-title">Livewire</span>\<span class="hljs-title">WithClientValidation</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CreateUser</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span>
+</span>{
+    <span class="hljs-keyword">use</span> <span class="hljs-title">WithClientValidation</span>;
+
+    <span class="hljs-keyword">public</span> string $email = <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">public</span> string $password = <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">public</span> string $password_confirmation = <span class="hljs-string">''</span>;
+
+    <span class="hljs-keyword">protected</span> $rules = [
+        <span class="hljs-string">'email'</span> =&gt; <span class="hljs-string">'required|email'</span>,
+        <span class="hljs-string">'password'</span> =&gt; <span class="hljs-string">'required|min:8|confirmed'</span>,
+    ];
+}
+</code></pre>
+<h2 id="filament-panel-plugin">Filament panel plugin</h2>
+<pre><code class="hljs language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">MrPunyapal</span>\<span class="hljs-title">ClientValidation</span>\<span class="hljs-title">Filament</span>\<span class="hljs-title">ClientValidationPlugin</span>;
+
+ClientValidationPlugin::make()
+    -&gt;enableRemoteValidation()
+    -&gt;validationMode(<span class="hljs-string">'live'</span>);
+</code></pre>
+<h2 id="programmatic-validator-for-a-custom-frontend">Programmatic validator for a custom frontend</h2>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { LaravelValidator } <span class="hljs-keyword">from</span> <span class="hljs-string">'laravel-client-validation/core'</span>;
+
+<span class="hljs-keyword">const</span> validator = <span class="hljs-keyword">new</span> LaravelValidator({
+    <span class="hljs-attr">rules</span>: {
+        <span class="hljs-attr">email</span>: <span class="hljs-string">'required|email'</span>,
+        <span class="hljs-attr">age</span>: <span class="hljs-string">'nullable|integer|min:18'</span>,
+    },
+});
+
+<span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> validator.validateAll({
+    <span class="hljs-attr">email</span>: <span class="hljs-string">'demo@example.com'</span>,
+    <span class="hljs-attr">age</span>: <span class="hljs-string">'21'</span>,
+});
+
+<span class="hljs-built_in">console</span>.log(result.valid, result.errors);
+</code></pre>
+<h2 id="example-file-locations-in-this-repository">Example file locations in this repository</h2>
+<p>The package already ships demonstration files under the <code>examples/</code> directory.</p>
+<ul>
+<li><code>examples/alpine-demo.blade.php</code></li>
+<li><code>examples/vanilla-demo.blade.php</code></li>
+<li><code>examples/livewire-demo.blade.php</code></li>
+<li><code>examples/demo.blade.php</code></li>
+</ul>
+<p>Use those files when you need a larger end-to-end reference while updating <a href="./usage.md">usage</a> or <a href="./validation-rules.md">validation rules</a>.</p>
+
+                </div>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/examples.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link" href="../troubleshooting/"><span>Previous</span><strong>Troubleshooting</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#blade-data-attribute-form">Blade data-attribute form</a><a class="toc-link toc-link-level-2" href="#alpine-js-registration-form">Alpine.js registration form</a><a class="toc-link toc-link-level-2" href="#formrequest-backed-blade-form">FormRequest-backed Blade form</a><a class="toc-link toc-link-level-2" href="#livewire-component">Livewire component</a><a class="toc-link toc-link-level-2" href="#filament-panel-plugin">Filament panel plugin</a><a class="toc-link toc-link-level-2" href="#programmatic-validator-for-a-custom-frontend">Programmatic validator for a custom frontend</a><a class="toc-link toc-link-level-2" href="#example-file-locations-in-this-repository">Example file locations in this repository</a></nav></aside>
+    </div>
+</body>
+</html>

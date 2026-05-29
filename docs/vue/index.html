@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="../assets/app.css">
+    <script src="../assets/app.js" defer></script>
+</head>
+<body data-docsmith-root="../">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
+            </div>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="" href="../" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="../installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="" href="../configuration/" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="../usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="" href="../alpine/" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="" href="../livewire/" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="../filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="" href="../vanilla/" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="../react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="active" href="./" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="" href="../inertia/" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="" href="../validation-rules/" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="../custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="../testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="../documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="../troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="" href="../examples/" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
+        </aside>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Vue</h1>
+                    <p class="doc-description">Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.</p>
+                </header>
+                <div class="doc-body">
+                    <p>The Vue adapter works best when you choose one of two styles: DOM-driven <code>v-validate</code> directives for quick forms, or an imperative validator instance that you wrap in your own Vue reactivity.</p>
+<h2 id="register-the-plugin">Register the plugin</h2>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { createApp } <span class="hljs-keyword">from</span> <span class="hljs-string">'vue'</span>;
+<span class="hljs-keyword">import</span> { VueValidationPlugin } <span class="hljs-keyword">from</span> <span class="hljs-string">'laravel-client-validation/vue'</span>;
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">'./App.vue'</span>;
+
+<span class="hljs-keyword">const</span> app = createApp(App);
+
+app.use(VueValidationPlugin, {
+    <span class="hljs-attr">debounce</span>: <span class="hljs-number">300</span>,
+    <span class="hljs-attr">validClass</span>: <span class="hljs-string">'border-green-500'</span>,
+    <span class="hljs-attr">invalidClass</span>: <span class="hljs-string">'border-red-500'</span>,
+});
+
+app.mount(<span class="hljs-string">'#app'</span>);
+</code></pre>
+<h2 id="use-the-directive-in-a-component">Use the directive in a component</h2>
+<pre><code class="language-vue">&lt;template&gt;
+    &lt;form @submit.prevent="submit"&gt;
+        &lt;input v-model="form.email" v-validate.live="'required|email'" name="email"&gt;
+        &lt;span class="validation-error" data-error="email"&gt;&lt;/span&gt;
+
+        &lt;input v-model="form.password" v-validate="'required|min:8'" type="password" name="password"&gt;
+        &lt;span class="validation-error" data-error="password"&gt;&lt;/span&gt;
+    &lt;/form&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { reactive } from 'vue';
+
+const form = reactive({
+    email: '',
+    password: '',
+});
+
+function submit() {
+    // Let the validator update the DOM before posting the form.
+}
+&lt;/script&gt;
+</code></pre>
+<p>The directive updates classes and nearby error containers directly, so it is a good fit when you want package-managed DOM feedback with minimal component code.</p>
+<h2 id="use-an-imperative-validator-with-your-own-state">Use an imperative validator with your own state</h2>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { createVueValidator } <span class="hljs-keyword">from</span> <span class="hljs-string">'laravel-client-validation/vue'</span>;
+
+<span class="hljs-keyword">const</span> validator = createVueValidator({
+    <span class="hljs-attr">rules</span>: {
+        <span class="hljs-attr">email</span>: <span class="hljs-string">'required|email'</span>,
+        <span class="hljs-attr">password</span>: <span class="hljs-string">'required|min:8'</span>,
+    },
+});
+
+<span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> validator.validateAll({
+    <span class="hljs-attr">email</span>: form.email,
+    <span class="hljs-attr">password</span>: form.password,
+});
+</code></pre>
+<p>Wrap <code>getError()</code>, <code>hasError()</code>, and <code>getAllErrors()</code> in your own refs or computed properties when you want Vue-controlled error rendering instead of DOM updates.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li>Use <a href="./inertia.md">inertia</a> when the Vue form lives inside an Inertia page.</li>
+<li>Open <a href="./vanilla.md">vanilla</a> for DOM-first validation outside Vue.</li>
+<li>Keep <a href="./examples.md">examples</a> nearby for compact snippets.</li>
+</ul>
+
+                </div>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/vue.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link" href="../react/"><span>Previous</span><strong>React</strong></a><a class="pager-link pager-link-next" href="../inertia/"><span>Next</span><strong>Inertia</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#register-the-plugin">Register the plugin</a><a class="toc-link toc-link-level-2" href="#use-the-directive-in-a-component">Use the directive in a component</a><a class="toc-link toc-link-level-2" href="#use-an-imperative-validator-with-your-own-state">Use an imperative validator with your own state</a><a class="toc-link toc-link-level-2" href="#related-pages">Related pages</a></nav></aside>
+    </div>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inertia | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="../assets/app.css">
+    <script src="../assets/app.js" defer></script>
+</head>
+<body data-docsmith-root="../">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
+            </div>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="" href="../" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="../installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="" href="../configuration/" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="../usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="" href="../alpine/" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="" href="../livewire/" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="../filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="" href="../vanilla/" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="../react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="" href="../vue/" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="active" href="./" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="" href="../validation-rules/" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="../custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="../testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="../documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="../troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="" href="../examples/" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
+        </aside>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Inertia</h1>
+                    <p class="doc-description">Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.</p>
+                </header>
+                <div class="doc-body">
+                    <p>Laravel Client Validation does not ship a dedicated Inertia adapter yet. Inertia apps already run on React or Vue, so the supported pattern is to use the matching browser adapter inside the page component and post only after client validation passes.</p>
+<h2 id="react-based-inertia-pages">React-based Inertia pages</h2>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { useForm } <span class="hljs-keyword">from</span> <span class="hljs-string">'@inertiajs/react'</span>;
+<span class="hljs-keyword">import</span> { createReactValidator } <span class="hljs-keyword">from</span> <span class="hljs-string">'laravel-client-validation/react'</span>;
+
+<span class="hljs-keyword">const</span> validator = createReactValidator({
+    <span class="hljs-attr">rules</span>: {
+        <span class="hljs-attr">email</span>: <span class="hljs-string">'required|email'</span>,
+        <span class="hljs-attr">password</span>: <span class="hljs-string">'required|min:8'</span>,
+    },
+});
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Register</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> form = useForm({
+        <span class="hljs-attr">email</span>: <span class="hljs-string">''</span>,
+        <span class="hljs-attr">password</span>: <span class="hljs-string">''</span>,
+    });
+
+    <span class="hljs-keyword">const</span> submit = <span class="hljs-keyword">async</span> (event) =&gt; {
+        event.preventDefault();
+
+        <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> validator.validateAll(form.data);
+
+        <span class="hljs-keyword">if</span> (result.valid) {
+            form.post(<span class="hljs-string">'/register'</span>);
+        }
+    };
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{submit}</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{form.data.email}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{(event)</span> =&gt;</span> form.setData('email', event.target.value)} /&gt;
+            <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"password"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{form.data.password}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{(event)</span> =&gt;</span> form.setData('password', event.target.value)} /&gt;
+        <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
+    );
+}
+</code></pre>
+<h2 id="vue-based-inertia-pages">Vue-based Inertia pages</h2>
+<pre><code class="language-vue">&lt;script setup&gt;
+import { useForm } from '@inertiajs/vue3';
+import { createVueValidator } from 'laravel-client-validation/vue';
+
+const form = useForm({
+    email: '',
+    password: '',
+});
+
+const validator = createVueValidator({
+    rules: {
+        email: 'required|email',
+        password: 'required|min:8',
+    },
+});
+
+const submit = async () =&gt; {
+    const result = await validator.validateAll({
+        email: form.email,
+        password: form.password,
+    });
+
+    if (result.valid) {
+        form.post('/register');
+    }
+};
+&lt;/script&gt;
+
+&lt;template&gt;
+    &lt;form @submit.prevent="submit"&gt;
+        &lt;input v-model="form.email" name="email"&gt;
+        &lt;input v-model="form.password" type="password" name="password"&gt;
+    &lt;/form&gt;
+&lt;/template&gt;
+</code></pre>
+<h2 id="remote-rules-and-server-validation">Remote rules and server validation</h2>
+<p>Inertia does not change remote rule behavior. <code>unique</code>, <code>exists</code>, and other server-backed rules still call the configured Laravel endpoint before the Inertia form posts.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li>Use <a href="./react.md">react</a> and <a href="./vue.md">vue</a> for the adapter-specific APIs.</li>
+<li>Open <a href="./troubleshooting.md">troubleshooting</a> when remote rules or asset bootstrapping fail.</li>
+<li>Keep <a href="./examples.md">examples</a> nearby for package-level snippets.</li>
+</ul>
+
+                </div>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/inertia.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link" href="../vue/"><span>Previous</span><strong>Vue</strong></a><a class="pager-link pager-link-next" href="../validation-rules/"><span>Next</span><strong>Validation Rules</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#react-based-inertia-pages">React-based Inertia pages</a><a class="toc-link toc-link-level-2" href="#vue-based-inertia-pages">Vue-based Inertia pages</a><a class="toc-link toc-link-level-2" href="#remote-rules-and-server-validation">Remote rules and server validation</a><a class="toc-link toc-link-level-2" href="#related-pages">Related pages</a></nav></aside>
+    </div>
+</body>
+</html>

@@ -7,9 +7,8 @@ on:
     paths:
       - '**/*.md'
       - 'composer.json'
-      - 'docs/assets/**'
-      - 'docs/build.php'
-      - 'docs/template.php'
+      - 'build-docs.php'
+      - 'docs/md/**'
       - '.github/workflows/build-docs.yml'
 
 permissions:
@@ -49,7 +48,7 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Build docs site
-        run: php docs/build.php
+        run: composer run docs:build
 
       - name: Detect generated docs changes
         id: docs_changes

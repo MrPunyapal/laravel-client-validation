@@ -1,155 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel Client Validation Docs</title>
-    <meta name="description" content="Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">
-        <link rel="canonical" href="https://MrPunyapal.github.io/laravel-client-validation/">
-    <meta property="og:url" content="https://MrPunyapal.github.io/laravel-client-validation/">
-        <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Laravel Client Validation">
-    <meta property="og:title" content="Laravel Client Validation Docs">
-    <meta property="og:description" content="Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="theme-color" content="#f53003">
-    <script>
-        (() => {
-            try {
-                const savedTheme = window.localStorage.getItem('docs-theme');
-                const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                document.documentElement.dataset.theme = preferredTheme;
-            } catch (error) {
-                document.documentElement.dataset.theme = 'light';
-            }
-        })();
-    </script>
-    <link rel="stylesheet" href="assets/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laravel Client Validation | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="assets/app.css">
+    <script src="assets/app.js" defer></script>
 </head>
-<body>
-    <a class="docs-skip-link" href="#docs-content">Skip to content</a>
-    <div class="docs-background" aria-hidden="true"></div>
-    <header class="docs-header">
-        <div class="docs-header__inner">
-            <button class="docs-header__menu" type="button" data-sidebar-toggle aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <a class="docs-brand" href="index.html">
-                <span class="docs-brand__copy">
-                    <span class="docs-brand__eyebrow">Package for Laravel</span>
-                    <span class="docs-brand__title">Laravel Client Validation</span>
-                </span>
-            </a>
-            <div class="docs-search">
-                <label class="sr-only" for="docs-search-input">Search the documentation</label>
-                <input id="docs-search-input" class="docs-search__input" type="search" placeholder="Search the docs" autocomplete="off" data-search-input>
-                <div class="docs-search__results" data-search-results hidden></div>
+<body data-docsmith-root="./">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
             </div>
-            <div class="docs-header__actions">
-                                <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">GitHub</a>
-                                <a class="docs-action-link" href="https://packagist.org/packages/mrpunyapal/laravel-client-validation">Packagist</a>
-                <button class="docs-theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme">
-                    <span data-theme-label>Theme</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <div class="docs-overlay" data-sidebar-overlay hidden></div>
-
-    <div class="docs-shell">
-        <aside class="docs-sidebar" data-sidebar>
-            <div class="docs-sidebar__hero">
-                <div>
-                    <p class="docs-sidebar__label">Package for Laravel</p>
-                    <h2>Laravel Client Validation</h2>
-                    <p>Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
-                </div>
-                <div class="docs-badges">
-                    <span class="docs-badge">PHP 8.2+</span>
-                    <span class="docs-badge">Laravel 12+</span>
-                </div>
-            </div>
-
-            <p class="docs-nav__eyebrow">Browse</p>
-            <nav class="docs-nav" aria-label="Documentation navigation">
-                                <a class="docs-nav__link is-active" href="index.html" aria-current="page">
-                    Overview                </a>
-                                <a class="docs-nav__link" href="installation.html">
-                    Installation                </a>
-                                <a class="docs-nav__link" href="configuration.html">
-                    Configuration                </a>
-                                <a class="docs-nav__link" href="usage.html">
-                    Usage                </a>
-                                <a class="docs-nav__link" href="alpine.html">
-                    Alpine.js                </a>
-                                <a class="docs-nav__link" href="livewire.html">
-                    Livewire                </a>
-                                <a class="docs-nav__link" href="filament.html">
-                    Filament                </a>
-                                <a class="docs-nav__link" href="vanilla.html">
-                    Vanilla JavaScript                </a>
-                                <a class="docs-nav__link" href="react.html">
-                    React                </a>
-                                <a class="docs-nav__link" href="vue.html">
-                    Vue                </a>
-                                <a class="docs-nav__link" href="inertia.html">
-                    Inertia                </a>
-                                <a class="docs-nav__link" href="validation-rules.html">
-                    Validation Rules                </a>
-                                <a class="docs-nav__link" href="custom-rules.html">
-                    Custom Rules                </a>
-                                <a class="docs-nav__link" href="testing.html">
-                    Testing                </a>
-                                <a class="docs-nav__link" href="documentation-workflow.html">
-                    Documentation Workflow                </a>
-                                <a class="docs-nav__link" href="troubleshooting.html">
-                    Troubleshooting                </a>
-                                <a class="docs-nav__link" href="examples.html">
-                    Examples                </a>
-                            </nav>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="active" href="./" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="" href="configuration/" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="" href="alpine/" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="" href="livewire/" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="" href="vanilla/" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="" href="vue/" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="" href="inertia/" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="" href="validation-rules/" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="" href="examples/" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
         </aside>
-
-        <main class="docs-main">
-            
-            <article class="docs-content" id="docs-content" tabindex="-1">
-                <header class="docs-content__header">
-                                        <h1>Laravel Client Validation</h1>
-                    <p class="docs-content__lead">Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.</p>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Laravel Client Validation</h1>
+                    <p class="doc-description">Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.</p>
                 </header>
-
-                                <details class="docs-mobile-toc">
-                    <summary>On this page</summary>
-                    <nav class="docs-mobile-toc__links" aria-label="On this page">
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#why-this-package-exists">Why this package exists</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#quick-start">Quick start</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-map">Documentation map</a>
-                                                <a class="docs-toc__link docs-toc__link--level-2" href="#supported-integration-styles">Supported integration styles</a>
-                                                <a class="docs-toc__link docs-toc__link--level-3" href="#blade-and-alpinejs">Blade and Alpine.js</a>
-                                                <a class="docs-toc__link docs-toc__link--level-3" href="#livewire-and-filament">Livewire and Filament</a>
-                                                <a class="docs-toc__link docs-toc__link--level-3" href="#vanilla-javascript">Vanilla JavaScript</a>
-                                            </nav>
-                </details>
-                
-                <p>Laravel Client Validation brings familiar Laravel validation rules into the browser so forms can respond immediately without maintaining a second rule set by hand.</p>
-<h2 id="why-this-package-exists">Why this package exists<a href="#why-this-package-exists" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+                <div class="doc-body">
+                    <p>Laravel Client Validation brings familiar Laravel validation rules into the browser so forms can respond immediately without maintaining a second rule set by hand.</p>
+<h2 id="why-this-package-exists">Why this package exists</h2>
 <ul>
 <li>Keep Laravel-style validation rules close to the UI.</li>
 <li>Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.</li>
 <li>Fall back to AJAX when a rule depends on the server, such as <code>unique</code> or <code>exists</code>.</li>
 </ul>
-<h2 id="quick-start">Quick start<a href="#quick-start" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="quick-start">Quick start</h2>
 <p>Install the package and publish the configuration and browser assets:</p>
-<pre><code class="language-bash">composer require mrpunyapal/laravel-client-validation
+<pre><code class="hljs language-bash">composer require mrpunyapal/laravel-client-validation
 php artisan client-validation:install
 </code></pre>
 <p>Then render the package assets in a Blade layout:</p>
-<pre><code class="language-php">&lt;!doctype html&gt;
-&lt;html lang="en"&gt;
+<pre><code class="hljs language-php">&lt;!doctype html&gt;
+&lt;html lang=<span class="hljs-string">"en"</span>&gt;
 &lt;head&gt;
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite([<span class="hljs-string">'resources/css/app.css'</span>, <span class="hljs-string">'resources/js/app.js'</span>])
     @clientValidationAssets
 &lt;/head&gt;
 &lt;body&gt;
@@ -157,105 +53,58 @@ php artisan client-validation:install
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<h2 id="documentation-map">Documentation map<a href="#documentation-map" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
+<h2 id="documentation-map">Documentation map</h2>
 <ul>
-<li>Start with <a href="./installation.html">installation</a> if you are onboarding the package into a Laravel app.</li>
-<li>Review <a href="./configuration.html">configuration</a> before changing default validation modes, messages, AJAX, or styling.</li>
-<li>Use <a href="./usage.html">usage</a> for the shared validation model and the integration map.</li>
-<li>Reach for <a href="./alpine.html">alpine</a> when you want <code>x-validate</code> directives or the <code>validation()</code> Alpine helper.</li>
-<li>Use <a href="./livewire.html">livewire</a> for <code>WithClientValidation</code>, <code>x-wire-validate</code>, and client-side pre-validation in Livewire components.</li>
-<li>Open <a href="./filament.html">filament</a> when your forms run inside a Filament panel or custom field.</li>
-<li>Pick <a href="./vanilla.html">vanilla</a>, <a href="./react.html">react</a>, or <a href="./vue.html">vue</a> for browser-adapter usage outside Blade-first forms.</li>
-<li>Keep <a href="./inertia.html">inertia</a> nearby when your Laravel app uses Inertia with React or Vue.</li>
-<li>Keep <a href="./validation-rules.html">validation rules</a> nearby when auditing client-side parity.</li>
-<li>Reach for <a href="./custom-rules.html">custom rules</a> when the default rule set is not enough.</li>
-<li>Run the checks in <a href="./testing.html">testing</a> before publishing a package release.</li>
-<li>Open <a href="./documentation-workflow.html">documentation workflow</a> when you are changing Markdown pages, the docs template, or generated site output.</li>
-<li>Check <a href="./troubleshooting.html">troubleshooting</a> when a directive, rule, or AJAX request does not behave as expected.</li>
-<li>Browse <a href="./examples.html">examples</a> for practical Laravel snippets you can adapt directly.</li>
+<li>Start with <a href="./installation.md">installation</a> if you are onboarding the package into a Laravel app.</li>
+<li>Review <a href="./configuration.md">configuration</a> before changing default validation modes, messages, AJAX, or styling.</li>
+<li>Use <a href="./usage.md">usage</a> for the shared validation model and the integration map.</li>
+<li>Reach for <a href="./alpine.md">alpine</a> when you want <code>x-validate</code> directives or the <code>validation()</code> Alpine helper.</li>
+<li>Use <a href="./livewire.md">livewire</a> for <code>WithClientValidation</code>, <code>x-wire-validate</code>, and client-side pre-validation in Livewire components.</li>
+<li>Open <a href="./filament.md">filament</a> when your forms run inside a Filament panel or custom field.</li>
+<li>Pick <a href="./vanilla.md">vanilla</a>, <a href="./react.md">react</a>, or <a href="./vue.md">vue</a> for browser-adapter usage outside Blade-first forms.</li>
+<li>Keep <a href="./inertia.md">inertia</a> nearby when your Laravel app uses Inertia with React or Vue.</li>
+<li>Keep <a href="./validation-rules.md">validation rules</a> nearby when auditing client-side parity.</li>
+<li>Reach for <a href="./custom-rules.md">custom rules</a> when the default rule set is not enough.</li>
+<li>Run the checks in <a href="./testing.md">testing</a> before publishing a package release.</li>
+<li>Open <a href="./documentation-workflow.md">documentation workflow</a> when you are changing Markdown pages, the docs template, or generated site output.</li>
+<li>Check <a href="./troubleshooting.md">troubleshooting</a> when a directive, rule, or AJAX request does not behave as expected.</li>
+<li>Browse <a href="./examples.md">examples</a> for practical Laravel snippets you can adapt directly.</li>
 </ul>
-<h2 id="supported-integration-styles">Supported integration styles<a href="#supported-integration-styles" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h2>
-<h3 id="blade-and-alpinejs">Blade and Alpine.js<a href="#blade-and-alpinejs" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<p>The package exposes Blade directives like <code>@rules</code>, <code>@validateBlur</code>, and <code>@validateLive</code>, alongside Alpine helpers and <code>x-validate</code> directives. Use the dedicated <a href="./alpine.html">alpine</a> page for the directive modes, <code>validation()</code> helper, and field-state patterns.</p>
-<pre><code class="language-html">&lt;form data-validate&gt;
-    &lt;input name="email" @rules('email', 'required|email')&gt;
-    &lt;input name="username" @validateLive('username', 'required|alpha_dash|min:3')&gt;
-&lt;/form&gt;
+<h2 id="supported-integration-styles">Supported integration styles</h2>
+<h3 id="blade-and-alpine-js">Blade and Alpine.js</h3>
+<p>The package exposes Blade directives like <code>@rules</code>, <code>@validateBlur</code>, and <code>@validateLive</code>, alongside Alpine helpers and <code>x-validate</code> directives. Use the dedicated <a href="./alpine.md">alpine</a> page for the directive modes, <code>validation()</code> helper, and field-state patterns.</p>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-validate</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span> @<span class="hljs-attr">rules</span>('<span class="hljs-attr">email</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">email</span>')&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"username"</span> @<span class="hljs-attr">validateLive</span>('<span class="hljs-attr">username</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">alpha_dash</span>|<span class="hljs-attr">min:3</span>')&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
 </code></pre>
-<h3 id="livewire-and-filament">Livewire and Filament<a href="#livewire-and-filament" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<p>Livewire components can use <code>WithClientValidation</code>, while Filament panels can install <code>ClientValidationPlugin</code> and field traits for form-level feedback. The dedicated <a href="./livewire.html">livewire</a> and <a href="./filament.html">filament</a> pages cover those package-specific integration surfaces.</p>
-<pre><code class="language-php">use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
+<h3 id="livewire-and-filament">Livewire and Filament</h3>
+<p>Livewire components can use <code>WithClientValidation</code>, while Filament panels can install <code>ClientValidationPlugin</code> and field traits for form-level feedback. The dedicated <a href="./livewire.md">livewire</a> and <a href="./filament.md">filament</a> pages cover those package-specific integration surfaces.</p>
+<pre><code class="hljs language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">MrPunyapal</span>\<span class="hljs-title">ClientValidation</span>\<span class="hljs-title">Filament</span>\<span class="hljs-title">ClientValidationPlugin</span>;
 
 $panel-&gt;plugins([
-    ClientValidationPlugin::make()-&gt;validationMode('live'),
+    ClientValidationPlugin::make()-&gt;validationMode(<span class="hljs-string">'live'</span>),
 ]);
 </code></pre>
-<h3 id="vanilla-javascript">Vanilla JavaScript<a href="#vanilla-javascript" class="heading-anchor" aria-hidden="true" title="Permalink">#</a></h3>
-<p>If you only need client-side validation in a custom frontend, the core validator and adapters are available from the browser bundle or ES module entrypoints. Use the adapter-specific guides for <a href="./vanilla.html">vanilla JavaScript</a>, <a href="./react.html">React</a>, <a href="./vue.html">Vue</a>, and <a href="./inertia.html">Inertia</a>.</p>
-<pre><code class="language-javascript">import { LaravelValidator } from 'laravel-client-validation/core';
+<h3 id="vanilla-javascript">Vanilla JavaScript</h3>
+<p>If you only need client-side validation in a custom frontend, the core validator and adapters are available from the browser bundle or ES module entrypoints. Use the adapter-specific guides for <a href="./vanilla.md">vanilla JavaScript</a>, <a href="./react.md">React</a>, <a href="./vue.md">Vue</a>, and <a href="./inertia.md">Inertia</a>.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { LaravelValidator } <span class="hljs-keyword">from</span> <span class="hljs-string">'laravel-client-validation/core'</span>;
 
-const validator = new LaravelValidator({
-    rules: {
-        email: 'required|email',
+<span class="hljs-keyword">const</span> validator = <span class="hljs-keyword">new</span> LaravelValidator({
+    <span class="hljs-attr">rules</span>: {
+        <span class="hljs-attr">email</span>: <span class="hljs-string">'required|email'</span>,
     },
 });
 </code></pre>
-            </article>
 
-            <footer class="docs-footer">
-                <div>
-                    <p>Last updated <time datetime="2026-05-15T19:16:30+00:00">May 15, 2026</time></p>
-                    <p>Built 2026-05-15T19:16:44+00:00</p>
                 </div>
-                <div class="docs-footer__actions">
-                                        <a class="docs-action-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/docs/md/index.md">Edit this page</a>
-                                    </div>
-            </footer>
-
-                        <nav class="docs-pager" aria-label="Page navigation">
-                                <span></span>
-                
-                                <a class="docs-pager__link docs-pager__link--next" href="installation.html">
-                    <span class="docs-pager__label">Next</span>
-                    <strong>Installation</strong>
-                </a>
-                            </nav>
-                    </main>
-
-                <aside class="docs-toc" aria-label="On this page">
-            <div class="docs-panel">
-                <p class="docs-panel__eyebrow">On this page</p>
-                <nav class="docs-toc__links">
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#why-this-package-exists" data-toc-link>
-                        Why this package exists                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#quick-start" data-toc-link>
-                        Quick start                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#documentation-map" data-toc-link>
-                        Documentation map                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-2" href="#supported-integration-styles" data-toc-link>
-                        Supported integration styles                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-3" href="#blade-and-alpinejs" data-toc-link>
-                        Blade and Alpine.js                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-3" href="#livewire-and-filament" data-toc-link>
-                        Livewire and Filament                    </a>
-                                        <a class="docs-toc__link docs-toc__link--level-3" href="#vanilla-javascript" data-toc-link>
-                        Vanilla JavaScript                    </a>
-                                    </nav>
-            </div>
-        </aside>
-            </div>
-
-    <script>
-        window.__DOCS_CONFIG__ = {"currentPage":"index.html","rootPrefix":"","searchIndexUrl":"search-index.json"};
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup-templating.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-php.min.js"></script>
-    <script defer src="assets/app.js"></script>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/index.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link pager-link-next" href="installation/"><span>Next</span><strong>Installation</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#why-this-package-exists">Why this package exists</a><a class="toc-link toc-link-level-2" href="#quick-start">Quick start</a><a class="toc-link toc-link-level-2" href="#documentation-map">Documentation map</a><a class="toc-link toc-link-level-2" href="#supported-integration-styles">Supported integration styles</a><a class="toc-link toc-link-level-3" href="#blade-and-alpine-js">Blade and Alpine.js</a><a class="toc-link toc-link-level-3" href="#livewire-and-filament">Livewire and Filament</a><a class="toc-link toc-link-level-3" href="#vanilla-javascript">Vanilla JavaScript</a></nav></aside>
+    </div>
 </body>
 </html>

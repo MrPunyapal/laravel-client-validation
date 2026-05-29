@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation Rules | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="../assets/app.css">
+    <script src="../assets/app.js" defer></script>
+</head>
+<body data-docsmith-root="../">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
+            </div>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="" href="../" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="../installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="" href="../configuration/" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="../usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="" href="../alpine/" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="" href="../livewire/" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="../filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="" href="../vanilla/" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="../react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="" href="../vue/" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="" href="../inertia/" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="active" href="./" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="../custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="../testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="../documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="../troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="" href="../examples/" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
+        </aside>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Validation Rules</h1>
+                    <p class="doc-description">Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.</p>
+                </header>
+                <div class="doc-body">
+                    <p>Laravel Client Validation currently ships broad client-side coverage and a smaller set of explicitly remote rules. Use this page as the working overview when deciding whether a rule can stay in the browser or must hit the backend.</p>
+<h2 id="rule-parity-at-a-glance">Rule parity at a glance</h2>
+<ul>
+<li>Client-side rules: 104</li>
+<li>Remote rules: 5 primary rules handled through AJAX</li>
+<li>Rule source lists: <code>config/client-validation.php</code>, <code>resources/js/core/rules</code>, and <code>resources/js/core/RuleRegistry.js</code></li>
+</ul>
+<h2 id="common-client-side-categories">Common client-side categories</h2>
+<h3 id="core-and-string-rules">Core and string rules</h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Data types</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>required</code></td>
+<td>Reject empty input</td>
+<td>string, array, file</td>
+<td><code>required</code></td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>Validate email format</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>alpha_dash</code></td>
+<td>Allow letters, numbers, dashes, underscores</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>contains:value</code></td>
+<td>Require a substring</td>
+<td>string</td>
+<td><code>contains:@company.com</code></td>
+</tr>
+<tr>
+<td><code>uuid:4</code></td>
+<td>Validate UUID format and version</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+</tbody>
+</table>
+<h3 id="numeric-and-size-rules">Numeric and size rules</h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Data types</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>numeric</code></td>
+<td>Accept numeric values</td>
+<td>string, number</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>integer:strict</code></td>
+<td>Enforce integer-only values</td>
+<td>number, numeric string</td>
+<td>`integer:strict</td>
+</tr>
+<tr>
+<td><code>between:min,max</code></td>
+<td>Constrain range or length</td>
+<td>string, array, numeric</td>
+<td><code>between:3,10</code></td>
+</tr>
+<tr>
+<td><code>multiple_of:value</code></td>
+<td>Enforce divisibility</td>
+<td>number</td>
+<td><code>multiple_of:5</code></td>
+</tr>
+<tr>
+<td><code>digits_between:min,max</code></td>
+<td>Validate exact digit count range</td>
+<td>numeric string</td>
+<td><code>digits_between:6,8</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="comparison-and-conditional-rules">Comparison and conditional rules</h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Data types</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>confirmed</code></td>
+<td>Match a confirmation field</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>same:field</code></td>
+<td>Match another field value</td>
+<td>mixed</td>
+<td><code>same:billing_email</code></td>
+</tr>
+<tr>
+<td><code>required_if:field,value</code></td>
+<td>Require when another field matches</td>
+<td>mixed</td>
+<td><code>required_if:role,admin</code></td>
+</tr>
+<tr>
+<td><code>required_without:field</code></td>
+<td>Require when another field is missing</td>
+<td>mixed</td>
+<td><code>required_without:phone</code></td>
+</tr>
+<tr>
+<td><code>prohibits:field</code></td>
+<td>Prevent conflicting fields</td>
+<td>mixed</td>
+<td><code>prohibits:coupon_code</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="date-network-and-file-rules">Date, network, and file rules</h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Purpose</th>
+<th>Data types</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>date_format:format</code></td>
+<td>Match a Laravel-style date format</td>
+<td>string</td>
+<td><code>date_format:Y-m-d</code></td>
+</tr>
+<tr>
+<td><code>after:today</code></td>
+<td>Compare against a relative date</td>
+<td>string</td>
+<td>`date</td>
+</tr>
+<tr>
+<td><code>ip</code> / <code>ipv4</code> / <code>ipv6</code></td>
+<td>Validate network values</td>
+<td>string</td>
+<td>`required</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>Restrict uploaded files to images</td>
+<td>file</td>
+<td>`file</td>
+</tr>
+<tr>
+<td><code>dimensions:...</code></td>
+<td>Inspect image width or height</td>
+<td>image file</td>
+<td><code>dimensions:min_width=640,min_height=480</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="remote-rules">Remote rules</h2>
+<p>Remote rules are intentionally delegated to the server because they depend on application state or backend facilities.</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Why it stays remote</th>
+<th>Typical example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unique</code></td>
+<td>Needs database access</td>
+<td><code>unique:users,email</code></td>
+</tr>
+<tr>
+<td><code>exists</code></td>
+<td>Needs database access</td>
+<td><code>exists:roles,id</code></td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>Needs current auth context</td>
+<td><code>password</code></td>
+</tr>
+<tr>
+<td><code>current_password</code></td>
+<td>Needs current auth context</td>
+<td><code>current_password</code></td>
+</tr>
+<tr>
+<td><code>encoding</code></td>
+<td>Needs backend encoding checks</td>
+<td><code>encoding:UTF-8</code></td>
+</tr>
+</tbody>
+</table>
+<p>If a remote rule never fires, check <a href="./troubleshooting.md">troubleshooting</a> for route, CSRF, or timeout issues.</p>
+<h2 id="usage-examples">Usage examples</h2>
+<h3 id="typical-account-form">Typical account form</h3>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"name"</span> @<span class="hljs-attr">validateBlur</span>('<span class="hljs-attr">name</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">string</span>|<span class="hljs-attr">min:2</span>|<span class="hljs-attr">max:50</span>')&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span> @<span class="hljs-attr">validateLive</span>('<span class="hljs-attr">email</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">email</span>|<span class="hljs-attr">unique:users</span>,<span class="hljs-attr">email</span>')&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span> @<span class="hljs-attr">validateSubmit</span>('<span class="hljs-attr">password</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">min:8</span>|<span class="hljs-attr">confirmed</span>')&gt;</span>
+</code></pre>
+<h3 id="array-date-and-file-examples">Array, date, and file examples</h3>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"timezone"</span> @<span class="hljs-attr">rules</span>('<span class="hljs-attr">timezone</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">timezone</span>')&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"launch_date"</span> @<span class="hljs-attr">rules</span>('<span class="hljs-attr">launch_date</span>', '<span class="hljs-attr">required</span>|<span class="hljs-attr">date</span>|<span class="hljs-attr">after_or_equal:today</span>')&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"file"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"avatar"</span> @<span class="hljs-attr">rules</span>('<span class="hljs-attr">avatar</span>', '<span class="hljs-attr">file</span>|<span class="hljs-attr">image</span>|<span class="hljs-attr">mimes:jpg</span>,<span class="hljs-attr">png</span>|<span class="hljs-attr">dimensions:min_width</span>=<span class="hljs-string">256,min_height</span>=<span class="hljs-string">256</span>')&gt;</span>
+</code></pre>
+<h2 id="edge-cases-and-expected-behavior">Edge cases and expected behavior</h2>
+<ul>
+<li><code>nullable</code> allows empty input but does not skip other rules when the value is non-empty.</li>
+<li>Rules that compare against sibling fields, such as <code>same</code>, <code>different</code>, <code>gt</code>, or <code>required_if</code>, depend on the form data already being available to the validator.</li>
+<li>Remote rules still need normal Laravel validation messages and backend authorization to be correct.</li>
+<li>File rules depend on browser-provided <code>File</code> objects, so they should be tested in a real browser flow rather than only in isolated unit tests.</li>
+</ul>
+<h2 id="message-placeholders">Message placeholders</h2>
+<p>Default browser messages use the same placeholder vocabulary Laravel developers expect, such as <code>:attribute</code>, <code>:min</code>, <code>:max</code>, <code>:other</code>, and <code>:values</code>.</p>
+<pre><code class="hljs language-php"><span class="hljs-string">'messages'</span> =&gt; [
+    <span class="hljs-string">'required'</span> =&gt; <span class="hljs-string">'The :attribute field is required.'</span>,
+    <span class="hljs-string">'min'</span> =&gt; <span class="hljs-string">'The :attribute must be at least :min characters.'</span>,
+    <span class="hljs-string">'unique'</span> =&gt; <span class="hljs-string">'The :attribute has already been taken.'</span>,
+],
+</code></pre>
+<h2 id="when-documenting-a-new-rule">When documenting a new rule</h2>
+<ul>
+<li>Explain the rule purpose in one sentence.</li>
+<li>Include a realistic Laravel rule string.</li>
+<li>Call out the supported value types.</li>
+<li>Document edge cases, especially for remote or cross-field rules.</li>
+<li>Show at least one example validation message.</li>
+</ul>
+
+                </div>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/validation-rules.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link" href="../inertia/"><span>Previous</span><strong>Inertia</strong></a><a class="pager-link pager-link-next" href="../custom-rules/"><span>Next</span><strong>Custom Rules</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#rule-parity-at-a-glance">Rule parity at a glance</a><a class="toc-link toc-link-level-2" href="#common-client-side-categories">Common client-side categories</a><a class="toc-link toc-link-level-3" href="#core-and-string-rules">Core and string rules</a><a class="toc-link toc-link-level-3" href="#numeric-and-size-rules">Numeric and size rules</a><a class="toc-link toc-link-level-3" href="#comparison-and-conditional-rules">Comparison and conditional rules</a><a class="toc-link toc-link-level-3" href="#date-network-and-file-rules">Date, network, and file rules</a><a class="toc-link toc-link-level-2" href="#remote-rules">Remote rules</a><a class="toc-link toc-link-level-2" href="#usage-examples">Usage examples</a><a class="toc-link toc-link-level-3" href="#typical-account-form">Typical account form</a><a class="toc-link toc-link-level-3" href="#array-date-and-file-examples">Array, date, and file examples</a><a class="toc-link toc-link-level-2" href="#edge-cases-and-expected-behavior">Edge cases and expected behavior</a><a class="toc-link toc-link-level-2" href="#message-placeholders">Message placeholders</a><a class="toc-link toc-link-level-2" href="#when-documenting-a-new-rule">When documenting a new rule</a></nav></aside>
+    </div>
+</body>
+</html>

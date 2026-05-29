@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine.js | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="../assets/app.css">
+    <script src="../assets/app.js" defer></script>
+</head>
+<body data-docsmith-root="../">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
+            </div>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="" href="../" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="../installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="" href="../configuration/" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="../usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="active" href="./" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="" href="../livewire/" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="../filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="" href="../vanilla/" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="../react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="" href="../vue/" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="" href="../inertia/" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="" href="../validation-rules/" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="../custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="../testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="../documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="../troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="" href="../examples/" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
+        </aside>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Alpine.js</h1>
+                    <p class="doc-description">Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.</p>
+                </header>
+                <div class="doc-body">
+                    <p>Alpine.js is the shortest path from Laravel rule strings to interactive browser feedback. The package supports both field-level directives and a form-scoped <code>validation()</code> helper.</p>
+<h2 id="register-the-adapter">Register the adapter</h2>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> Alpine <span class="hljs-keyword">from</span> <span class="hljs-string">'alpinejs'</span>;
+<span class="hljs-keyword">import</span> registerAlpine <span class="hljs-keyword">from</span> <span class="hljs-string">'laravel-client-validation/alpine'</span>;
+
+<span class="hljs-built_in">window</span>.Alpine = Alpine;
+registerAlpine(Alpine);
+Alpine.start();
+</code></pre>
+<p>If you load the browser bundle through <code>@clientValidationAssets</code>, the package auto-registers Alpine integration when Alpine boots.</p>
+<h2 id="validate-individual-fields">Validate individual fields</h2>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span> <span class="hljs-attr">x-validate</span>=<span class="hljs-string">"'required|email'"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"username"</span> <span class="hljs-attr">x-validate.live</span>=<span class="hljs-string">"'required|alpha_dash|min:3'"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"password"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span> <span class="hljs-attr">x-validate.submit</span>=<span class="hljs-string">"'required|min:8|confirmed'"</span>&gt;</span>
+</code></pre>
+<p><code>x-validate</code> validates on blur by default. <code>.live</code> adds debounced input validation and <code>.submit</code> blocks form submission until the field passes.</p>
+<h2 id="manage-a-full-alpine-form">Manage a full Alpine form</h2>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">x-data</span>=<span class="hljs-string">"validation({
+    rules: {
+        email: 'required|email|unique:users,email',
+        password: 'required|min:8',
+        password_confirmation: 'required|same:password',
+    },
+    messages: {
+        'password.min': 'Use at least eight characters.',
+    },
+})"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> @<span class="hljs-attr">submit.prevent</span>=<span class="hljs-string">"submit(async (payload) =&gt; await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    }))"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">x-model</span>=<span class="hljs-string">"form.email"</span> @<span class="hljs-attr">input</span>=<span class="hljs-string">"validateLive('email')"</span> @<span class="hljs-attr">blur</span>=<span class="hljs-string">"validate('email')"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">x-show</span>=<span class="hljs-string">"hasError('email')"</span> <span class="hljs-attr">x-text</span>=<span class="hljs-string">"error('email')"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"password"</span> <span class="hljs-attr">x-model</span>=<span class="hljs-string">"form.password"</span> @<span class="hljs-attr">blur</span>=<span class="hljs-string">"validate('password')"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">x-show</span>=<span class="hljs-string">"hasError('password')"</span> <span class="hljs-attr">x-text</span>=<span class="hljs-string">"error('password')"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>The helper keeps touched state, per-field errors, and debounced remote validation in one Alpine object. Use <code>stateClass(field)</code> when you want to map the package validity state into your own utility classes.</p>
+<h2 id="cross-field-and-remote-rules">Cross-field and remote rules</h2>
+<p>Rules such as <code>same</code>, <code>different</code>, <code>required_if</code>, and <code>unique</code> work best when every sibling value lives in the same <code>form</code> object so Alpine always passes the latest state into the validator.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li>Use <a href="./installation.md">installation</a> to bootstrap the bundle in Blade layouts.</li>
+<li>Keep <a href="./usage.md">usage</a> nearby for the cross-framework model.</li>
+<li>Open <a href="./examples.md">examples</a> when you need larger Blade snippets.</li>
+</ul>
+
+                </div>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/alpine.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link" href="../usage/"><span>Previous</span><strong>Usage</strong></a><a class="pager-link pager-link-next" href="../livewire/"><span>Next</span><strong>Livewire</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#register-the-adapter">Register the adapter</a><a class="toc-link toc-link-level-2" href="#validate-individual-fields">Validate individual fields</a><a class="toc-link toc-link-level-2" href="#manage-a-full-alpine-form">Manage a full Alpine form</a><a class="toc-link toc-link-level-2" href="#cross-field-and-remote-rules">Cross-field and remote rules</a><a class="toc-link toc-link-level-2" href="#related-pages">Related pages</a></nav></aside>
+    </div>
+</body>
+</html>

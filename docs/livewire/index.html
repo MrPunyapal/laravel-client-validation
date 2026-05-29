@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livewire | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="../assets/app.css">
+    <script src="../assets/app.js" defer></script>
+</head>
+<body data-docsmith-root="../">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
+            </div>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="" href="../" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="../installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="" href="../configuration/" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="../usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="" href="../alpine/" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="active" href="./" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="../filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="" href="../vanilla/" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="../react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="" href="../vue/" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="" href="../inertia/" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="" href="../validation-rules/" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="../custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="../testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="../documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="../troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="" href="../examples/" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
+        </aside>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Livewire</h1>
+                    <p class="doc-description">Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.</p>
+                </header>
+                <div class="doc-body">
+                    <p>Livewire integration has two layers: the PHP trait keeps the server rules central, and the browser adapter lets fields fail fast before a Livewire request leaves the page. The JavaScript adapter supports both Livewire 3 and Livewire 4.</p>
+<h2 id="add-the-livewire-trait">Add the Livewire trait</h2>
+<pre><code class="hljs language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">Livewire</span>\<span class="hljs-title">Component</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">MrPunyapal</span>\<span class="hljs-title">ClientValidation</span>\<span class="hljs-title">Livewire</span>\<span class="hljs-title">WithClientValidation</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CreateUser</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span>
+</span>{
+    <span class="hljs-keyword">use</span> <span class="hljs-title">WithClientValidation</span>;
+
+    <span class="hljs-keyword">public</span> string $email = <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">public</span> string $password = <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">public</span> string $password_confirmation = <span class="hljs-string">''</span>;
+
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">array</span> $rules = [
+        <span class="hljs-string">'email'</span> =&gt; <span class="hljs-string">'required|email|unique:users,email'</span>,
+        <span class="hljs-string">'password'</span> =&gt; <span class="hljs-string">'required|min:8|confirmed'</span>,
+    ];
+}
+</code></pre>
+<p><code>WithClientValidation</code> exposes computed properties such as <code>$this-&gt;clientRules</code>, <code>$this-&gt;clientMessages</code>, and <code>$this-&gt;clientValidationData</code> so the same component rules can be reused in the browser.</p>
+<h2 id="validate-fields-in-the-blade-view">Validate fields in the Blade view</h2>
+<pre><code class="language-blade">@php($clientRules = json_decode($this-&gt;clientRules, true))
+
+&lt;div x-data="{ clientRules: @js($clientRules) }"&gt;
+    &lt;input
+        wire:model.live="email"
+        name="email"
+        x-wire-validate.live="clientRules.email"
+    &gt;
+
+    &lt;span class="validation-error" data-error="email"&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<p><code>x-wire-validate</code> uses the same trigger model as <code>x-validate</code>: blur by default, <code>.live</code> for debounced typing feedback. The field still keeps its normal <code>wire:model</code> binding.</p>
+<h2 id="use-explicit-rules-when-you-only-need-one-field">Use explicit rules when you only need one field</h2>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+    <span class="hljs-attr">wire:model.blur</span>=<span class="hljs-string">"email"</span>
+    <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span>
+    <span class="hljs-attr">x-wire-validate</span>=<span class="hljs-string">"'required|email|unique:users,email'"</span>
+&gt;</span>
+</code></pre>
+<p>This is useful when the rules are small or when you are incrementally adopting the package inside an existing component.</p>
+<h2 id="listen-for-client-validation-events">Listen for client-validation events</h2>
+<p>The Livewire adapter dispatches <code>client-validation-error</code> and <code>client-validation-cleared</code> events back to the component. Use them when you need to sync custom UI or logging around client-side failures.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li>Open <a href="./filament.md">filament</a> for the panel-specific helper layer.</li>
+<li>Use <a href="./troubleshooting.md">troubleshooting</a> when Livewire requests and client validation drift apart.</li>
+<li>Check <a href="./examples.md">examples</a> for compact component snippets.</li>
+</ul>
+
+                </div>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/livewire.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link" href="../alpine/"><span>Previous</span><strong>Alpine.js</strong></a><a class="pager-link pager-link-next" href="../filament/"><span>Next</span><strong>Filament</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#add-the-livewire-trait">Add the Livewire trait</a><a class="toc-link toc-link-level-2" href="#validate-fields-in-the-blade-view">Validate fields in the Blade view</a><a class="toc-link toc-link-level-2" href="#use-explicit-rules-when-you-only-need-one-field">Use explicit rules when you only need one field</a><a class="toc-link toc-link-level-2" href="#listen-for-client-validation-events">Listen for client-validation events</a><a class="toc-link toc-link-level-2" href="#related-pages">Related pages</a></nav></aside>
+    </div>
+</body>
+</html>

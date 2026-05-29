@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanilla JavaScript | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="../assets/app.css">
+    <script src="../assets/app.js" defer></script>
+</head>
+<body data-docsmith-root="../">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
+            </div>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="" href="../" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="../installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="" href="../configuration/" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="../usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="" href="../alpine/" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="" href="../livewire/" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="../filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="active" href="./" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="../react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="" href="../vue/" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="" href="../inertia/" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="" href="../validation-rules/" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="../custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="../testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="../documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="../troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="" href="../examples/" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
+        </aside>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Vanilla JavaScript</h1>
+                    <p class="doc-description">Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.</p>
+                </header>
+                <div class="doc-body">
+                    <p>Use the vanilla adapter when you want client validation in a Laravel Blade page or custom frontend without Alpine, React, Vue, or Livewire.</p>
+<h2 id="let-the-browser-bundle-auto-init-forms">Let the browser bundle auto-init forms</h2>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">data-validate</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span> <span class="hljs-attr">data-rules</span>=<span class="hljs-string">"required|email"</span> <span class="hljs-attr">data-validate-on</span>=<span class="hljs-string">"blur"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"username"</span> <span class="hljs-attr">data-rules</span>=<span class="hljs-string">"required|alpha_dash|min:3"</span> <span class="hljs-attr">data-validate-on</span>=<span class="hljs-string">"input"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>&gt;</span>Create account<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+</code></pre>
+<p>When the browser bundle is loaded, forms matching <code>form[data-validate]</code> are initialized automatically on <code>DOMContentLoaded</code>.</p>
+<h2 id="create-a-validator-programmatically">Create a validator programmatically</h2>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { createFormValidator } <span class="hljs-keyword">from</span> <span class="hljs-string">'laravel-client-validation/vanilla'</span>;
+
+<span class="hljs-keyword">const</span> form = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#registration-form'</span>);
+
+<span class="hljs-keyword">const</span> validator = createFormValidator(form, {
+    onSubmit(data) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Validated payload'</span>, data);
+    },
+});
+</code></pre>
+<p>Use the factory when you want to control initialization order or intercept successful submit events yourself.</p>
+<h2 id="customize-messages-and-field-names">Customize messages and field names</h2>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+    <span class="hljs-attr">name</span>=<span class="hljs-string">"email"</span>
+    <span class="hljs-attr">data-rules</span>=<span class="hljs-string">"required|email"</span>
+    <span class="hljs-attr">data-message</span>=<span class="hljs-string">"Use a valid work email address."</span>
+    <span class="hljs-attr">data-attribute</span>=<span class="hljs-string">"work email"</span>
+&gt;</span>
+</code></pre>
+<p><code>data-message</code> overrides the first rule message for that field, and <code>data-attribute</code> controls the human-readable attribute name in generated messages.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li>Use <a href="./installation.md">installation</a> when the bundle itself is not loading.</li>
+<li>Open <a href="./react.md">react</a> or <a href="./vue.md">vue</a> when you need a framework-owned UI layer instead of DOM-managed errors.</li>
+<li>Keep <a href="./examples.md">examples</a> nearby for larger snippets.</li>
+</ul>
+
+                </div>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/vanilla.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link" href="../filament/"><span>Previous</span><strong>Filament</strong></a><a class="pager-link pager-link-next" href="../react/"><span>Next</span><strong>React</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#let-the-browser-bundle-auto-init-forms">Let the browser bundle auto-init forms</a><a class="toc-link toc-link-level-2" href="#create-a-validator-programmatically">Create a validator programmatically</a><a class="toc-link toc-link-level-2" href="#customize-messages-and-field-names">Customize messages and field names</a><a class="toc-link toc-link-level-2" href="#related-pages">Related pages</a></nav></aside>
+    </div>
+</body>
+</html>

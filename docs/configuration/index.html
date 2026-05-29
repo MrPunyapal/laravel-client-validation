@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration | Laravel Client Validation</title>
+    <meta name="description" content="Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.">
+    <link rel="stylesheet" href="../assets/app.css">
+    <script src="../assets/app.js" defer></script>
+</head>
+<body data-docsmith-root="../">
+    <div class="shell has-right-rail">
+        <aside class="sidebar">
+            <h1 class="brand">Laravel Client Validation</h1>
+            <p class="tagline">Client-side Laravel validation rules for Alpine, Livewire, Filament, and vanilla JavaScript.</p>
+            <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
+            <div class="search">
+                <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                <div class="search-results" data-docsmith-search-results hidden></div>
+                <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
+            </div>
+            <nav class="nav" data-docsmith-nav><section class="nav-group is-open has-active" data-nav-group><button type="button" class="nav-group-toggle" data-nav-toggle aria-expanded="true"><span class="nav-group-label"><span>General</span></span><span class="nav-group-caret" aria-hidden="true">▾</span></button><div class="nav-group-items" data-nav-items><a class="" href="../" data-nav-item data-title="Overview" data-search="Laravel Client Validation Overview Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.">Overview</a><a class="" href="../installation/" data-nav-item data-title="Installation" data-search="Installation Installation Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.">Installation</a><a class="active" href="./" data-nav-item data-title="Configuration" data-search="Configuration Configuration Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.">Configuration</a><a class="" href="../usage/" data-nav-item data-title="Usage" data-search="Usage Usage Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.">Usage</a><a class="" href="../alpine/" data-nav-item data-title="Alpine.js" data-search="Alpine.js Alpine.js Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.">Alpine.js</a><a class="" href="../livewire/" data-nav-item data-title="Livewire" data-search="Livewire Livewire Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.">Livewire</a><a class="" href="../filament/" data-nav-item data-title="Filament" data-search="Filament Filament Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.">Filament</a><a class="" href="../vanilla/" data-nav-item data-title="Vanilla JavaScript" data-search="Vanilla JavaScript Vanilla JavaScript Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.">Vanilla JavaScript</a><a class="" href="../react/" data-nav-item data-title="React" data-search="React React Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.">React</a><a class="" href="../vue/" data-nav-item data-title="Vue" data-search="Vue Vue Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.">Vue</a><a class="" href="../inertia/" data-nav-item data-title="Inertia" data-search="Inertia Inertia Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.">Inertia</a><a class="" href="../validation-rules/" data-nav-item data-title="Validation Rules" data-search="Validation Rules Validation Rules Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.">Validation Rules</a><a class="" href="../custom-rules/" data-nav-item data-title="Custom Rules" data-search="Custom Rules Custom Rules Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.">Custom Rules</a><a class="" href="../testing/" data-nav-item data-title="Testing" data-search="Testing Testing Validate package changes with Pest and JavaScript tests before merging updates.">Testing</a><a class="" href="../documentation-workflow/" data-nav-item data-title="Documentation Workflow" data-search="Documentation Workflow Documentation Workflow Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.">Documentation Workflow</a><a class="" href="../troubleshooting/" data-nav-item data-title="Troubleshooting" data-search="Troubleshooting Troubleshooting Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.">Troubleshooting</a><a class="" href="../examples/" data-nav-item data-title="Examples" data-search="Examples Examples Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.">Examples</a></div></section></nav>
+        </aside>
+        <main class="content">
+            <article>
+                <header class="doc-head">
+                    
+                    <h1>Configuration</h1>
+                    <p class="doc-description">Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.</p>
+                </header>
+                <div class="doc-body">
+                    <p>Laravel Client Validation publishes a single configuration file, <code>config/client-validation.php</code>, that controls how the browser bundle is loaded and how validation behaves by default.</p>
+<h2 id="publishing-and-editing-config">Publishing and editing config</h2>
+<p>If you skipped the installer, publish the configuration manually:</p>
+<pre><code class="hljs language-bash">php artisan vendor:publish --tag=client-validation-config
+</code></pre>
+<p>Then edit the generated file in your application.</p>
+<h2 id="core-runtime-options">Core runtime options</h2>
+<p>Use these settings to decide when validation runs and whether server-backed rules are allowed.</p>
+<pre><code class="hljs language-php"><span class="hljs-keyword">return</span> [
+    <span class="hljs-string">'auto_include_assets'</span> =&gt; <span class="hljs-keyword">true</span>,
+    <span class="hljs-string">'enable_ajax_validation'</span> =&gt; <span class="hljs-keyword">true</span>,
+    <span class="hljs-string">'ajax_timeout'</span> =&gt; <span class="hljs-number">5000</span>,
+    <span class="hljs-string">'route_prefix'</span> =&gt; <span class="hljs-string">'client-validation'</span>,
+    <span class="hljs-string">'validation_mode'</span> =&gt; <span class="hljs-string">'blur'</span>,
+    <span class="hljs-string">'debounce_ms'</span> =&gt; <span class="hljs-number">300</span>,
+];
+</code></pre>
+<h3 id="recommended-defaults">Recommended defaults</h3>
+<ul>
+<li>Keep <code>validation_mode</code> at <code>blur</code> for most text fields.</li>
+<li>Switch to <code>input</code> or <code>live</code> only when feedback needs to be immediate.</li>
+<li>Leave <code>enable_ajax_validation</code> enabled if you use <code>unique</code>, <code>exists</code>, <code>password</code>, or other server-side rules.</li>
+</ul>
+<h2 id="rate-limiting-and-caching">Rate limiting and caching</h2>
+<p>AJAX validation is throttled and cached to avoid spamming the backend while the user types.</p>
+<pre><code class="hljs language-php"><span class="hljs-string">'rate_limit'</span> =&gt; [
+    <span class="hljs-string">'max_attempts'</span> =&gt; <span class="hljs-number">60</span>,
+    <span class="hljs-string">'decay_seconds'</span> =&gt; <span class="hljs-number">60</span>,
+],
+
+<span class="hljs-string">'cache'</span> =&gt; [
+    <span class="hljs-string">'enabled'</span> =&gt; <span class="hljs-keyword">true</span>,
+    <span class="hljs-string">'ttl'</span> =&gt; <span class="hljs-number">300</span>,
+    <span class="hljs-string">'max_size'</span> =&gt; <span class="hljs-number">1000</span>,
+],
+</code></pre>
+<p>Use a lower debounce or lower rate limit only when you have confirmed the validation endpoint can tolerate the extra traffic.</p>
+<h2 id="error-templates-and-field-styling">Error templates and field styling</h2>
+<p>The package can add and remove CSS classes automatically when a field passes or fails validation.</p>
+<pre><code class="hljs language-php"><span class="hljs-string">'error_template'</span> =&gt; [
+    <span class="hljs-string">'enabled'</span> =&gt; <span class="hljs-keyword">true</span>,
+    <span class="hljs-string">'container_class'</span> =&gt; <span class="hljs-string">'validation-error text-red-500 text-sm mt-1'</span>,
+    <span class="hljs-string">'show_on'</span> =&gt; [<span class="hljs-string">'fail'</span>],
+    <span class="hljs-string">'position'</span> =&gt; <span class="hljs-string">'after'</span>,
+],
+
+<span class="hljs-string">'field_styling'</span> =&gt; [
+    <span class="hljs-string">'enabled'</span> =&gt; <span class="hljs-keyword">true</span>,
+    <span class="hljs-string">'valid_class'</span> =&gt; <span class="hljs-string">'is-valid border-green-500'</span>,
+    <span class="hljs-string">'invalid_class'</span> =&gt; <span class="hljs-string">'is-invalid border-red-500'</span>,
+],
+</code></pre>
+<p>This is a good place to align the generated classes with your Tailwind, Bootstrap, or bespoke utility classes.</p>
+<h2 id="default-messages-and-attributes">Default messages and attributes</h2>
+<p>Message placeholders are merged with per-form messages, so keep the config file focused on cross-application defaults.</p>
+<pre><code class="hljs language-php"><span class="hljs-string">'messages'</span> =&gt; [
+    <span class="hljs-string">'required'</span> =&gt; <span class="hljs-string">'The :attribute field is required.'</span>,
+    <span class="hljs-string">'email'</span> =&gt; <span class="hljs-string">'The :attribute must be a valid email address.'</span>,
+],
+
+<span class="hljs-string">'attributes'</span> =&gt; [
+    <span class="hljs-string">'password_confirmation'</span> =&gt; <span class="hljs-string">'password confirmation'</span>,
+],
+</code></pre>
+<h2 id="rule-capability-lists">Rule capability lists</h2>
+<p>The configuration file also keeps track of which rules are treated as fully client-side and which rules should always use the server.</p>
+<pre><code class="hljs language-php"><span class="hljs-string">'client_side_rules'</span> =&gt; [
+    <span class="hljs-string">'required'</span>, <span class="hljs-string">'email'</span>, <span class="hljs-string">'min'</span>, <span class="hljs-string">'max'</span>, <span class="hljs-string">'between'</span>, <span class="hljs-string">'confirmed'</span>,
+],
+
+<span class="hljs-string">'server_side_rules'</span> =&gt; [
+    <span class="hljs-string">'unique'</span>, <span class="hljs-string">'exists'</span>, <span class="hljs-string">'password'</span>, <span class="hljs-string">'current_password'</span>, <span class="hljs-string">'encoding'</span>,
+],
+</code></pre>
+<p>Only adjust those lists when you are extending the package itself and you fully understand how the parser and browser runtime treat the rule.</p>
+<h2 id="example-environment-overrides">Example environment overrides</h2>
+<pre><code class="hljs language-ini"><span class="hljs-attr">CLIENT_VALIDATION_AUTO_INCLUDE</span>=<span class="hljs-literal">true</span>
+<span class="hljs-attr">CLIENT_VALIDATION_ENABLE_AJAX</span>=<span class="hljs-literal">true</span>
+<span class="hljs-attr">CLIENT_VALIDATION_AJAX_TIMEOUT</span>=<span class="hljs-number">7000</span>
+<span class="hljs-attr">CLIENT_VALIDATION_RATE_LIMIT</span>=<span class="hljs-number">30</span>
+<span class="hljs-attr">CLIENT_VALIDATION_RATE_DECAY</span>=<span class="hljs-number">60</span>
+<span class="hljs-attr">CLIENT_VALIDATION_MODE</span>=blur
+<span class="hljs-attr">CLIENT_VALIDATION_DEBOUNCE</span>=<span class="hljs-number">250</span>
+</code></pre>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li>See <a href="./usage.md">usage</a> for directive-level overrides.</li>
+<li>See <a href="./validation-rules.md">validation rules</a> for rule behavior and remote fallback.</li>
+<li>See <a href="./troubleshooting.md">troubleshooting</a> when configuration and runtime behavior drift apart.</li>
+</ul>
+
+                </div>
+                <footer class="doc-meta">
+                    <a class="edit-link" href="https://github.com/mrpunyapal/laravel-client-validation/edit/main/configuration.md">Edit this page</a>
+                </footer>
+            </article>
+            <nav class="pager" aria-label="Page navigation"><a class="pager-link" href="../installation/"><span>Previous</span><strong>Installation</strong></a><a class="pager-link pager-link-next" href="../usage/"><span>Next</span><strong>Usage</strong></a></nav>
+        </main>
+        <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#publishing-and-editing-config">Publishing and editing config</a><a class="toc-link toc-link-level-2" href="#core-runtime-options">Core runtime options</a><a class="toc-link toc-link-level-3" href="#recommended-defaults">Recommended defaults</a><a class="toc-link toc-link-level-2" href="#rate-limiting-and-caching">Rate limiting and caching</a><a class="toc-link toc-link-level-2" href="#error-templates-and-field-styling">Error templates and field styling</a><a class="toc-link toc-link-level-2" href="#default-messages-and-attributes">Default messages and attributes</a><a class="toc-link toc-link-level-2" href="#rule-capability-lists">Rule capability lists</a><a class="toc-link toc-link-level-2" href="#example-environment-overrides">Example environment overrides</a><a class="toc-link toc-link-level-2" href="#related-pages">Related pages</a></nav></aside>
+    </div>
+</body>
+</html>
