@@ -19,9 +19,10 @@
                 <button type="button" class="mobile-menu-toggle" data-docsmith-menu-toggle aria-expanded="false" aria-controls="docsmith-sidebar-panel" aria-label="Open menu"><span class="mobile-menu-icon" aria-hidden="true"></span><span class="sr-only">Toggle menu</span></button>
             </div>
             <div class="sidebar-panel" id="docsmith-sidebar-panel" data-docsmith-sidebar-panel>
+                
                 <div class="sidebar-actions"><a class="sidebar-action-link" href="https://github.com/mrpunyapal/laravel-client-validation">Repository</a><button type="button" class="theme-toggle" data-docsmith-theme-toggle>Theme</button></div>
                 <div class="search">
-                    <input type="search" placeholder="Search pages" aria-label="Search pages" data-docsmith-search>
+                    <input type="search" placeholder="Search pages  (⌘K)" aria-label="Search pages" data-docsmith-search>
                     <div class="search-results" data-docsmith-search-results hidden></div>
                     <div class="search-empty" data-docsmith-empty>No pages match your search.</div>
                 </div>
@@ -40,16 +41,16 @@
                     <p>Package changes are safest when you validate both the PHP and browser runtime behavior in the same branch.</p>
 <h2 id="php-test-suite">PHP test suite</h2>
 <p>Run the Pest suite from the repository root:</p>
-<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8"><code><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">composer</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">test</span><span class="token">
+<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8;"><code><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">composer</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">test</span><span class="token">
 </span></span><span class="line"><span class="token">
 </span></span></code></pre>
 <p>Use coverage when you are working on package internals or parser behavior.</p>
-<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8"><code><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">composer</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">test-coverage</span><span class="token">
+<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8;"><code><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">composer</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">test-coverage</span><span class="token">
 </span></span><span class="line"><span class="token">
 </span></span></code></pre>
 <h2 id="javascript-test-suite">JavaScript test suite</h2>
 <p>The frontend rules and adapters live in <code>resources/js</code>, so use the JavaScript suite when you change the browser runtime.</p>
-<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8"><code><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">npm</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">test</span><span class="token">
+<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8;"><code><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">npm</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">test</span><span class="token">
 </span></span><span class="line"><span class="token">
 </span></span></code></pre>
 <h2 id="documentation-changes">Documentation changes</h2>
@@ -63,8 +64,8 @@
 </ol>
 <h2 id="practical-verification-examples">Practical verification examples</h2>
 <h3 id="rule-or-parser-change">Rule or parser change</h3>
-<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8"><code><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">composer</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">test</span><span class="token">
-</span></span><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">npm</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">test</span><span class="token">
+<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8;"><code><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">composer</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">test</span><span class="token">
+</span></span><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">npm</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">test</span><span class="token">
 </span></span><span class="line"><span class="token">
 </span></span></code></pre>
 
@@ -77,5 +78,17 @@
         </main>
         <aside class="toc-sidebar" data-docsmith-toc><p class="toc-title">On this page</p><nav class="toc-links"><a class="toc-link toc-link-level-2" href="#php-test-suite" data-docsmith-toc-link="php-test-suite">PHP test suite</a><a class="toc-link toc-link-level-2" href="#javascript-test-suite" data-docsmith-toc-link="javascript-test-suite">JavaScript test suite</a><a class="toc-link toc-link-level-2" href="#documentation-changes" data-docsmith-toc-link="documentation-changes">Documentation changes</a><a class="toc-link toc-link-level-2" href="#recommended-contributor-loop" data-docsmith-toc-link="recommended-contributor-loop">Recommended contributor loop</a><a class="toc-link toc-link-level-2" href="#practical-verification-examples" data-docsmith-toc-link="practical-verification-examples">Practical verification examples</a><a class="toc-link toc-link-level-3" href="#rule-or-parser-change" data-docsmith-toc-link="rule-or-parser-change">Rule or parser change</a></nav></aside>
     </div>
+    <div class="search-overlay" data-docsmith-search-overlay hidden role="dialog" aria-label="Search documentation">
+    <div class="search-overlay-backdrop" data-docsmith-search-overlay-close></div>
+    <div class="search-overlay-panel">
+        <div class="search-overlay-input-wrap">
+            <svg class="search-overlay-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="search" class="search-overlay-input" placeholder="Search documentation..." aria-label="Search documentation" data-docsmith-search-overlay-input autocomplete="off">
+            <kbd class="search-overlay-hint">ESC</kbd>
+        </div>
+        <div class="search-overlay-results" data-docsmith-search-overlay-results></div>
+        <div class="search-overlay-empty" data-docsmith-search-overlay-empty hidden>No results found.</div>
+    </div>
+</div>
 </body>
 </html>
