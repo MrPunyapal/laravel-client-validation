@@ -51,10 +51,10 @@
 <p>Each Markdown page should keep its frontmatter accurate so the builder can generate the correct title, description, sidebar label, and navigation order.</p>
 <h2 id="how-to-rebuild-the-site">How to rebuild the site</h2>
 <p>Run the Composer script from the repository root:</p>
-<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8"><code><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">composer</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">docs:build</span><span class="token">
+<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8;"><code><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">composer</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">docs:build</span><span class="token">
 </span></span></code></pre>
 <p>You can also run the builder directly:</p>
-<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8"><code><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">php</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">docs/build.php</span><span class="token">
+<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8;"><code><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">php</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">docs/build.php</span><span class="token">
 </span></span></code></pre>
 <p>Both commands rebuild the checked-in documentation site.</p>
 <h2 id="what-the-builder-writes">What the builder writes</h2>
@@ -69,7 +69,7 @@
 <h2 id="practical-example">Practical example</h2>
 <h3 id="updating-a-docs-page">Updating a docs page</h3>
 <p>If you change <code>docs/md/usage.md</code>, rebuild the site before you finish the change:</p>
-<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8"><code><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">composer</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">docs:build</span><span class="token">
+<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8;"><code><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">composer</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">docs:build</span><span class="token">
 </span></span></code></pre>
 <p>Expected result:</p>
 <ul>
@@ -84,7 +84,7 @@
 </ul>
 <h2 id="build-failures">Build failures</h2>
 <p>If the builder fails before rendering pages, install the repository dependencies first:</p>
-<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8"><code><span class="line"><span class="token" style="color: #6f42c1;;--phiki-dark-color: #b392f0">composer</span><span class="token"> </span><span class="token" style="color: #032f62;;--phiki-dark-color: #9ecbff">install</span><span class="token">
+<pre class="phiki language-shellscript github-light phiki-themes github-dark" data-language="shellscript" style="background-color: #fff;color: #24292e;--phiki-dark-background-color: #24292e;--phiki-dark-color: #e1e4e8;"><code><span class="line"><span class="token" style="color: #6f42c1;--phiki-dark-color: #b392f0;">composer</span><span class="token"> </span><span class="token" style="color: #032f62;--phiki-dark-color: #9ecbff;">install</span><span class="token">
 </span></span></code></pre>
 <p>Then rerun the docs build command. For broader package validation after documentation changes, continue with the checks in <a href="./testing.md">testing</a>.</p>
 
