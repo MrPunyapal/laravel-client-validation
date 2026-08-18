@@ -3,20 +3,20 @@
 
 ## Docs
 
-- https://MrPunyapal.github.io/laravel-client-validation/: Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.
-- https://MrPunyapal.github.io/laravel-client-validation/installation: Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.
-- https://MrPunyapal.github.io/laravel-client-validation/configuration: Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.
-- https://MrPunyapal.github.io/laravel-client-validation/usage: Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.
-- https://MrPunyapal.github.io/laravel-client-validation/alpine: Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.
-- https://MrPunyapal.github.io/laravel-client-validation/livewire: Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.
-- https://MrPunyapal.github.io/laravel-client-validation/filament: Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.
-- https://MrPunyapal.github.io/laravel-client-validation/vanilla: Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.
-- https://MrPunyapal.github.io/laravel-client-validation/react: Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.
-- https://MrPunyapal.github.io/laravel-client-validation/vue: Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.
-- https://MrPunyapal.github.io/laravel-client-validation/inertia: Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.
-- https://MrPunyapal.github.io/laravel-client-validation/validation-rules: Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.
-- https://MrPunyapal.github.io/laravel-client-validation/custom-rules: Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.
-- https://MrPunyapal.github.io/laravel-client-validation/testing: Validate package changes with Pest and JavaScript tests before merging updates.
-- https://MrPunyapal.github.io/laravel-client-validation/documentation-workflow: Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.
-- https://MrPunyapal.github.io/laravel-client-validation/troubleshooting: Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.
-- https://MrPunyapal.github.io/laravel-client-validation/examples: Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.
+- https://mrpunyapal.github.io/laravel-client-validation/: Bring Laravel-style validation rules into the browser for Alpine, Livewire, Filament, and JavaScript forms.
+- https://mrpunyapal.github.io/laravel-client-validation/installation: Install Laravel Client Validation in a Laravel application and verify the client bundle is available in Blade views.
+- https://mrpunyapal.github.io/laravel-client-validation/configuration: Configure default validation behavior, AJAX, styling, and message handling through config/client-validation.php.
+- https://mrpunyapal.github.io/laravel-client-validation/usage: Choose the right Laravel Client Validation integration and reuse the same rule grammar across Blade, Alpine, Livewire, Filament, vanilla JavaScript, React, Vue, and Inertia-driven apps.
+- https://mrpunyapal.github.io/laravel-client-validation/alpine: Use x-validate directives and the validation() Alpine helper to run Laravel-style validation in reactive Blade forms.
+- https://mrpunyapal.github.io/laravel-client-validation/livewire: Combine WithClientValidation, x-wire-validate, and the Livewire browser adapter for fast client-side feedback before a server round-trip.
+- https://mrpunyapal.github.io/laravel-client-validation/filament: Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.
+- https://mrpunyapal.github.io/laravel-client-validation/vanilla: Attach Laravel-style rules to plain HTML forms with data attributes or the vanilla form validator factory.
+- https://mrpunyapal.github.io/laravel-client-validation/react: Keep Laravel rule strings in React components with the shipped React validator helpers and field prop generators.
+- https://mrpunyapal.github.io/laravel-client-validation/vue: Use the shipped Vue directive, plugin, or validator helpers to keep Laravel rules close to Vue forms.
+- https://mrpunyapal.github.io/laravel-client-validation/inertia: Use Laravel Client Validation inside Inertia pages by composing the shipped React or Vue adapters; no dedicated Inertia adapter is required.
+- https://mrpunyapal.github.io/laravel-client-validation/validation-rules: Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.
+- https://mrpunyapal.github.io/laravel-client-validation/custom-rules: Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.
+- https://mrpunyapal.github.io/laravel-client-validation/testing: Validate package changes with Pest and JavaScript tests before merging updates.
+- https://mrpunyapal.github.io/laravel-client-validation/documentation-workflow: Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.
+- https://mrpunyapal.github.io/laravel-client-validation/troubleshooting: Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.
+- https://mrpunyapal.github.io/laravel-client-validation/examples: Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.
