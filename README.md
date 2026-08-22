@@ -2,6 +2,9 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mrpunyapal/laravel-client-validation.svg?style=flat-square)](https://packagist.org/packages/mrpunyapal/laravel-client-validation)
 [![Total Downloads](https://img.shields.io/packagist/dt/mrpunyapal/laravel-client-validation.svg?style=flat-square)](https://packagist.org/packages/mrpunyapal/laravel-client-validation)
+[![Laravel Version Compatibility](https://badge.laravel.cloud/badge/mrpunyapal/laravel-client-validation?style=flat-square)](https://packagist.org/packages/mrpunyapal/laravel-client-validation)
+[![PHP Version Compatibility](https://badge.laravel.cloud/php-badge/mrpunyapal/laravel-client-validation?style=flat-square)](https://packagist.org/packages/mrpunyapal/laravel-client-validation)
+[![Laravel Boost Skill](https://badge.laravel.cloud/boost-badge.svg?style=flat-square)](https://laravel.com/docs/boost#third-party-package-skills)
 
 A powerful validation package that brings Laravel validation rules to the client-side. Validate forms in real-time using the same rules you know from Laravel — works with **any backend** or as a standalone NPM package.
 
