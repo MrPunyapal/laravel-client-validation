@@ -69,6 +69,25 @@ Remote rules are intentionally delegated to the server because they depend on ap
 
 If a remote rule never fires, check [troubleshooting](./troubleshooting.md) for route, CSRF, or timeout issues.
 
+### The `ajax:` prefix in generated payloads
+
+When the package generates a client-side payload — the Livewire snapshot memo from `WithClientValidation` magic mode (see [livewire](./livewire.md)), or payloads built by the PHP parser — server-side rules are serialized with an `ajax:` prefix instead of being dropped:
+
+```php
+// Your Laravel rule
+'email' => 'required|email|unique:users,email'
+
+// What the browser receives
+'email' => 'required|email|ajax:unique:users,email'
+```
+
+Expected behavior:
+
+- The browser strips the prefix and routes the rule (`unique`, `exists`, `password`, `current_password`, `encoding`) to the remote validator, which posts to the `route_prefix` endpoint.
+- Client-side rules in the same string still apply instantly; the AJAX request only runs once local rules pass.
+- The AJAX hop respects `enable_ajax_validation` (or the `enableAjax` validator option). When disabled, `ajax:`-prefixed rules are skipped and enforcement is left entirely to the final Laravel validation.
+- Conditional rules such as `required_if` are included normally because the browser can evaluate them against sibling field values.
+
 ## Usage examples
 
 ### Typical account form
@@ -91,6 +110,7 @@ If a remote rule never fires, check [troubleshooting](./troubleshooting.md) for 
 
 - `nullable` allows empty input but does not skip other rules when the value is non-empty.
 - Rules that compare against sibling fields, such as `same`, `different`, `gt`, or `required_if`, depend on the form data already being available to the validator.
+- Date comparison rules (`after`, `before`, `after_or_equal`, `before_or_equal`, `date_equals`) accept another field's name or the `today` / `tomorrow` / `yesterday` keywords as their parameter, mirroring Laravel's behavior.
 - Remote rules still need normal Laravel validation messages and backend authorization to be correct.
 - File rules depend on browser-provided `File` objects, so they should be tested in a real browser flow rather than only in isolated unit tests.
 

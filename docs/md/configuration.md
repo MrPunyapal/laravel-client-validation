@@ -29,6 +29,7 @@ return [
     'route_prefix' => 'client-validation',
     'validation_mode' => 'blur',
     'debounce_ms' => 300,
+    'auto_bind_livewire' => true,
 ];
 ```
 
@@ -37,6 +38,7 @@ return [
 - Keep `validation_mode` at `blur` for most text fields.
 - Switch to `input` or `live` only when feedback needs to be immediate.
 - Leave `enable_ajax_validation` enabled if you use `unique`, `exists`, `password`, or other server-side rules.
+- Leave `auto_bind_livewire` enabled unless you only use the manual `x-wire-validate` directive; see [Livewire](./livewire.md#configuration).
 
 ## Rate limiting and caching
 
@@ -119,7 +121,10 @@ CLIENT_VALIDATION_RATE_LIMIT=30
 CLIENT_VALIDATION_RATE_DECAY=60
 CLIENT_VALIDATION_MODE=blur
 CLIENT_VALIDATION_DEBOUNCE=250
+CLIENT_VALIDATION_AUTO_BIND_LIVEWIRE=true
 ```
+
+`CLIENT_VALIDATION_AUTO_BIND_LIVEWIRE=false` disables automatic Livewire binding: no component hook is registered and fields must be validated manually with `x-wire-validate`.
 
 ## Related pages
 

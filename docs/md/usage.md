@@ -95,6 +95,12 @@ const validator = new LaravelClientValidation.Validator({ rules });
 validator
     .beforeValidate(({ data }) => console.log('Validating', data))
     .afterValidate(({ valid, errors }) => console.log('Done', valid, errors));
+
+// Convenience hooks for the two common cases — each fires once per full
+// form validation, only in its respective outcome:
+validator
+    .onPasses(({ data }) => console.log('All good, submitting…'))
+    .onFails((errors) => console.log('Fix these first', errors));
 ```
 
 ## Related pages
