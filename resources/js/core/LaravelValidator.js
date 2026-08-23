@@ -7,58 +7,59 @@ import EventEmitter from './EventEmitter.js';
  * Framework-agnostic - works with Alpine.js, Vanilla JS, or any framework.
  */
 export default class LaravelValidator {
-    constructor(options = {}) {
-        this.rules = this.normalizeRules(options.rules || {});
-        this.messages = options.messages || {};
-        this.attributes = options.attributes || {};
+  constructor(options = {}) {
+    this.rules = this.normalizeRules(options.rules || {});
+    this.messages = options.messages || {};
+    this.attributes = options.attributes || {};
 
-        this.options = {
-            remoteUrl: options.remoteUrl || '/client-validation/validate',
-            debounce: options.debounce || 300,
-            stopOnFirstError: options.stopOnFirstError ?? true,
-            ...options
-        };
+    this.options = {
+      remoteUrl: options.remoteUrl || '/client-validation/validate',
+      debounce: options.debounce || 300,
+      stopOnFirstError: options.stopOnFirstError ?? true,
+      enableAjax: options.enableAjax ?? true,
+      ...options
+    };
 
-        // Core components
-        this.registry = RuleRegistry;
-        this.remote = new RemoteValidator({ url: this.options.remoteUrl });
-        this.events = new EventEmitter();
+    // Core components
+    this.registry = RuleRegistry;
+    this.remote = new RemoteValidator({ url: this.options.remoteUrl });
+    this.events = new EventEmitter();
 
-        // State
-        this.errors = {};
-        this.validating = new Set();
-        this.touched = new Set();
-        this.debounceTimers = new Map();
-    }
+    // State
+    this.errors = {};
+    this.validating = new Set();
+    this.touched = new Set();
+    this.debounceTimers = new Map();
+  }
 
-    /**
+  /**
      * Normalize rules to consistent format
      */
-    normalizeRules(rules) {
-        const normalized = {};
-        for (const [field, fieldRules] of Object.entries(rules)) {
-            if (typeof fieldRules === 'string') {
-                normalized[field] = fieldRules.split('|').filter(r => r.trim());
-            } else if (Array.isArray(fieldRules)) {
-                normalized[field] = fieldRules;
-            } else {
-                normalized[field] = [];
-            }
-        }
-        return normalized;
+  normalizeRules(rules) {
+    const normalized = {};
+    for (const [field, fieldRules] of Object.entries(rules)) {
+      if (typeof fieldRules === 'string') {
+        normalized[field] = fieldRules.split('|').filter(r => r.trim());
+      } else if (Array.isArray(fieldRules)) {
+        normalized[field] = fieldRules;
+      } else {
+        normalized[field] = [];
+      }
     }
+    return normalized;
+  }
 
-    /**
+  /**
      * Parse a single rule string into name and parameters
      * @example parseRule('min:8') => { name: 'min', params: ['8'] }
      */
-    parseRule(rule) {
-        const [name, ...paramsParts] = rule.split(':');
-        const params = paramsParts.length > 0 ? paramsParts[0].split(',') : [];
-        return { name, params };
-    }
+  parseRule(rule) {
+    const [name, ...paramsParts] = rule.split(':');
+    const params = paramsParts.length > 0 ? paramsParts[0].split(',') : [];
+    return { name, params };
+  }
 
-    /**
+  /**
      * Validate a single field
      *
      * @param {string} field - Field name
@@ -66,264 +67,301 @@ export default class LaravelValidator {
      * @param {Object} allData - All form data (for rules like 'confirmed', 'same')
      * @returns {Promise<{valid: boolean, errors: string[]}>}
      */
-    async validateField(field, value, allData = {}) {
-        const fieldRules = this.rules[field];
-        if (!fieldRules || fieldRules.length === 0) {
-            return { valid: true, errors: [] };
-        }
-
-        this.validating.add(field);
-        this.touched.add(field);
-
-        await this.events.emit('field:validating', { field, value });
-
-        const errors = [];
-        let valid = true;
-
-        const hasBail = fieldRules.some(r => this.parseRule(r).name === 'bail');
-
-        for (const ruleString of fieldRules) {
-            const { name, params } = this.parseRule(ruleString);
-
-            if (name === 'nullable' || name === 'bail' || name === 'sometimes') continue;
-
-            if (this.hasRule(field, 'nullable') && this.isEmpty(value)) {
-                break;
-            }
-
-            let result;
-
-            if (this.registry.isRemote(name)) {
-                result = await this.remote.validate(field, value, name, params, {
-                    messages: this.messages,
-                    attributes: this.attributes
-                });
-            } else if (this.registry.has(name)) {
-                result = await this.validateClientRule(field, value, name, params, allData);
-            } else {
-                result = await this.remote.validate(field, value, name, params, {
-                    messages: this.messages,
-                    attributes: this.attributes
-                });
-            }
-
-            if (!result.valid) {
-                valid = false;
-                const message = result.message || this.formatMessage(field, name, params);
-                errors.push(message);
-
-                if (hasBail || this.options.stopOnFirstError) {
-                    break;
-                }
-            }
-        }
-
-        // Update error state
-        if (valid) {
-            delete this.errors[field];
-        } else {
-            this.errors[field] = errors;
-        }
-
-        this.validating.delete(field);
-
-        await this.events.emit('field:validated', { field, value, valid, errors });
-
-        return { valid, errors };
+  async validateField(field, value, allData = {}) {
+    const fieldRules = this.rules[field];
+    if (!fieldRules || fieldRules.length === 0) {
+      return { valid: true, errors: [] };
     }
 
-    async validateClientRule(field, value, ruleName, params, allData) {
-        const validator = this.registry.get(ruleName);
-        if (!validator) {
-            return { valid: true, message: null };
-        }
+    this.validating.add(field);
+    this.touched.add(field);
 
-        const context = { field, allData, rules: this.rules[field] };
+    await this.events.emit('field:validating', { field, value });
 
-        try {
-            let isValid = validator(value, params, field, context);
-            if (isValid instanceof Promise) {
-                isValid = await isValid;
-            }
-            return {
-                valid: isValid,
-                message: isValid ? null : this.formatMessage(field, ruleName, params)
-            };
-        } catch (error) {
-            console.error(`Validation error for rule ${ruleName}:`, error);
-            return { valid: false, message: 'Validation error occurred' };
-        }
-    }
+    const errors = [];
+    let valid = true;
 
-    async validateAll(data = {}) {
-        await this.events.emit('form:validating', { data });
+    const hasBail = fieldRules.some(r => this.parseRule(r).name === 'bail');
 
-        const results = {};
-        let formValid = true;
+    for (const ruleString of fieldRules) {
+      // Server rules arrive prefixed with "ajax:" (e.g. "ajax:unique:users,email")
+      // and always validate remotely.
+      if (ruleString.startsWith('ajax:')) {
+        const serverRule = ruleString.slice('ajax:'.length);
+        const { name, params } = this.parseRule(serverRule);
 
-        for (const field of Object.keys(this.rules)) {
-            const value = data[field] !== undefined ? data[field] : '';
-            const result = await this.validateField(field, value, data);
-            results[field] = result;
+        if (!this.options.enableAjax) continue;
 
-            if (!result.valid) {
-                formValid = false;
-            }
-        }
-
-        await this.events.emit('form:validated', { valid: formValid, errors: this.errors, results });
-
-        return {
-            valid: formValid,
-            errors: { ...this.errors },
-            results
-        };
-    }
-
-    validateFieldDebounced(field, value, allData = {}) {
-        return new Promise((resolve) => {
-            if (this.debounceTimers.has(field)) {
-                clearTimeout(this.debounceTimers.get(field));
-            }
-
-            const timer = setTimeout(async () => {
-                const result = await this.validateField(field, value, allData);
-                this.debounceTimers.delete(field);
-                resolve(result);
-            }, this.options.debounce);
-
-            this.debounceTimers.set(field, timer);
+        result = await this.remote.validate(field, value, name, params, {
+          messages: this.messages,
+          attributes: this.attributes
         });
-    }
 
-    formatMessage(field, ruleName, params) {
-        const customKey = `${field}.${ruleName}`;
-        let message = this.messages[customKey] || this.messages[ruleName] || this.registry.getMessage(ruleName);
-        const displayName = this.attributes[field] || field.replace(/_/g, ' ');
-
-        return message
-            .replace(/:attribute/g, displayName)
-            .replace(/:field/g, displayName)
-            .replace(/:min/g, params[0] || '')
-            .replace(/:max/g, params[1] || params[0] || '')
-            .replace(/:size/g, params[0] || '')
-            .replace(/:digits/g, params[0] || '')
-            .replace(/:date/g, params[0] || '')
-            .replace(/:other/g, params[0] || '');
-    }
-
-    hasRule(field, ruleName) {
-        const fieldRules = this.rules[field] || [];
-        return fieldRules.some(r => this.parseRule(r).name === ruleName);
-    }
-
-    isEmpty(value) {
-        if (value === null || value === undefined) return true;
-        if (typeof value === 'string') return value.trim() === '';
-        if (Array.isArray(value)) return value.length === 0;
-        return false;
-    }
-
-    // State Methods
-
-    getErrors(field) {
-        return this.errors[field] || [];
-    }
-
-    getError(field) {
-        const errors = this.getErrors(field);
-        return errors.length > 0 ? errors[0] : null;
-    }
-
-    hasError(field) {
-        return Boolean(this.errors[field] && this.errors[field].length > 0);
-    }
-
-    hasErrors() {
-        return Object.keys(this.errors).length > 0;
-    }
-
-    isValidating(field = null) {
-        if (field) {
-            return this.validating.has(field);
+        if (!result.valid) {
+          valid = false;
+          errors.push(result.message || this.formatMessage(field, name, params));
+          if (hasBail || this.options.stopOnFirstError) break;
         }
-        return this.validating.size > 0;
-    }
+        continue;
+      }
 
-    isTouched(field) {
-        return this.touched.has(field);
-    }
+      const { name, params } = this.parseRule(ruleString);
 
-    isValid(field = null) {
-        if (field) {
-            return this.touched.has(field) && !this.hasError(field);
+      if (name === 'nullable' || name === 'bail' || name === 'sometimes') continue;
+
+      if (this.hasRule(field, 'nullable') && this.isEmpty(value)) {
+        break;
+      }
+
+      let result;
+
+      if (this.registry.isRemote(name)) {
+        result = await this.remote.validate(field, value, name, params, {
+          messages: this.messages,
+          attributes: this.attributes
+        });
+      } else if (this.registry.has(name)) {
+        result = await this.validateClientRule(field, value, name, params, allData);
+      } else {
+        result = await this.remote.validate(field, value, name, params, {
+          messages: this.messages,
+          attributes: this.attributes
+        });
+      }
+
+      if (!result.valid) {
+        valid = false;
+        const message = result.message || this.formatMessage(field, name, params);
+        errors.push(message);
+
+        if (hasBail || this.options.stopOnFirstError) {
+          break;
         }
-        for (const f of Object.keys(this.rules)) {
-            if (this.hasError(f)) return false;
-        }
-        return this.touched.size > 0;
+      }
     }
 
-    clearErrors(field = null) {
-        if (field) {
-            delete this.errors[field];
-            this.touched.delete(field);
-        } else {
-            this.errors = {};
-            this.touched.clear();
-        }
+    // Update error state
+    if (valid) {
+      delete this.errors[field];
+    } else {
+      this.errors[field] = errors;
     }
 
-    reset() {
-        this.errors = {};
-        this.touched.clear();
-        this.validating.clear();
-        this.debounceTimers.forEach(timer => clearTimeout(timer));
-        this.debounceTimers.clear();
+    this.validating.delete(field);
+
+    await this.events.emit('field:validated', { field, value, valid, errors });
+
+    return { valid, errors };
+  }
+
+  async validateClientRule(field, value, ruleName, params, allData) {
+    const validator = this.registry.get(ruleName);
+    if (!validator) {
+      return { valid: true, message: null };
     }
 
-    // Rule Management
+    const context = { field, allData, rules: this.rules[field] };
 
-    setRules(rules) {
-        this.rules = { ...this.rules, ...this.normalizeRules(rules) };
+    try {
+      let isValid = validator(value, params, field, context);
+      if (isValid instanceof Promise) {
+        isValid = await isValid;
+      }
+      return {
+        valid: isValid,
+        message: isValid ? null : this.formatMessage(field, ruleName, params)
+      };
+    } catch (error) {
+      console.error(`Validation error for rule ${ruleName}:`, error);
+      return { valid: false, message: 'Validation error occurred' };
+    }
+  }
+
+  async validateAll(data = {}) {
+    await this.events.emit('form:validating', { data });
+
+    const results = {};
+    let formValid = true;
+
+    for (const field of Object.keys(this.rules)) {
+      const value = data[field] !== undefined ? data[field] : '';
+      const result = await this.validateField(field, value, data);
+      results[field] = result;
+
+      if (!result.valid) {
+        formValid = false;
+      }
     }
 
-    setMessages(messages) {
-        this.messages = { ...this.messages, ...messages };
-    }
+    await this.events.emit('form:validated', { valid: formValid, errors: this.errors, results });
 
-    setAttributes(attributes) {
-        this.attributes = { ...this.attributes, ...attributes };
-    }
+    return {
+      valid: formValid,
+      errors: { ...this.errors },
+      results
+    };
+  }
 
-    extend(name, validator, message = null) {
-        this.registry.extend(name, validator, message);
-    }
+  validateFieldDebounced(field, value, allData = {}) {
+    return new Promise((resolve) => {
+      if (this.debounceTimers.has(field)) {
+        clearTimeout(this.debounceTimers.get(field));
+      }
 
-    // Event Hooks
+      const timer = setTimeout(async () => {
+        const result = await this.validateField(field, value, allData);
+        this.debounceTimers.delete(field);
+        resolve(result);
+      }, this.options.debounce);
 
-    beforeFieldValidate(callback) {
-        this.events.on('field:validating', callback);
-        return this;
-    }
+      this.debounceTimers.set(field, timer);
+    });
+  }
 
-    afterFieldValidate(callback) {
-        this.events.on('field:validated', callback);
-        return this;
-    }
+  formatMessage(field, ruleName, params) {
+    const customKey = `${field}.${ruleName}`;
+    let message = this.messages[customKey] || this.messages[ruleName] || this.registry.getMessage(ruleName);
+    const displayName = this.attributes[field] || field.replace(/_/g, ' ');
 
-    beforeValidate(callback) {
-        this.events.on('form:validating', callback);
-        return this;
-    }
+    return message
+      .replace(/:attribute/g, displayName)
+      .replace(/:field/g, displayName)
+      .replace(/:min/g, params[0] || '')
+      .replace(/:max/g, params[1] || params[0] || '')
+      .replace(/:size/g, params[0] || '')
+      .replace(/:digits/g, params[0] || '')
+      .replace(/:date/g, params[0] || '')
+      .replace(/:other/g, params[0] || '');
+  }
 
-    afterValidate(callback) {
-        this.events.on('form:validated', callback);
-        return this;
-    }
+  hasRule(field, ruleName) {
+    const fieldRules = this.rules[field] || [];
+    return fieldRules.some(r => this.parseRule(r).name === ruleName);
+  }
 
-    destroy() {
-        this.reset();
-        this.events.removeAll();
+  isEmpty(value) {
+    if (value === null || value === undefined) return true;
+    if (typeof value === 'string') return value.trim() === '';
+    if (Array.isArray(value)) return value.length === 0;
+    return false;
+  }
+
+  // State Methods
+
+  getErrors(field) {
+    return this.errors[field] || [];
+  }
+
+  getError(field) {
+    const errors = this.getErrors(field);
+    return errors.length > 0 ? errors[0] : null;
+  }
+
+  hasError(field) {
+    return Boolean(this.errors[field] && this.errors[field].length > 0);
+  }
+
+  hasErrors() {
+    return Object.keys(this.errors).length > 0;
+  }
+
+  isValidating(field = null) {
+    if (field) {
+      return this.validating.has(field);
     }
+    return this.validating.size > 0;
+  }
+
+  isTouched(field) {
+    return this.touched.has(field);
+  }
+
+  isValid(field = null) {
+    if (field) {
+      return this.touched.has(field) && !this.hasError(field);
+    }
+    for (const f of Object.keys(this.rules)) {
+      if (this.hasError(f)) return false;
+    }
+    return this.touched.size > 0;
+  }
+
+  clearErrors(field = null) {
+    if (field) {
+      delete this.errors[field];
+      this.touched.delete(field);
+    } else {
+      this.errors = {};
+      this.touched.clear();
+    }
+  }
+
+  reset() {
+    this.errors = {};
+    this.touched.clear();
+    this.validating.clear();
+    this.debounceTimers.forEach(timer => clearTimeout(timer));
+    this.debounceTimers.clear();
+  }
+
+  // Rule Management
+
+  setRules(rules) {
+    this.rules = { ...this.rules, ...this.normalizeRules(rules) };
+  }
+
+  setMessages(messages) {
+    this.messages = { ...this.messages, ...messages };
+  }
+
+  setAttributes(attributes) {
+    this.attributes = { ...this.attributes, ...attributes };
+  }
+
+  extend(name, validator, message = null) {
+    this.registry.extend(name, validator, message);
+  }
+
+  // Event Hooks
+
+  beforeFieldValidate(callback) {
+    this.events.on('field:validating', callback);
+    return this;
+  }
+
+  afterFieldValidate(callback) {
+    this.events.on('field:validated', callback);
+    return this;
+  }
+
+  beforeValidate(callback) {
+    this.events.on('form:validating', callback);
+    return this;
+  }
+
+  afterValidate(callback) {
+    this.events.on('form:validated', callback);
+    return this;
+  }
+
+  /** Register a callback fired after form validation passes. */
+  onPasses(callback) {
+    this.events.on('form:validated', (payload) => {
+      if (payload?.valid) callback(payload);
+    });
+    return this;
+  }
+
+  /** Register a callback fired after form validation fails. */
+  onFails(callback) {
+    this.events.on('form:validated', (payload) => {
+      if (payload && !payload.valid) callback(payload);
+    });
+    return this;
+  }
+
+  destroy() {
+    this.reset();
+    this.events.removeAll();
+  }
 }

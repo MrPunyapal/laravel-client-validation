@@ -1,3 +1,3 @@
 export default function missing(value) {
-    return value === undefined;
+  return value === undefined;
 }

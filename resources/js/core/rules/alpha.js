@@ -1,11 +1,13 @@
 export default function alpha(value, params) {
-    if (!value) return true;
+  if (!value) return true;
 
-    const ascii = params && params.includes('ascii');
+  // Unicode letters by default (matches Laravel); the optional 'ascii'
+  // parameter restricts matching to a-z/A-Z.
+  const ascii = params && params.includes('ascii');
 
-    if (ascii) {
-        return /^[a-zA-Z]+$/.test(value);
-    }
+  if (ascii) {
+    return /^[a-zA-Z]+$/.test(value);
+  }
 
-    return /^[\p{L}\p{M}]+$/u.test(value);
+  return /^[\p{L}\p{M}]+$/u.test(value);
 }

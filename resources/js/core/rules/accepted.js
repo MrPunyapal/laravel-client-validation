@@ -1,5 +1,5 @@
 export default function accepted(value) {
-    return value === 'yes' ||
+  return value === 'yes' ||
            value === 'on' ||
            value === '1' ||
            value === 1 ||

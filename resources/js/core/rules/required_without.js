@@ -1,18 +1,19 @@
 export default function requiredWithout(value, params, field, context = {}) {
-    const allData = context.allData || {};
+  if (!Array.isArray(params) || params.length === 0) return true;
+  const allData = context.allData || {};
 
-    const allOthersPresent = params.every(otherField => {
-        const otherValue = allData[otherField];
-        if (otherValue === null || otherValue === undefined) return false;
-        if (typeof otherValue === 'string') return otherValue.trim() !== '';
-        if (Array.isArray(otherValue)) return otherValue.length > 0;
-        return true;
-    });
-
-    if (allOthersPresent) return true;
-
-    if (value === null || value === undefined) return false;
-    if (typeof value === 'string') return value.trim() !== '';
-    if (Array.isArray(value)) return value.length > 0;
+  const allOthersPresent = params.every(otherField => {
+    const otherValue = allData[otherField];
+    if (otherValue === null || otherValue === undefined) return false;
+    if (typeof otherValue === 'string') return otherValue.trim() !== '';
+    if (Array.isArray(otherValue)) return otherValue.length > 0;
     return true;
+  });
+
+  if (allOthersPresent) return true;
+
+  if (value === null || value === undefined) return false;
+  if (typeof value === 'string') return value.trim() !== '';
+  if (Array.isArray(value)) return value.length > 0;
+  return true;
 }

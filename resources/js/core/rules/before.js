@@ -1,12 +1,15 @@
-export default function before(value, [beforeDate]) {
-    if (!value) return true;
+import { resolveDateParam } from './date_utils.js';
 
-    const date = new Date(value);
-    const compareDate = new Date(beforeDate);
+export default function before(value, params, field, context = {}) {
+  if (!Array.isArray(params) || params.length === 0) return false;
+  if (!value) return true;
 
-    if (isNaN(date.getTime()) || isNaN(compareDate.getTime())) {
-        return false;
-    }
+  const date = new Date(value);
+  const compareDate = resolveDateParam(params[0], context.allData);
 
-    return date < compareDate;
+  if (isNaN(date.getTime()) || !compareDate) {
+    return false;
+  }
+
+  return date.getTime() < compareDate.getTime();
 }

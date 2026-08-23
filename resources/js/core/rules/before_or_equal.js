@@ -1,21 +1,17 @@
-export default function beforeOrEqual(value, [dateParam], field, context = {}) {
-    if (!value) return true;
+import { resolveDateParam } from './date_utils.js';
 
-    const allData = context.allData || {};
-    let compareDate;
+export default function beforeOrEqual(value, params, field, context = {}) {
+  if (!Array.isArray(params) || params.length === 0) return false;
+  if (!value) return true;
 
-    if (allData[dateParam]) {
-        compareDate = new Date(allData[dateParam]);
-    } else {
-        compareDate = new Date(dateParam);
-    }
+  const inputDate = new Date(value);
+  const compareDate = resolveDateParam(params[0], context.allData);
 
-    const inputDate = new Date(value);
+  if (isNaN(inputDate.getTime()) || !compareDate) return false;
 
-    if (isNaN(inputDate.getTime()) || isNaN(compareDate.getTime())) return false;
+  // Compare calendar days, so date-only inputs compare predictably.
+  inputDate.setHours(0, 0, 0, 0);
+  compareDate.setHours(0, 0, 0, 0);
 
-    inputDate.setHours(0, 0, 0, 0);
-    compareDate.setHours(0, 0, 0, 0);
-
-    return inputDate <= compareDate;
+  return inputDate <= compareDate;
 }

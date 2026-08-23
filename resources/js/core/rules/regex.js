@@ -1,22 +1,15 @@
-export default function regex(value, [pattern, flags = '']) {
-    if (!value) return true;
+import { buildPattern } from './build_pattern.js';
 
-    try {
-        // Remove leading and trailing slashes if present (Laravel format)
-        let cleanPattern = pattern;
-        if (pattern.startsWith('/') && pattern.lastIndexOf('/') > 0) {
-            const lastSlash = pattern.lastIndexOf('/');
-            cleanPattern = pattern.slice(1, lastSlash);
-            // Extract flags after the last slash if no flags parameter provided
-            if (!flags && lastSlash < pattern.length - 1) {
-                flags = pattern.slice(lastSlash + 1);
-            }
-        }
+export default function regex(value, params) {
+  if (!value) return true;
 
-        const regex = new RegExp(cleanPattern, flags);
-        return regex.test(value);
-    } catch (e) {
-        console.warn('Invalid regex pattern:', pattern);
-        return false;
-    }
+  const { pattern, flags } = buildPattern(params);
+  if (!pattern) return false;
+
+  try {
+    return new RegExp(pattern, flags).test(String(value));
+  } catch (e) {
+    console.warn('Invalid regex pattern:', pattern);
+    return false;
+  }
 }

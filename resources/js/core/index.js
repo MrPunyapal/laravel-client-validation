@@ -4,11 +4,11 @@ import RemoteValidator from './RemoteValidator.js';
 import EventEmitter from './EventEmitter.js';
 
 export {
-    LaravelValidator,
-    LaravelValidator as Validator,
-    RuleRegistry,
-    RemoteValidator,
-    EventEmitter,
+  LaravelValidator,
+  LaravelValidator as Validator,
+  RuleRegistry,
+  RemoteValidator,
+  EventEmitter,
 };
 
 export default LaravelValidator;

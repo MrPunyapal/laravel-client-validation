@@ -1,11 +1,12 @@
 export default function presentIf(value, params, field, context = {}) {
-    const [otherField, ...expectedValues] = params;
-    const allData = context.allData || {};
-    const otherValue = String(allData[otherField] ?? '');
+  if (!Array.isArray(params) || params.length < 2) return true;
+  const [otherField, ...expectedValues] = params;
+  const allData = context.allData || {};
+  const otherValue = String(allData[otherField] ?? '');
 
-    const shouldBePresent = expectedValues.some(v => String(v) === otherValue);
+  const shouldBePresent = expectedValues.some(v => String(v) === otherValue);
 
-    if (!shouldBePresent) return true;
+  if (!shouldBePresent) return true;
 
-    return value !== undefined;
+  return value !== undefined;
 }

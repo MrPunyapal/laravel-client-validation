@@ -1,3 +1,3 @@
 export default function present(value) {
-    return value !== undefined;
+  return value !== undefined;
 }

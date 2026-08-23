@@ -1,23 +1,22 @@
 export default function decimal(value, params = []) {
-    if (!value && value !== 0) return true;
+  if (value === null || value === undefined || value === '') return true;
+  if (typeof value === 'boolean') return false;
 
-    const str = String(value);
-    const decimalMatch = str.match(/^-?\d+\.(\d+)$/);
+  const str = String(value);
 
-    if (!decimalMatch) {
-        return params.length === 0 || (params[0] === '0' && /^-?\d+$/.test(str));
-    }
+  const [minParam, maxParam] = Array.isArray(params) ? params : [];
 
-    const decimalPlaces = decimalMatch[1].length;
-    const [min, max] = params;
+  if (minParam === undefined) {
+    // No parameters (package extension): any decimal number.
+    return /^[+-]?\d*\.?\d+$/.test(str);
+  }
 
-    if (min !== undefined && max !== undefined) {
-        return decimalPlaces >= Number(min) && decimalPlaces <= Number(max);
-    }
+  // Package extension: a single parameter means "exactly N decimal places",
+  // i.e. the same pattern as Laravel with min = max.
+  const min = parseInt(minParam, 10);
+  const max = maxParam !== undefined ? parseInt(maxParam, 10) : min;
+  if (isNaN(min) || isNaN(max)) return false;
 
-    if (min !== undefined) {
-        return decimalPlaces === Number(min);
-    }
-
-    return true;
+  // Mirrors Laravel: /^[+-]?\d*\.?\d{min,max}$/
+  return new RegExp(`^[+-]?\\d*\\.?\\d{${min},${max}}$`).test(str);
 }

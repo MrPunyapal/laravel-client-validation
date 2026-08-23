@@ -1,9 +1,10 @@
 export default function missingWith(value, params, field, context = {}) {
-    const allData = context.allData || {};
+  if (!Array.isArray(params) || params.length === 0) return true;
+  const allData = context.allData || {};
 
-    const anyPresent = params.some(f => allData[f] !== undefined);
+  const anyPresent = params.some(f => allData[f] !== undefined);
 
-    if (!anyPresent) return true;
+  if (!anyPresent) return true;
 
-    return value === undefined;
+  return value === undefined;
 }
