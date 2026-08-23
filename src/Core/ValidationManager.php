@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Validator;
 use MrPunyapal\ClientValidation\Contracts\RuleParserInterface;
 use MrPunyapal\ClientValidation\Contracts\ValidationManagerInterface;
 use MrPunyapal\ClientValidation\Hooks\ValidationHooks;
-
 /**
  * Central orchestrator for client-side validation.
  *
@@ -72,32 +71,32 @@ class ValidationManager implements ValidationManagerInterface
 
     public function fromLivewireComponent($component): ValidationContext
     {
-        $rules = [];
-        $messages = [];
-        $attributes = [];
-
-        // Extract rules from Livewire component
-        if (method_exists($component, 'rules')) {
-            $rules = $component->rules();
-        } elseif (property_exists($component, 'rules')) {
-            $rules = $component->rules;
-        }
-
-        // Extract messages
-        if (method_exists($component, 'messages')) {
-            $messages = $component->messages();
-        } elseif (property_exists($component, 'messages')) {
-            $messages = $component->messages;
-        }
-
-        // Extract custom attributes
-        if (method_exists($component, 'validationAttributes')) {
-            $attributes = $component->validationAttributes();
-        } elseif (property_exists($component, 'validationAttributes')) {
-            $attributes = $component->validationAttributes;
-        }
+        $rules = $this->extractFromComponent($component, 'rules') ?? [];
+        $messages = $this->extractFromComponent($component, 'messages') ?? [];
+        $attributes = $this->extractFromComponent($component, 'validationAttributes') ?? [];
 
         return $this->createContext($rules, $messages, $attributes);
+    }
+
+    /**
+     * Extract a value from a component via method or (protected) property.
+     *
+     * Livewire components intercept inaccessible property reads through
+     * __get(), so reflection is used to read properties safely.
+     */
+    private function extractFromComponent(object $component, string $name): mixed
+    {
+        if (method_exists($component, $name)) {
+            return $component->{$name}();
+        }
+
+        try {
+            $property = new \ReflectionProperty($component, $name);
+
+            return $property->getValue($component);
+        } catch (\ReflectionException) {
+            return null;
+        }
     }
 
     public function createDirective(string $field, string $rules, array $options = []): DirectiveContext

@@ -31,31 +31,36 @@ class RuleParser implements RuleParserInterface
 
     /**
      * Default client-side rules when config is not available.
+     *
+     * @link https://laravel.com/docs/validation#available-validation-rules
      */
     private const DEFAULT_CLIENT_RULES = [
-        'required', 'email', 'min', 'max', 'numeric', 'integer',
-        'alpha', 'alpha_num', 'alpha_dash', 'url', 'between',
-        'confirmed', 'size', 'in', 'not_in', 'boolean', 'date',
-        'after', 'before', 'regex', 'same', 'different', 'digits',
-        'digits_between', 'string', 'nullable', 'accepted', 'array',
-        'json', 'file', 'image', 'mimes', 'extensions', 'filled',
-        'present', 'distinct', 'lt', 'lte', 'gt', 'gte',
-        'starts_with', 'ends_with', 'doesnt_start_with', 'doesnt_end_with',
-        'uuid', 'ulid', 'lowercase', 'uppercase', 'ip', 'ipv4', 'ipv6',
-        'mac_address', 'ascii', 'decimal', 'multiple_of',
-        'after_or_equal', 'before_or_equal', 'date_equals', 'date_format',
-        'accepted_if', 'declined', 'declined_if',
-        'prohibited', 'prohibited_if', 'prohibited_unless',
-        'required_if', 'required_unless', 'required_with', 'required_without',
-        'required_with_all', 'required_without_all', 'required_array_keys',
-        'min_digits', 'max_digits', 'timezone', 'active_url', 'hex_color',
-        'any_of', 'password_strength',
-        'not_regex', 'contains', 'doesnt_contain', 'in_array', 'in_array_keys',
-        'list', 'missing', 'missing_if', 'missing_unless', 'missing_with',
-        'missing_with_all', 'present_if', 'present_unless', 'present_with',
-        'present_with_all', 'prohibited_if_accepted', 'prohibited_if_declined',
-        'prohibits', 'required_if_accepted', 'required_if_declined',
-        'enum', 'file', 'image', 'mimes', 'mimetypes', 'extensions', 'dimensions',
+        // Core
+        'accepted', 'accepted_if', 'after', 'after_or_equal', 'alpha',
+        'alpha_dash', 'alpha_num', 'any_of', 'array', 'ascii', 'before',
+        'before_or_equal', 'between', 'boolean', 'confirmed', 'contains',
+        'date', 'date_equals', 'date_format', 'decimal', 'declined',
+        'declined_if', 'different', 'digits', 'digits_between', 'dimensions',
+        'distinct', 'doesnt_contain', 'doesnt_end_with', 'doesnt_start_with',
+        'email', 'ends_with', 'enum', 'extensions', 'file', 'filled',
+        'gt', 'gte', 'hex_color', 'image', 'in', 'in_array', 'in_array_keys',
+        'integer', 'ip', 'ipv4', 'ipv6', 'json', 'list', 'lowercase',
+        'lt', 'lte', 'mac_address', 'max', 'max_digits', 'mimes',
+        'mimetypes', 'min', 'min_digits', 'missing', 'missing_if',
+        'missing_unless', 'missing_with', 'missing_with_all',
+        'multiple_of', 'not_in', 'not_regex', 'nullable', 'numeric',
+        'password_strength', 'present', 'present_if', 'present_unless',
+        'present_with', 'present_with_all', 'prohibited', 'prohibited_if',
+        'prohibited_if_accepted', 'prohibited_if_declined',
+        'prohibited_unless', 'prohibits', 'regex', 'required',
+        'required_array_keys', 'required_if', 'required_if_accepted',
+        'required_if_declined', 'required_unless', 'required_with',
+        'required_with_all', 'required_without', 'required_without_all',
+        'same', 'size', 'starts_with', 'string', 'timezone', 'ulid',
+        'uppercase', 'url', 'uuid',
+
+        // Package extras
+        'active_url', 'bail', 'password_strength',
     ];
 
     /**
@@ -63,6 +68,7 @@ class RuleParser implements RuleParserInterface
      */
     private const DEFAULT_SERVER_RULES = [
         'unique', 'exists', 'password', 'current_password',
+        'can',
         'exclude', 'exclude_if', 'exclude_unless', 'exclude_with',
         'exclude_without', 'sometimes',
     ];
@@ -73,7 +79,6 @@ class RuleParser implements RuleParserInterface
     private const DEFAULT_CONDITIONAL_RULES = [
         'required_if', 'required_unless', 'required_with',
         'required_with_all', 'required_without', 'required_without_all',
-        'nullable_if', 'nullable_unless',
     ];
 
     public function __construct()

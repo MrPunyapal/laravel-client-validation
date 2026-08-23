@@ -15,6 +15,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Auto Bind Livewire Validation
+    |--------------------------------------------------------------------------
+    |
+    | Automatically bind client-side validation to Livewire components that
+    | use the WithClientValidation trait. When enabled, rules defined in PHP
+    | are injected into the component snapshot and validated in the browser
+    | without any Blade template changes.
+    |
+    */
+    'auto_bind_livewire' => env('CLIENT_VALIDATION_AUTO_BIND_LIVEWIRE', true),
+
+    /*
+    |--------------------------------------------------------------------------
     | Enable AJAX Validation
     |--------------------------------------------------------------------------
     |
@@ -209,7 +222,7 @@ return [
     |
     */
     'server_side_rules' => [
-        'unique', 'exists', 'password', 'current_password', 'encoding',
+        'unique', 'exists', 'password', 'current_password', 'can',
         'exclude', 'exclude_if', 'exclude_unless', 'exclude_with',
         'exclude_without', 'sometimes',
     ],
@@ -225,7 +238,6 @@ return [
     'conditional_rules' => [
         'required_if', 'required_unless', 'required_with',
         'required_with_all', 'required_without', 'required_without_all',
-        'nullable_if', 'nullable_unless',
     ],
 
     /*

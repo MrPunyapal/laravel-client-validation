@@ -95,6 +95,9 @@ readonly class ParsedFieldRules
     /**
      * Get rule strings for client-side validation with ajax: prefix for server rules.
      *
+     * Conditional rules are included as-is because they depend on sibling field
+     * values, which are available in the browser.
+     *
      * @return array<int, string>
      */
     public function toClientRuleStrings(): array
@@ -104,12 +107,17 @@ readonly class ParsedFieldRules
             $this->clientRules
         );
 
+        $conditionalRules = array_map(
+            static fn (RuleData $rule): string => $rule->getString(),
+            $this->conditionalRules
+        );
+
         $serverRules = array_map(
             static fn (RuleData $rule): string => 'ajax:' . $rule->getString(),
             $this->serverRules
         );
 
-        return [...$rules, ...$serverRules];
+        return [...$rules, ...$conditionalRules, ...$serverRules];
     }
 
     /**
