@@ -97,3 +97,59 @@ it('handles empty rules gracefully', function () {
     expect(json_decode($clientMessages, true))->toBeArray();
     expect(json_decode($clientAttributes, true))->toBeArray();
 });
+
+it('returns empty payload when no rules are defined', function () {
+    $component = new class
+    {
+        use WithClientValidation;
+    };
+
+    expect($component->getClientValidationPayload())->toBe([]);
+});
+
+it('generates client validation payload for livewire components', function () {
+    $component = new class
+    {
+        use WithClientValidation;
+
+        protected $rules = [
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|unique:users,email',
+        ];
+
+        protected $messages = [
+            'name.required' => 'Name is required',
+        ];
+
+        protected function validationAttributes()
+        {
+            return ['email' => 'email address'];
+        }
+    };
+
+    $payload = $component->getClientValidationPayload();
+
+    expect($payload)->toHaveKeys(['rules', 'ajax_rules', 'messages', 'attributes', 'config'])
+        ->and($payload['rules'])->toHaveKey('name')
+        ->and($payload['rules']['name'])->toContain('required')
+        ->and($payload['messages'])->toHaveKey('name.required')
+        ->and($payload['attributes'])->toHaveKey('email');
+});
+
+it('prefixes server rules with ajax in the payload while keeping client rules clean', function () {
+    $component = new class
+    {
+        use WithClientValidation;
+
+        protected $rules = [
+            'email' => 'required|email|unique:users,email',
+            'company' => 'required_if:role,admin|string',
+        ];
+    };
+
+    $rules = $component->getClientValidationPayload()['rules'];
+
+    expect($rules['email'])->toContain('required')
+        ->and($rules['email'])->toContain('ajax:unique:users,email')
+        ->and($rules['company'])->toContain('required_if:role,admin');
+});

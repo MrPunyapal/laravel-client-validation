@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MrPunyapal\ClientValidation\Livewire;
 
 use MrPunyapal\ClientValidation\Facades\ClientValidation;
+use MrPunyapal\ClientValidation\Core\ValidationManager;
 
 /**
  * @property-read string $clientRules
@@ -15,6 +16,32 @@ use MrPunyapal\ClientValidation\Facades\ClientValidation;
  */
 trait WithClientValidation
 {
+    /**
+     * Payload injected into the Livewire snapshot by ClientValidationHook.
+     *
+     * Contains only client-safe rules; server rules (unique, exists, ...)
+     * are prefixed with "ajax:" and validated remotely.
+     *
+     * @return array{rules: array<string, array<int, string>>, ajax_rules?: array<string, mixed>, messages: array<string, string>, attributes: array<string, string>, config: array<string, mixed>}|array<empty, empty>
+     */
+    public function getClientValidationPayload(): array
+    {
+        $rules = $this->extractRules();
+
+        if ($rules === []) {
+            return [];
+        }
+
+        /** @var ValidationManager $manager */
+        $manager = app(ValidationManager::class);
+
+        return $manager->fromRules(
+            $rules,
+            $this->extractMessages(),
+            $this->extractValidationAttributes()
+        )->toClientPayload();
+    }
+
     public function getClientRulesProperty(): string
     {
         return ClientValidation::rules($this->extractRules());

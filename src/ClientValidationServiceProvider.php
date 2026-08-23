@@ -28,6 +28,14 @@ class ClientValidationServiceProvider extends PackageServiceProvider
             ->publishesServiceProvider('ClientValidationServiceProvider');
     }
 
+    public function registeringPackage(): void
+    {
+        // Register during the registration phase: Laravel registers every
+        // provider before booting any, so this hook is always present when
+        // Livewire's ComponentHookRegistry::boot() attaches its listeners.
+        $this->registerLivewireHook();
+    }
+
     public function packageBooted(): void
     {
         $this->registerBladeDirectives();
@@ -131,6 +139,19 @@ class ClientValidationServiceProvider extends PackageServiceProvider
             [$field, $rules] = array_pad(explode(',', $params, 2), 2, '""');
             return "<?php echo app('client-validation')->directive({$field}, {$rules}, ['mode' => 'form']); ?>";
         });
+    }
+
+    protected function registerLivewireHook(): void
+    {
+        if (
+            ! config('client-validation.auto_bind_livewire', true)
+            || ! class_exists(\Livewire\Component::class)
+            || ! class_exists(\Livewire\ComponentHookRegistry::class)
+        ) {
+            return;
+        }
+
+        \Livewire\ComponentHookRegistry::register(Livewire\ClientValidationHook::class);
     }
 
     protected function registerRoutes(): void
