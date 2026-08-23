@@ -11,6 +11,7 @@ $__cvConfig = [
     'fieldStyling' => config('client-validation.field_styling.enabled', true),
     'enableAjax' => config('client-validation.enable_ajax_validation', true),
     'ajaxTimeout' => config('client-validation.ajax_timeout', 5000),
+    'autoBindLivewire' => config('client-validation.auto_bind_livewire', true),
 ];
 @endphp
 <script>
