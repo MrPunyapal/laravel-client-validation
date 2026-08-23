@@ -212,19 +212,55 @@ export default function registerAlpine(Alpine) {
   });
 }
 
+/**
+ * Gather current values of sibling named fields so rules like `confirmed`,
+ * `same:x`, or `required_if:y` can compare against them in bare-directive
+ * mode (no validation() component supplying form state). Preference order:
+ * enclosing <form> → enclosing x-data root → whole document.
+ */
+function collectSiblingData(el) {
+  const scope = el.closest('form')
+    || (function findXDataRoot() {
+      let node = el;
+      while ((node = node.parentElement)) {
+        if (node.hasAttribute && node.hasAttribute('x-data')) return node;
+      }
+      return null;
+    })()
+    || el.ownerDocument;
+
+  const data = {};
+  scope.querySelectorAll('input[name], select[name], textarea[name]').forEach((input) => {
+    if (input === el || input.type === 'file' || !input.name) return;
+    if (input.type === 'checkbox') {
+      data[input.name] = input.checked;
+    } else if (input.type === 'radio') {
+      if (input.checked) data[input.name] = input.value;
+    } else {
+      data[input.name] = input.value;
+    }
+  });
+
+  // The field's own value is supplied separately by the caller; keep it out
+  // of the sibling snapshot unless a duplicate name exists.
+  delete data[el.name];
+
+  return data;
+}
+
 function setupFieldHandlers(el, validator, fieldName, mode, config) {
   const unsubscribers = [];
 
   const validateField = async () => {
     const value = getFieldValue(el);
-    const result = await validator.validateField(fieldName, value);
+    const result = await validator.validateField(fieldName, value, collectSiblingData(el));
     updateFieldUI(el, result, config);
     return result.valid;
   };
 
   const validateFieldDebounced = async () => {
     const value = getFieldValue(el);
-    const result = await validator.validateFieldDebounced(fieldName, value);
+    const result = await validator.validateFieldDebounced(fieldName, value, collectSiblingData(el));
     updateFieldUI(el, result, config);
     return result.valid;
   };

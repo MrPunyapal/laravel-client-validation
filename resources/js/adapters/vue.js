@@ -13,17 +13,34 @@ const defaults = {
   invalidClass: 'border-red-500',
 };
 
+// Options captured by VueValidationPlugin.install() so the v-validate
+// directive (which reads config at mount time) honors app.use() options
+// instead of only window-level config.
+let pluginOptions = null;
+
 function getConfig() {
+  if (pluginOptions) {
+    return { ...defaults, ...windowConfig(), ...pluginOptions };
+  }
   if (typeof window !== 'undefined' && window.LaravelClientValidation?.config) {
     return { ...defaults, ...window.LaravelClientValidation.config };
   }
   return defaults;
 }
 
+function windowConfig() {
+  return (typeof window !== 'undefined' && window.LaravelClientValidation?.config) || {};
+}
+
 /**
- * Vue 3 Composable for form validation
+ * Vue 3 composable for form validation.
+ *
+ * Returns a plain object: mutations are NOT reactive by themselves. Wrap
+ * values you render in your own `ref`/`reactive` state (see docs), or use
+ * the v-validate directive / VueValidationPlugin for automatic rendering.
+ *
  * @param {Object} options - Validation options
- * @returns {Object} - Reactive validation state and methods
+ * @returns {Object} - Validation state and methods
  */
 export function useValidation(options = {}) {
   const config = { ...getConfig(), ...options };
@@ -271,6 +288,9 @@ export const vValidate = {
 export const VueValidationPlugin = {
   install(app, options = {}) {
     const config = { ...getConfig(), ...options };
+
+    // Directive mounts read getConfig(); make install-time options win.
+    pluginOptions = options;
 
     // Register global directive
     app.directive('validate', vValidate);

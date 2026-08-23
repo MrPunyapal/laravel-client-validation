@@ -30,6 +30,8 @@ If you load the browser bundle through `@clientValidationAssets`, the package au
 
 `x-validate` validates on blur by default. `.live` adds debounced input validation and `.submit` blocks form submission until the field passes.
 
+Cross-field rules (`confirmed`, `same:other`, `required_if:role,admin`, …) work in bare-directive mode too: sibling values are read from the enclosing `<form>`, falling back to the surrounding `x-data` root. For full control over the compared state — or fields that live in different forms — use the `validation()` component instead, shown below.
+
 ## Manage a full Alpine form
 
 ```html
@@ -61,7 +63,7 @@ The helper keeps touched state, per-field errors, and debounced remote validatio
 
 ## Cross-field and remote rules
 
-Rules such as `same`, `different`, `required_if`, and `unique` work best when every sibling value lives in the same `form` object so Alpine always passes the latest state into the validator.
+Rules such as `same`, `different`, `required_if`, and `unique` work best when every sibling value lives in the same `form` object so Alpine always passes the latest state into the validator. Bare directives also compare against sibling inputs in the same `<form>` automatically; prefer the component form when fields span multiple forms or you keep values outside the DOM.
 
 ## Related pages
 

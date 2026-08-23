@@ -129,7 +129,11 @@ if (typeof window !== 'undefined') {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => init(window.clientValidationConfig || {}));
   } else {
-    init(window.clientValidationConfig || {});
+    // Ready-state is already 'interactive' while deferred scripts execute.
+    // Defer one tick so bundler-emitted globals (e.g. Vite/UMD export tails
+    // that replace window.LaravelClientValidation) land BEFORE we decorate
+    // it with config — otherwise user config is silently discarded.
+    setTimeout(() => init(window.clientValidationConfig || {}), 0);
   }
 }
 

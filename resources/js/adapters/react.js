@@ -21,7 +21,13 @@ function getConfig() {
 }
 
 /**
- * React hook for form validation
+ * Validation state factory for React.
+ *
+ * NOT a true hook: it holds no React state internally and never re-renders
+ * the calling component. Create it once (useRef / module scope) and mirror
+ * changes into component state via `validator.subscribe(...)`, or prefer
+ * createFieldProps + getErrorProps as shown in the docs.
+ *
  * @param {Object} options - Validation options
  * @returns {Object} - Validation state and methods
  */

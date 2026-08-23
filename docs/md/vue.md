@@ -25,6 +25,8 @@ app.use(VueValidationPlugin, {
 app.mount('#app');
 ```
 
+These options apply to everything the plugin provides — the `v-validate` directive included. They override the window-level `clientValidationConfig` for this app, so multiple Vue apps on one page can use different styling or debounce values.
+
 ## Use the directive in a component
 
 ```vue
