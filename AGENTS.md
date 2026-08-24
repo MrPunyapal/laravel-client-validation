@@ -6,8 +6,8 @@ This repository ships package code, browser adapters, and a generated static doc
 
 - Package code lives in `src/` and `resources/js/`.
 - Static documentation source lives in `docs/md/`.
-- Generated documentation output lives in `docs/*.html`, `docs/search-index.json`, `docs/sitemap.xml`, and `docs/.nojekyll`, and those files must never be edited manually.
-- The documentation builder is `docs/build.php`, with layout and UI in `docs/template.php` and `docs/assets/`.
+- Generated documentation output lives in `docs/index.html`, `docs/*/index.html`, `docs/search-index.json`, `docs/sitemap.xml`, `docs/llms.txt`, `docs/llms-full.txt`, `docs/export/docs.md`, and `docs/.nojekyll`, and those files must never be edited manually.
+- The documentation builder is the root `build-docs.php`, which drives the `mrpunyapal/docsmith` package (`composer docs:build`).
 - All contributor and AI-agent guidance lives in this root `AGENTS.md`. Do not create or rely on nested `AGENTS.md` files for `docs/`.
 
 ## Required workflow
@@ -27,7 +27,7 @@ This repository ships package code, browser adapters, and a generated static doc
 ### Documentation changes
 
 1. Edit Markdown files in `docs/md/`.
-2. Run `php docs/build.php` or `composer docs:build`.
+2. Run `php build-docs.php` or `composer docs:build`.
 3. Verify the generated HTML, search index, and sitemap in `docs/`.
 4. Commit the Markdown source and the regenerated output together.
 
@@ -70,7 +70,7 @@ Laravel Client Validation converts Laravel validation rules into client-side beh
 ### Documentation system
 
 - `docs/md/*.md` files are canonical and use YAML frontmatter.
-- `docs/build.php` scans markdown, parses frontmatter, converts Markdown to HTML with `league/commonmark`, builds navigation and search metadata, and writes generated HTML, `.nojekyll`, `search-index.json`, and `sitemap.xml` into `docs/`.
+- The root `build-docs.php` feeds `docs/md/` to the `mrpunyapal/docsmith` builder, which renders pages to pretty URLs under `docs/<slug>/index.html`, builds navigation, search metadata, sitemap, and LLM export files, and writes `.nojekyll` into `docs/`.
 - `.github/workflows/build-docs.yml` rebuilds and deploys the generated docs on pushes to `main`.
 
 ## Code style
@@ -122,7 +122,7 @@ npm run build
 ### Documentation
 
 ```bash
-php docs/build.php
+php build-docs.php
 composer docs:build
 ```
 
@@ -150,10 +150,7 @@ composer docs:build
 - `node_modules/`
 - `resources/js/dist/`
 - `build/`
-- `docs/*.html`
-- `docs/search-index.json`
-- `docs/sitemap.xml`
-- `docs/.nojekyll`
+- Generated docs output: `docs/index.html`, `docs/*/index.html`, `docs/search-index.json`, `docs/sitemap.xml`, `docs/llms.txt`, `docs/llms-full.txt`, `docs/export/docs.md`, and `docs/.nojekyll`
 
 ## Documentation guardrails
 
@@ -163,11 +160,11 @@ composer docs:build
 - Keep frontmatter `title`, `description`, `order`, and `slug` accurate.
 - `sidebar_label` is optional and should only be used when the sidebar text should differ from the page title.
 - Do not rename slugs or anchors casually, because internal links, search results, and bookmarks depend on them.
-- Never patch generated HTML to “fix” a docs issue. Change the Markdown, template, assets, or builder instead.
-- Never edit generated docs files in `docs/` by hand. Rebuild them from `docs/md/` with `php docs/build.php` instead.
+- Never patch generated HTML to “fix” a docs issue. Change the Markdown or the builder instead.
+- Never edit generated docs files in `docs/` by hand. Rebuild them from `docs/md/` with `php build-docs.php` instead.
 - Keep Markdown compatible with `league/commonmark` and GitHub-flavored Markdown.
-- Remember that `.md` links are rewritten to `.html` during generation.
-- Keep template, asset, and builder changes small and coordinated. If you change one, rebuild immediately.
+- Remember that relative `.md` links are rewritten to pretty URLs such as `../installation/` during generation.
+- Keep builder configuration changes small. If you touch `build-docs.php`, rebuild immediately.
 
 ## AI editing rules
 
@@ -206,7 +203,7 @@ Before finishing a docs change, confirm:
 1. Frontmatter is complete and accurate.
 2. Links resolve correctly in Markdown form.
 3. Code blocks use the correct language.
-4. `php docs/build.php` completes successfully.
+4. `php build-docs.php` completes successfully.
 5. The generated output matches the Markdown source.
 
 ## Important patterns
