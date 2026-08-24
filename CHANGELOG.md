@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.1.0
+
+### Minor Changes
+
+- 47f6005: Split into publishable packages: core + adapters under the @laravel-client-validation scope; meta-package unchanged for BC.
+
+### Patch Changes
+
+- Updated dependencies [47f6005]
+    - @laravel-client-validation/core@2.1.0
+    - @laravel-client-validation/alpine@2.1.0
+    - @laravel-client-validation/vanilla@2.1.0
+    - @laravel-client-validation/livewire@2.1.0
+    - @laravel-client-validation/react@2.1.0
+    - @laravel-client-validation/vue@2.1.0
+
 All notable changes to `laravel-client-validation` will be documented in this file.
 
 ## Unreleased
@@ -10,6 +26,7 @@ All notable changes to `laravel-client-validation` will be documented in this fi
 - Livewire PHP integration (WithClientValidation trait, snapshot hook) moved to the new `mrpunyapal/client-validation-livewire` package. The trait namespace is unchanged; run `composer require mrpunyapal/client-validation-livewire` after upgrading. The core package's service provider auto-registers the snapshot hook when that package is installed.
 
 ### Fixed- Livewire magic mode: a component hook (`ClientValidationHook`) now injects the client validation payload into the snapshot memo for components using `WithClientValidation`, and the browser adapter automatically binds blur/live validation and submit blocking to all `wire:model` fields — no Blade changes required.
+
 - Conditional rules such as `required_if` are now included in generated client payloads (previously dropped) because they can be evaluated against sibling fields in the browser.
 - Server-side rules are serialized into payloads prefixed with `ajax:` (e.g. `ajax:unique:users,email`) so the browser routes them through the AJAX validation endpoint while client rules still apply instantly.
 - New `auto_bind_livewire` config option (`CLIENT_VALIDATION_AUTO_BIND_LIVEWIRE`, default `true`) to disable magic mode; manual `x-wire-validate` remains available as an escape hatch.
