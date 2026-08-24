@@ -1,5 +1,6 @@
 {
   "name": "mrpunyapal/laravel-client-validation",
+  "version": "2.0.0",
   "description": "Laravel validation rules for client-side with Alpine.js integration",
   "type": "library",
   "license": "MIT",
@@ -46,7 +47,7 @@
   },
   "suggest": {
     "filament/filament": "Required for Filament panel integration (^3.0|^5.0)",
-    "livewire/livewire": "Required for Livewire component trait (^3.0|^4.0)"
+    "mrpunyapal/client-validation-livewire": "Required for the Livewire integration (WithClientValidation trait, works with livewire ^3.0|^4.0)"
   },
   "autoload": {
     "psr-4": {

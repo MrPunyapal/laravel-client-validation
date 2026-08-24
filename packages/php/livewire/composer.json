@@ -1,0 +1,53 @@
+{
+  "name": "mrpunyapal/client-validation-livewire",
+  "version": "2.0.0",
+  "description": "Livewire integration for Laravel Client Validation: WithClientValidation trait, snapshot hook, and magic-mode browser binding.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Punyapal Shah",
+      "email": "mrpunyapal@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.3",
+    "livewire/livewire": "^3.0|^4.0",
+    "mrpunyapal/laravel-client-validation": "^2.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^10.0|^11.0",
+    "pestphp/pest": "^3.0",
+    "pestphp/pest-plugin-laravel": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "MrPunyapal\\ClientValidation\\Livewire\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../..",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
+  "scripts": {
+    "test": "vendor/bin/pest"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "php-http/discovery": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+  }
+}

@@ -56,7 +56,7 @@ Laravel Client Validation converts Laravel validation rules into client-side beh
 - `src/Core/` contains rule parsing, validation context, and directive generation.
 - `src/Contracts/` defines the service-layer interfaces.
 - `src/Http/Controllers/` handles AJAX validation endpoints.
-- `src/Livewire/` contains Livewire integration.
+- `src/Livewire/` Livewire integration has moved to `packages/php/livewire/` (`mrpunyapal/client-validation-livewire`); its snapshot hook is auto-registered by the core service provider when installed.
 - `src/Filament/` contains Filament integration.
 
 ### JavaScript

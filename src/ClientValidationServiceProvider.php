@@ -147,6 +147,7 @@ class ClientValidationServiceProvider extends PackageServiceProvider
             ! config('client-validation.auto_bind_livewire', true)
             || ! class_exists(\Livewire\Component::class)
             || ! class_exists(\Livewire\ComponentHookRegistry::class)
+            || ! class_exists(Livewire\ClientValidationHook::class)
         ) {
             return;
         }
