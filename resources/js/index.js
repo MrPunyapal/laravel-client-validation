@@ -4,17 +4,15 @@
  */
 
 // Core
-import LaravelValidator from './core/LaravelValidator.js';
-import RuleRegistry from './core/RuleRegistry.js';
-import RemoteValidator from './core/RemoteValidator.js';
-import EventEmitter from './core/EventEmitter.js';
+import LaravelValidator from '@laravel-client-validation/core';
+import { RuleRegistry, RemoteValidator, EventEmitter } from '@laravel-client-validation/core';
 
 // Adapters
-import registerAlpine from './adapters/alpine.js';
-import { VanillaFormValidator, initForms, createFormValidator, autoInit } from './adapters/vanilla.js';
-import { LivewireValidator, createLivewireValidator, registerLivewireDirective, autoBindLivewireComponents } from './adapters/livewire.js';
-import { useValidation as useReactValidation, ReactValidator, createReactValidator, createFieldProps, getErrorProps } from './adapters/react.js';
-import { useValidation as useVueValidation, createVueValidator, vValidate, VueValidationPlugin, ValidationMixin } from './adapters/vue.js';
+import registerAlpine from '@laravel-client-validation/alpine';
+import { VanillaFormValidator, initForms, createFormValidator, autoInit } from '@laravel-client-validation/vanilla';
+import { LivewireValidator, createLivewireValidator, registerLivewireDirective, autoBindLivewireComponents } from '@laravel-client-validation/livewire';
+import { useValidation as useReactValidation, ReactValidator, createReactValidator, createFieldProps, getErrorProps } from '@laravel-client-validation/react';
+import { useValidation as useVueValidation, createVueValidator, vValidate, VueValidationPlugin, ValidationMixin } from '@laravel-client-validation/vue';
 
 /**
  * Register Alpine directives exactly once per page load, whichever order our

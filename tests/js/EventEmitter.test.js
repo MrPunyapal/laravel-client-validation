@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import EventEmitter from '../../resources/js/core/EventEmitter.js';
+import EventEmitter from '@laravel-client-validation/core/src/EventEmitter.js';
 
 describe('EventEmitter', () => {
     let emitter;

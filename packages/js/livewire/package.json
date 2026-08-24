@@ -1,0 +1,32 @@
+{
+  "name": "@laravel-client-validation/livewire",
+  "version": "2.0.0",
+  "description": "Livewire adapter for Laravel Client Validation: magic-mode auto-binding, x-wire-validate directive, and morph-resilient validation.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "laravel",
+    "validation",
+    "livewire",
+    "form-validation"
+  ],
+  "author": "Punyapal Shah <mrpunyapal@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrpunyapal/laravel-client-validation.git",
+    "directory": "packages/js/livewire"
+  },
+  "bugs": {
+    "url": "https://github.com/mrpunyapal/laravel-client-validation/issues"
+  },
+  "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme",
+  "dependencies": {
+    "@laravel-client-validation/core": "^2.0.0"
+  }
+}

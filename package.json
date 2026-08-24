@@ -11,29 +11,26 @@
       "require": "./resources/js/dist/client-validation.umd.js"
     },
     "./core": {
-      "import": "./resources/js/core/index.js"
+      "import": "./resources/js/core.js"
     },
     "./alpine": {
-      "import": "./resources/js/adapters/alpine.js"
+      "import": "./resources/js/alpine.js"
     },
     "./vanilla": {
-      "import": "./resources/js/adapters/vanilla.js"
+      "import": "./resources/js/vanilla.js"
     },
     "./livewire": {
-      "import": "./resources/js/adapters/livewire.js"
+      "import": "./resources/js/livewire.js"
     },
     "./react": {
-      "import": "./resources/js/adapters/react.js"
+      "import": "./resources/js/react.js"
     },
     "./vue": {
-      "import": "./resources/js/adapters/vue.js"
+      "import": "./resources/js/vue.js"
     }
   },
   "files": [
-    "resources/js/core/",
-    "resources/js/adapters/",
-    "resources/js/dist/",
-    "resources/js/index.js"
+    "resources/js"
   ],
   "scripts": {
     "dev": "vite",
@@ -41,9 +38,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint resources/js --ext .js",
-    "lint:fix": "eslint resources/js --ext .js --fix",
-    "format": "prettier --write resources/js/**/*.js",
+    "lint": "eslint packages/js resources/js --ext .js",
+    "lint:fix": "eslint packages/js resources/js --ext .js --fix",
+    "format": "prettier --write \"packages/js/**/*.js\" \"resources/js/**/*.js\"",
     "prepublishOnly": "npm run build && npm test -- --run"
   },
   "keywords": [
@@ -69,6 +66,17 @@
   "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme",
   "bugs": {
     "url": "https://github.com/mrpunyapal/laravel-client-validation/issues"
+  },
+  "workspaces": [
+    "packages/js/*"
+  ],
+  "dependencies": {
+    "@laravel-client-validation/alpine": "^2.0.0",
+    "@laravel-client-validation/core": "^2.0.0",
+    "@laravel-client-validation/livewire": "^2.0.0",
+    "@laravel-client-validation/react": "^2.0.0",
+    "@laravel-client-validation/vanilla": "^2.0.0",
+    "@laravel-client-validation/vue": "^2.0.0"
   },
   "devDependencies": {
     "eslint": "^8.0.0",

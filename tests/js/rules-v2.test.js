@@ -1,15 +1,15 @@
 import { describe, it, expect } from 'vitest';
 
-import anyOf from '../../resources/js/core/rules/any_of.js';
-import passwordStrength from '../../resources/js/core/rules/password_strength.js';
-import boolean from '../../resources/js/core/rules/boolean.js';
-import integer from '../../resources/js/core/rules/integer.js';
-import numeric from '../../resources/js/core/rules/numeric.js';
-import alpha from '../../resources/js/core/rules/alpha.js';
-import alphaDash from '../../resources/js/core/rules/alpha_dash.js';
-import alphaNum from '../../resources/js/core/rules/alpha_num.js';
-import confirmed from '../../resources/js/core/rules/confirmed.js';
-import uuid from '../../resources/js/core/rules/uuid.js';
+import anyOf from '@laravel-client-validation/core/src/rules/any_of.js';
+import passwordStrength from '@laravel-client-validation/core/src/rules/password_strength.js';
+import boolean from '@laravel-client-validation/core/src/rules/boolean.js';
+import integer from '@laravel-client-validation/core/src/rules/integer.js';
+import numeric from '@laravel-client-validation/core/src/rules/numeric.js';
+import alpha from '@laravel-client-validation/core/src/rules/alpha.js';
+import alphaDash from '@laravel-client-validation/core/src/rules/alpha_dash.js';
+import alphaNum from '@laravel-client-validation/core/src/rules/alpha_num.js';
+import confirmed from '@laravel-client-validation/core/src/rules/confirmed.js';
+import uuid from '@laravel-client-validation/core/src/rules/uuid.js';
 
 describe('v2 Rule Enhancements', () => {
     describe('boolean:strict', () => {

@@ -1,0 +1,32 @@
+{
+  "name": "@laravel-client-validation/react",
+  "version": "2.0.0",
+  "description": "React adapter for Laravel Client Validation (works with Inertia): hooks and field prop helpers for Laravel rule strings.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "laravel",
+    "validation",
+    "react",
+    "form-validation"
+  ],
+  "author": "Punyapal Shah <mrpunyapal@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrpunyapal/laravel-client-validation.git",
+    "directory": "packages/js/react"
+  },
+  "bugs": {
+    "url": "https://github.com/mrpunyapal/laravel-client-validation/issues"
+  },
+  "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme",
+  "dependencies": {
+    "@laravel-client-validation/core": "^2.0.0"
+  }
+}

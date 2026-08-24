@@ -3,7 +3,7 @@
  * Provides composables and directives for Vue 3 applications.
  */
 
-import LaravelValidator from '../core/LaravelValidator.js';
+import LaravelValidator from '@laravel-client-validation/core';
 
 const defaults = {
   remoteUrl: '/client-validation/validate',

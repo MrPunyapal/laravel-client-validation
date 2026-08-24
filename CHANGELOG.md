@@ -6,7 +6,9 @@ All notable changes to `laravel-client-validation` will be documented in this fi
 
 ### Added
 
-- Livewire magic mode: a component hook (`ClientValidationHook`) now injects the client validation payload into the snapshot memo for components using `WithClientValidation`, and the browser adapter automatically binds blur/live validation and submit blocking to all `wire:model` fields — no Blade changes required.
+- Package split: JavaScript sources now live in `packages/js/*` as publishable packages (`@laravel-client-validation/core`, `/alpine`, `/vanilla`, `/livewire`, `/react`, `/vue`) managed via npm workspaces. The `laravel-client-validation` meta-package keeps working unchanged: same entry points, same subpath exports (`/core`, `/alpine`, `/vanilla`, `/livewire`, `/react`, `/vue`), and the Laravel-served IIFE/UMD bundle is unchanged.
+
+### Fixed- Livewire magic mode: a component hook (`ClientValidationHook`) now injects the client validation payload into the snapshot memo for components using `WithClientValidation`, and the browser adapter automatically binds blur/live validation and submit blocking to all `wire:model` fields — no Blade changes required.
 - Conditional rules such as `required_if` are now included in generated client payloads (previously dropped) because they can be evaluated against sibling fields in the browser.
 - Server-side rules are serialized into payloads prefixed with `ajax:` (e.g. `ajax:unique:users,email`) so the browser routes them through the AJAX validation endpoint while client rules still apply instantly.
 - New `auto_bind_livewire` config option (`CLIENT_VALIDATION_AUTO_BIND_LIVEWIRE`, default `true`) to disable magic mode; manual `x-wire-validate` remains available as an escape hatch.

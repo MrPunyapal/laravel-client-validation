@@ -1,0 +1,32 @@
+{
+  "name": "@laravel-client-validation/alpine",
+  "version": "2.0.0",
+  "description": "Alpine.js adapter for Laravel Client Validation: x-validate directives and the validation() component for reactive Blade forms.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "laravel",
+    "validation",
+    "alpine",
+    "form-validation"
+  ],
+  "author": "Punyapal Shah <mrpunyapal@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrpunyapal/laravel-client-validation.git",
+    "directory": "packages/js/alpine"
+  },
+  "bugs": {
+    "url": "https://github.com/mrpunyapal/laravel-client-validation/issues"
+  },
+  "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme",
+  "dependencies": {
+    "@laravel-client-validation/core": "^2.0.0"
+  }
+}

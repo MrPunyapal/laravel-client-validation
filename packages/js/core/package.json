@@ -1,0 +1,30 @@
+{
+  "name": "@laravel-client-validation/core",
+  "version": "2.0.0",
+  "description": "Framework-agnostic core for Laravel Client Validation: 100+ Laravel validation rules, rule registry, validator, and remote (AJAX) validation.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "laravel",
+    "validation",
+    "client-side",
+    "form-validation",
+    "rules"
+  ],
+  "author": "Punyapal Shah <mrpunyapal@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrpunyapal/laravel-client-validation.git",
+    "directory": "packages/js/core"
+  },
+  "bugs": {
+    "url": "https://github.com/mrpunyapal/laravel-client-validation/issues"
+  },
+  "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme"
+}

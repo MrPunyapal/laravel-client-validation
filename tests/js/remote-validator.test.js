@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import RemoteValidator from '../../resources/js/core/RemoteValidator.js';
-import { LaravelValidator, RuleRegistry, EventEmitter } from '../../resources/js/core/index.js';
+import RemoteValidator from '@laravel-client-validation/core/src/RemoteValidator.js';
+import { LaravelValidator, RuleRegistry, EventEmitter } from '@laravel-client-validation/core';
 
 describe('Core Entry Point', () => {
     it('exports LaravelValidator', () => {

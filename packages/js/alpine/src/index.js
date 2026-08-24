@@ -3,7 +3,7 @@
  * Provides x-validate directive and validation() data component.
  */
 
-import LaravelValidator from '../core/LaravelValidator.js';
+import LaravelValidator from '@laravel-client-validation/core';
 
 const defaults = {
   remoteUrl: '/client-validation/validate',

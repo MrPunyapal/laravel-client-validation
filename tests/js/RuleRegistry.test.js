@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 // Mock the validationRules import
-vi.mock('../../resources/js/core/rules/index.js', () => ({
+vi.mock('@laravel-client-validation/core/src/rules/index.js', () => ({
     default: {
         required: (value) => value !== '' && value !== null && value !== undefined,
         email: (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
@@ -11,7 +11,7 @@ vi.mock('../../resources/js/core/rules/index.js', () => ({
 }));
 
 // Import after mock
-const { default: RuleRegistry } = await import('../../resources/js/core/RuleRegistry.js');
+const { default: RuleRegistry } = await import('@laravel-client-validation/core/src/RuleRegistry.js');
 
 describe('RuleRegistry', () => {
     describe('has', () => {

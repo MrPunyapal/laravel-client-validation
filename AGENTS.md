@@ -61,11 +61,12 @@ Laravel Client Validation converts Laravel validation rules into client-side beh
 
 ### JavaScript
 
-- `resources/js/core/` contains `LaravelValidator`, `RuleRegistry`, `RemoteValidator`, and the individual rule implementations.
-- `resources/js/adapters/` contains Alpine, vanilla, Livewire, React, and Vue adapters.
-- `resources/js/index.js` and `resources/js/index.d.ts` are the main browser entry points.
-- `package.json` exposes subpath exports such as `./core`, `./alpine`, `./vanilla`, `./livewire`, `./react`, and `./vue`.
-- `resources/js/dist/` is generated output. Do not hand-edit it.
+- `packages/js/core/src/` contains `LaravelValidator`, `RuleRegistry`, `RemoteValidator`, `EventEmitter`, and the individual rule implementations (`@laravel-client-validation/core`).
+- `packages/js/{alpine,vanilla,livewire,react,vue}/src/` contain the adapters (`@laravel-client-validation/*`), each depending on core.
+- `resources/js/index.js` is the meta-package entry that re-exports everything; `resources/js/*.js` are subpath shims for the npm exports map.
+- `resources/js/index.d.ts` holds the full meta-package types; each package ships its own `src/index.d.ts`.
+- `resources/js/dist/` is the combined IIFE/UMD/ES build served by the Laravel package. Do not hand-edit it.
+- npm workspaces are defined in the root `package.json` (`packages/js/*`).
 
 ### Documentation system
 
@@ -88,7 +89,7 @@ Laravel Client Validation converts Laravel validation rules into client-side beh
 - Use ES modules only.
 - Keep the code in plain JavaScript with JSDoc where it adds clarity.
 - Keep comments sparse and useful.
-- Place each rule in its own file under `resources/js/core/rules/`.
+- Place each rule in its own file under `packages/js/core/src/rules/`.
 
 ### Rule function signature
 
@@ -130,9 +131,9 @@ composer docs:build
 
 ### Adding a new validation rule
 
-1. Add the rule implementation in `resources/js/core/rules/`.
-2. Export it from `resources/js/core/rules/index.js`.
-3. Register the default message in `resources/js/core/RuleRegistry.js`.
+1. Add the rule implementation in `packages/js/core/src/rules/`.
+2. Export it from `packages/js/core/src/rules/index.js`.
+3. Register the default message in `packages/js/core/src/RuleRegistry.js`.
 4. Update the PHP parser or server-side rule lists when needed.
 5. Add or update tests.
 6. Document the new behavior in `docs/md/validation-rules.md` or a new markdown page.

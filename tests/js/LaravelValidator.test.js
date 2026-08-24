@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import LaravelValidator from '../../resources/js/core/LaravelValidator.js';
+import LaravelValidator from '@laravel-client-validation/core/src/LaravelValidator.js';
 
 describe('LaravelValidator', () => {
     let validator;

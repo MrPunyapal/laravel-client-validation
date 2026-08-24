@@ -33,12 +33,12 @@ export default defineConfig(({ mode }) => {
       lib: {
         entry: {
           'client-validation': resolve(__dirname, 'resources/js/index.js'),
-          'core': resolve(__dirname, 'resources/js/core/index.js'),
-          'alpine': resolve(__dirname, 'resources/js/adapters/alpine.js'),
-          'vanilla': resolve(__dirname, 'resources/js/adapters/vanilla.js'),
-          'livewire': resolve(__dirname, 'resources/js/adapters/livewire.js'),
-          'react': resolve(__dirname, 'resources/js/adapters/react.js'),
-          'vue': resolve(__dirname, 'resources/js/adapters/vue.js'),
+          'core': resolve(__dirname, 'packages/js/core/src/index.js'),
+          'alpine': resolve(__dirname, 'packages/js/alpine/src/index.js'),
+          'vanilla': resolve(__dirname, 'packages/js/vanilla/src/index.js'),
+          'livewire': resolve(__dirname, 'packages/js/livewire/src/index.js'),
+          'react': resolve(__dirname, 'packages/js/react/src/index.js'),
+          'vue': resolve(__dirname, 'packages/js/vue/src/index.js'),
         },
         name: 'LaravelClientValidation',
         formats: ['es'],

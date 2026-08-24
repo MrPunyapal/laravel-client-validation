@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import registerAlpine from '../../resources/js/adapters/alpine.js';
-import { VanillaFormValidator, initForms, createFormValidator } from '../../resources/js/adapters/vanilla.js';
-import { useValidation as useReactValidation, ReactValidator, createFieldProps } from '../../resources/js/adapters/react.js';
-import { useValidation as useVueValidation, vValidate } from '../../resources/js/adapters/vue.js';
+import registerAlpine from '@laravel-client-validation/alpine';
+import { VanillaFormValidator, initForms, createFormValidator } from '@laravel-client-validation/vanilla';
+import { useValidation as useReactValidation, ReactValidator, createFieldProps } from '@laravel-client-validation/react';
+import { useValidation as useVueValidation, vValidate } from '@laravel-client-validation/vue';
 
 const tick = (ms = 40) => new Promise(resolve => setTimeout(resolve, ms));
 
