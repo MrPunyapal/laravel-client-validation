@@ -53,6 +53,21 @@ If you prefer to control configuration separately, render the configuration obje
 </head>
 ```
 
+## Install only what you need
+
+For bundler-based setups, each framework adapter ships as its own scoped npm package. Every adapter pulls in the shared core automatically:
+
+```bash
+npm install @laravel-client-validation/alpine   # Alpine.js adapter
+npm install @laravel-client-validation/vanilla  # vanilla data-rules forms
+npm install @laravel-client-validation/livewire # Livewire JS adapter
+npm install @laravel-client-validation/react    # React / Inertia-React
+npm install @laravel-client-validation/vue      # Vue 3 / Inertia-Vue
+npm install @laravel-client-validation/core     # rules and validator only
+```
+
+The existing `laravel-client-validation` package keeps working unchanged — same subpath imports such as `laravel-client-validation/alpine` — and it is still the bundle that `@clientValidationAssets` serves. Reach for the scoped packages when your bundler should include only one adapter instead of the whole set.
+
 ## First validation field
 
 Use Blade directives immediately after the script is present on the page.

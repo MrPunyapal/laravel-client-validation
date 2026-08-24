@@ -68,6 +68,17 @@ if (result.valid) {
 
 This is the easiest place to keep client-side feedback and Laravel server validation in the same submit flow.
 
+## Using with Inertia
+
+The React adapter works unchanged inside Inertia pages. Import the helpers into a page component exactly as shown above, keep one validator instance per form, and subscribe as usual. Validation state lives with the page component, so no extra adapter or provider is needed:
+
+```jsx
+import { createReactValidator } from 'laravel-client-validation/react';
+
+// Inside an Inertia page component — identical to any other React page
+const validator = createReactValidator({ rules: { email: 'required|email' } });
+```
+
 ## Related pages
 
 - Use [inertia](./inertia.md) when the React form lives inside an Inertia page.

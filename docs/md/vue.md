@@ -76,6 +76,17 @@ const result = await validator.validateAll({
 
 Wrap `getError()`, `hasError()`, and `getAllErrors()` in your own refs or computed properties when you want Vue-controlled error rendering instead of DOM updates.
 
+## Using with Inertia
+
+The Vue adapter works unchanged inside Inertia pages. Register the plugin once during app bootstrap, then use `v-validate` or `createVueValidator()` in page components exactly as shown above. State stays with the Inertia page, so no extra adapter is required — the directive reads sibling values from the rendered DOM as usual:
+
+```javascript
+import { VueValidationPlugin } from 'laravel-client-validation/vue';
+
+// app.js — identical for standalone apps and Inertia apps
+app.use(VueValidationPlugin);
+```
+
 ## Related pages
 
 - Use [inertia](./inertia.md) when the Vue form lives inside an Inertia page.

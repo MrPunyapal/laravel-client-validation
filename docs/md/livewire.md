@@ -12,6 +12,14 @@ There are two ways to bind validation:
 - **Magic mode (default):** add the `WithClientValidation` trait and define your rules. The payload travels inside the Livewire snapshot, and every `wire:model` field is validated without any Blade changes.
 - **Manual mode:** opt out of magic mode and attach rules per field with the `x-wire-validate` Alpine directive.
 
+The PHP side of the Livewire integration ships as its own Composer package:
+
+```bash
+composer require mrpunyapal/client-validation-livewire
+```
+
+It requires the core package, which Composer installs automatically. Everything still lives under the unchanged `MrPunyapal\ClientValidation\Livewire` namespace, so existing components need no edits.
+
 ## Magic mode: trait only, no Blade changes
 
 ### Component

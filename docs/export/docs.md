@@ -145,6 +145,21 @@ If you prefer to control configuration separately, render the configuration obje
 </head>
 ```
 
+## Install only what you need
+
+For bundler-based setups, each framework adapter ships as its own scoped npm package. Every adapter pulls in the shared core automatically:
+
+```bash
+npm install @laravel-client-validation/alpine   # Alpine.js adapter
+npm install @laravel-client-validation/vanilla  # vanilla data-rules forms
+npm install @laravel-client-validation/livewire # Livewire JS adapter
+npm install @laravel-client-validation/react    # React / Inertia-React
+npm install @laravel-client-validation/vue      # Vue 3 / Inertia-Vue
+npm install @laravel-client-validation/core     # rules and validator only
+```
+
+The existing `laravel-client-validation` package keeps working unchanged — same subpath imports such as `laravel-client-validation/alpine` — and it is still the bundle that `@clientValidationAssets` serves. Reach for the scoped packages when your bundler should include only one adapter instead of the whole set.
+
 ## First validation field
 
 Use Blade directives immediately after the script is present on the page.
@@ -510,6 +525,14 @@ There are two ways to bind validation:
 
 - **Magic mode (default):** add the `WithClientValidation` trait and define your rules. The payload travels inside the Livewire snapshot, and every `wire:model` field is validated without any Blade changes.
 - **Manual mode:** opt out of magic mode and attach rules per field with the `x-wire-validate` Alpine directive.
+
+The PHP side of the Livewire integration ships as its own Composer package:
+
+```bash
+composer require mrpunyapal/client-validation-livewire
+```
+
+It requires the core package, which Composer installs automatically. Everything still lives under the unchanged `MrPunyapal\ClientValidation\Livewire` namespace, so existing components need no edits.
 
 ## Magic mode: trait only, no Blade changes
 
@@ -900,6 +923,17 @@ if (result.valid) {
 
 This is the easiest place to keep client-side feedback and Laravel server validation in the same submit flow.
 
+## Using with Inertia
+
+The React adapter works unchanged inside Inertia pages. Import the helpers into a page component exactly as shown above, keep one validator instance per form, and subscribe as usual. Validation state lives with the page component, so no extra adapter or provider is needed:
+
+```jsx
+import { createReactValidator } from 'laravel-client-validation/react';
+
+// Inside an Inertia page component — identical to any other React page
+const validator = createReactValidator({ rules: { email: 'required|email' } });
+```
+
 ## Related pages
 
 - Use [inertia](./inertia.md) when the React form lives inside an Inertia page.
@@ -983,6 +1017,17 @@ const result = await validator.validateAll({
 ```
 
 Wrap `getError()`, `hasError()`, and `getAllErrors()` in your own refs or computed properties when you want Vue-controlled error rendering instead of DOM updates.
+
+## Using with Inertia
+
+The Vue adapter works unchanged inside Inertia pages. Register the plugin once during app bootstrap, then use `v-validate` or `createVueValidator()` in page components exactly as shown above. State stays with the Inertia page, so no extra adapter is required — the directive reads sibling values from the rendered DOM as usual:
+
+```javascript
+import { VueValidationPlugin } from 'laravel-client-validation/vue';
+
+// app.js — identical for standalone apps and Inertia apps
+app.use(VueValidationPlugin);
+```
 
 ## Related pages
 
