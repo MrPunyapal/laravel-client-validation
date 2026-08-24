@@ -1,6 +1,6 @@
 {
   "name": "@laravel-client-validation/alpine",
-  "version": "2.0.0",
+  "version": "0.0.3",
   "description": "Alpine.js adapter for Laravel Client Validation: x-validate directives and the validation() component for reactive Blade forms.",
   "type": "module",
   "main": "./src/index.js",
@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme",
   "dependencies": {
-    "@laravel-client-validation/core": "^2.0.0"
+    "@laravel-client-validation/core": "^0.0.3"
   }
 }

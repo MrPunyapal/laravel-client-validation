@@ -1,6 +1,6 @@
 {
   "name": "mrpunyapal/client-validation-livewire",
-  "version": "2.0.0",
+  "version": "0.1.0",
   "description": "Livewire integration for Laravel Client Validation: WithClientValidation trait, snapshot hook, and magic-mode browser binding.",
   "type": "library",
   "license": "MIT",
@@ -13,7 +13,7 @@
   "require": {
     "php": "^8.3",
     "livewire/livewire": "^3.0|^4.0",
-    "mrpunyapal/laravel-client-validation": "^2.0"
+    "mrpunyapal/laravel-client-validation": "^0.1.0"
   },
   "require-dev": {
     "orchestra/testbench": "^10.0|^11.0",
