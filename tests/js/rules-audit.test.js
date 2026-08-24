@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 import LaravelValidator from '../../resources/js/core/LaravelValidator.js';
 import rulesIndex from '../../resources/js/core/rules/index.js';
@@ -268,6 +268,42 @@ describe('Rules audit - regex survives comma-splitting of parameters', () => {
         const bad = await validator.validateField('amount', '12,34', {});
         expect(good.valid).toBe(true);
         expect(bad.valid).toBe(false);
+    });
+});
+
+describe('Rules audit - ajax: prefixed server rules', () => {
+    it('routes ajax: rules remotely without a temporal-dead-zone crash', async () => {
+        // Regression: the ajax: branch assigned `result` before its `let`
+        // declaration executed, throwing "Cannot access 'f' before
+        // initialization" in the minified bundle (Livewire magic mode).
+        const validator = new LaravelValidator({
+            rules: { email: 'required|email|ajax:unique:users,email' },
+            enableAjax: true,
+            stopOnFirstError: false,
+        });
+        validator.remote = {
+            validate: vi.fn().mockResolvedValue({ valid: false, message: 'The email has already been taken.' }),
+        };
+
+        const result = await validator.validateField('email', 'jane@example.com', {});
+
+        expect(result.valid).toBe(false);
+        expect(result.errors).toContain('The email has already been taken.');
+        expect(validator.remote.validate).toHaveBeenCalledTimes(1);
+    });
+
+    it('skips ajax: rules entirely when enableAjax is false', async () => {
+        const validator = new LaravelValidator({
+            rules: { email: 'ajax:unique:users,email' },
+            enableAjax: false,
+            stopOnFirstError: false,
+        });
+        validator.remote = { validate: vi.fn() };
+
+        const result = await validator.validateField('email', 'anything', {});
+
+        expect(result.valid).toBe(true);
+        expect(validator.remote.validate).not.toHaveBeenCalled();
     });
 });
 

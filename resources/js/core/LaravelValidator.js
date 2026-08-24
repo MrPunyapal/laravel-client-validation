@@ -80,6 +80,9 @@ export default class LaravelValidator {
 
     const errors = [];
     let valid = true;
+    // Declared before the loop so the "ajax:" branch below can assign it
+    // without hitting a temporal-dead-zone reference.
+    let result;
 
     const hasBail = fieldRules.some(r => this.parseRule(r).name === 'bail');
 
@@ -112,8 +115,6 @@ export default class LaravelValidator {
       if (this.hasRule(field, 'nullable') && this.isEmpty(value)) {
         break;
       }
-
-      let result;
 
       if (this.registry.isRemote(name)) {
         result = await this.remote.validate(field, value, name, params, {
