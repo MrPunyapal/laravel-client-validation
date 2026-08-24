@@ -257,6 +257,39 @@ describe('vanilla adapter', () => {
         expect(onSubmit.mock.calls[0][0]).toEqual({ email: 'test@example.com' });
     });
 
+    it('passes untracked sibling values as context for cross-field rules', async () => {
+        const form = buildForm(`
+            <form data-validate>
+                <input type="password" name="password" data-rules="required|min:8|confirmed">
+                <input type="password" name="password_confirmation">
+            </form>`);
+        form.submit = vi.fn();
+        const password = form.querySelector('input[name="password"]');
+        const confirmation = form.querySelector('input[name="password_confirmation"]');
+        const onSubmit = vi.fn();
+
+        createFormValidator(form, { debounce: 5, onSubmit });
+
+        password.value = 'longenough1';
+        confirmation.value = 'different';
+        password.dispatchEvent(new Event('blur'));
+        await tick();
+
+        const errorEl = form.querySelector('[data-error-for="password"]');
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.textContent).toContain('confirmation');
+
+        confirmation.value = 'longenough1';
+        password.dispatchEvent(new Event('blur'));
+        await tick();
+
+        expect(form.querySelector('[data-error-for="password"]')).toBeNull();
+
+        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        await tick();
+        expect(onSubmit).toHaveBeenCalledTimes(1);
+    });
+
     it('initForms/autoInit are idempotent and markers clear on destroy', () => {
         document.body.innerHTML = `
             <form data-validate id="a"><input name="email" data-rules="required"></form>

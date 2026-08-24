@@ -809,6 +809,21 @@ Use the factory when you want to control initialization order or intercept succe
 
 `data-message` overrides the first rule message for that field, and `data-attribute` controls the human-readable attribute name in generated messages.
 
+## Cross-field rules
+
+Cross-field rules such as `confirmed`, `same`, and `required_if` compare against sibling values. The vanilla adapter collects every named `input`, `select`, or `textarea` inside the form — including fields without `data-rules` — so a confirmation input does not need its own rules:
+
+```html
+<form data-validate>
+    <input type="password" name="password" data-rules="required|min:8|confirmed">
+    <input type="password" name="password_confirmation">
+
+    <button type="submit">Sign up</button>
+</form>
+```
+
+Here `confirmed` reads `password_confirmation` from the form even though that input carries no `data-rules`. When validation fails, the adapter injects an error element with a `data-error-for` attribute next to the invalid field; when it passes again, that element is removed.
+
 ## Related pages
 
 - Use [installation](./installation.md) when the bundle itself is not loading.

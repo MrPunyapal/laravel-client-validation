@@ -158,9 +158,16 @@ export class VanillaFormValidator {
 
   getFormData() {
     const data = {};
-    this.fields.forEach((el, name) => {
-      data[name] = this.getFieldValue(el);
-    });
+    const seen = new Set();
+    const collect = (el) => {
+      // Sibling inputs without data-rules are still needed as context for
+      // cross-field rules such as confirmed, same, and required_if.
+      if (!el.name || el.type === 'file' || seen.has(el.name)) return;
+      seen.add(el.name);
+      data[el.name] = this.getFieldValue(el);
+    };
+    this.fields.forEach(collect);
+    this.form.querySelectorAll('input[name], select[name], textarea[name]').forEach(collect);
     return data;
   }
 

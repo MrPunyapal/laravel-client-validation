@@ -18,6 +18,7 @@ All notable changes to `laravel-client-validation` will be documented in this fi
 
 ### Fixed
 
+- Vanilla adapter (`data-rules` forms) now passes all named sibling fields to the validator, so cross-field rules such as `confirmed`, `same`, and `required_if` work even when the sibling input has no rules of its own.
 - Alpine directives register reliably whether the package loads before or after Alpine starts, including Alpine 3.14+.
 - `valid_class` / `invalid_class` values containing multiple class names apply correctly instead of breaking styling updates.
 - `regex` and `not_regex` patterns containing commas are no longer split into fragments.
