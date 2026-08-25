@@ -9,6 +9,15 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'beta = throwaway core publish to verify OIDC; full = normal release'
+        required: false
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - beta
 
 permissions:
   contents: write
@@ -74,6 +83,13 @@ jobs:
           # versions not yet uploaded (e.g. core ^0.1.1 during a fresh release).
           node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('package.json','utf8'));delete m.workspaces;fs.writeFileSync('package.json',JSON.stringify(m,null,2)+'\n')"
           npm run build
+          if [ "${{ inputs.mode }}" = "beta" ]; then
+            # Throwaway OIDC verification: core only, beta tag, verbose logs so
+            # npm's silent oidc() failures become visible.
+            cd packages/js/core
+            npm version "0.0.0-beta.${{ github.run_number }}" --no-git-tag-version
+            exec npm publish --provenance --access public --tag beta --loglevel=silly
+          fi
           # changeset publish does not propagate the OIDC environment to its npm
           # subprocesses (changesets#1914), so publish each package directly.
           # Provenance mode forces npm's OIDC auth exchange; the registry check
