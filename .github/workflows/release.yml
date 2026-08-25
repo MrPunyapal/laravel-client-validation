@@ -46,7 +46,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Version packages from changesets
-        run: npx changeset version
+        run: |
+          pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md')
+          if [ -n "$pending" ]; then
+            npx changeset version
+          else
+            echo "No pending changesets — publishing current manifest versions."
+          fi
 
       - name: Commit version bumps
         run: |
