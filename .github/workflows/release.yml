@@ -86,6 +86,16 @@ jobs:
           if [ "${{ inputs.mode }}" = "beta" ]; then
             # Throwaway OIDC verification: core only, beta tag, verbose logs so
             # npm's silent oidc() failures become visible.
+            echo "=== JWT claims npm sends to the registry ==="
+            jwt=$(curl -sS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+              "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=npm:registry.npmjs.org" \
+              | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).value))")
+            node -e "
+              const [h,p] = process.argv[1].split('.');
+              const claims = JSON.parse(Buffer.from(p,'base64').toString('utf8'));
+              const keep = ['repository','repository_owner','workflow','job_workflow_ref','ref','environment'];
+              for (const k of keep) console.log(k+':', JSON.stringify(claims[k] ?? null));
+            " "$jwt"
             cd packages/js/core
             npm version "0.0.0-beta.${{ github.run_number }}" --no-git-tag-version
             exec npm publish --provenance --access public --tag beta --loglevel=silly
