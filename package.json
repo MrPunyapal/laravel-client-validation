@@ -64,11 +64,11 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mrpunyapal/laravel-client-validation.git"
+    "url": "git+https://github.com/MrPunyapal/laravel-client-validation.git"
   },
-  "homepage": "https://github.com/Mrpunyapal/laravel-client-validation#readme",
+  "homepage": "https://github.com/MrPunyapal/laravel-client-validation#readme",
   "bugs": {
-    "url": "https://github.com/Mrpunyapal/laravel-client-validation/issues"
+    "url": "https://github.com/MrPunyapal/laravel-client-validation/issues"
   },
   "workspaces": [
     ".",
