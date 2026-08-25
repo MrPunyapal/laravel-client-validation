@@ -67,4 +67,8 @@ jobs:
           fi
 
       - name: Publish changed packages to npm
-        run: npm run publish
+        run: |
+          echo "node $(node -v) / npm $(npm -v)"
+          [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ] && echo "OIDC request URL: present" || echo "OIDC request URL: MISSING"
+          [ -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ] && echo "OIDC request token: present" || echo "OIDC request token: MISSING"
+          npm run publish
