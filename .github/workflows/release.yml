@@ -52,6 +52,8 @@ jobs:
           if [[ -n "$(git status --porcelain)" ]]; then
             git add -A
             git commit -m "chore: version packages [skip ci]"
+            # build-docs may have committed regenerated output meanwhile; rebase over it
+            git pull --rebase origin main
             git push
           else
             echo "No pending changesets — nothing to version."
