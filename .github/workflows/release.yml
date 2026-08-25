@@ -31,7 +31,8 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
+          # no registry-url here: setting one makes setup-node export a dummy
+          # NODE_AUTH_TOKEN, which stops npm from using OIDC trusted publishing
 
       - name: Ensure npm supports OIDC publishing
         run: npm install -g npm@latest
