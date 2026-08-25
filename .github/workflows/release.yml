@@ -71,4 +71,36 @@ jobs:
           echo "node $(node -v) / npm $(npm -v)"
           [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ] && echo "OIDC request URL: present" || echo "OIDC request URL: MISSING"
           [ -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ] && echo "OIDC request token: present" || echo "OIDC request token: MISSING"
-          npm run publish
+          npm run build
+          # changeset publish does not propagate the OIDC environment to its npm
+          # subprocesses (changesets#1914), so publish each package directly.
+          # Provenance mode forces npm's OIDC auth exchange; the registry check
+          # keeps reruns idempotent.
+          node - <<'EOF'
+          const fs = require('fs');
+          const cp = require('child_process');
+          const targets = [
+            process.cwd(),
+            'packages/js/core',
+            'packages/js/alpine',
+            'packages/js/vanilla',
+            'packages/js/livewire',
+            'packages/js/react',
+            'packages/js/vue',
+          ];
+          for (const dir of targets) {
+            const manifest = JSON.parse(fs.readFileSync(`${dir}/package.json`, 'utf8'));
+            const spec = `${manifest.name}@${manifest.version}`;
+            let published = false;
+            try {
+              cp.execSync(`npm view ${spec} version`, { stdio: 'pipe' });
+              published = true;
+            } catch {}
+            if (published) {
+              console.log(`skip ${spec} (already on npm)`);
+              continue;
+            }
+            console.log(`publishing ${spec}`);
+            cp.execSync('npm publish --provenance --access public', { cwd: dir, stdio: 'inherit' });
+          }
+          EOF
