@@ -1,43 +1,57 @@
+# Manual release: Actions tab -> Release -> Run workflow.
+# Consumes pending changesets, pushes version bumps ([skip ci]), publishes changed packages.
+# NPM_TOKEN must be an automation-scoped token covering laravel-client-validation
+# and every @laravel-client-validation/* package.
 name: Release
 
-# NPM_TOKEN must be an automation-scoped token with publish rights covering
-# `laravel-client-validation` and all `@laravel-client-validation` org packages
-# (core, alpine, vanilla, livewire, react, vue).
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org
+          node-version: '22'
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci
 
-      - uses: changesets/action@v1
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Version packages from changesets
+        run: npx changeset version
+
+      - name: Commit version bumps
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add -A
+            git commit -m "chore: version packages [skip ci]"
+            git push
+          else
+            echo "No pending changesets — nothing to version."
+          fi
+
+      - name: Publish changed packages to npm
+        run: npm run publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        with:
-          publish: npm run publish
-          version: npx changeset version
-          commit: "chore: version packages"
-          title: "chore: version packages"
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
