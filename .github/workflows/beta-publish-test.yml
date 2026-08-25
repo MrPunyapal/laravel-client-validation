@@ -30,13 +30,11 @@ jobs:
         working-directory: packages/js/core
         run: |
           echo "node $(node -v) / npm $(npm -v)"
+          # Detach the workspace definition so npm treats core as standalone
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('../../package.json','utf8'));delete m.workspaces;fs.writeFileSync('../../package.json',JSON.stringify(m,null,2)+'\n')"
           stage=$(mktemp -d)
-          # Bump to a throwaway version, then pack WITHOUT letting npm walk up
-          # into the workspace tree (sibling manifests pin core@^0.1.1, which is
-          # intentionally absent until the real release lands).
           npm version "0.0.0-beta.${{ github.run_number }}" --no-git-tag-version
           npm pack --pack-destination "$stage"
           echo "publishing $(ls "$stage")"
-          # leave the repo so npm cannot walk up into the workspace tree
           cd "$stage"
           npm publish *.tgz --provenance --access public --tag beta

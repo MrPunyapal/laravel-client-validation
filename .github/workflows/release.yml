@@ -69,24 +69,26 @@ jobs:
       - name: Publish changed packages to npm
         run: |
           echo "node $(node -v) / npm $(npm -v)"
-          [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ] && echo "OIDC request URL: present" || echo "OIDC request URL: MISSING"
-          [ -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ] && echo "OIDC request token: present" || echo "OIDC request token: MISSING"
+          # Detach the npm workspace definition: while present, any pack/publish
+          # resolves the whole monorepo tree and fails on sibling ranges that pin
+          # versions not yet uploaded (e.g. core ^0.1.1 during a fresh release).
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('package.json','utf8'));delete m.workspaces;fs.writeFileSync('package.json',JSON.stringify(m,null,2)+'\n')"
           npm run build
           # changeset publish does not propagate the OIDC environment to its npm
           # subprocesses (changesets#1914), so publish each package directly.
           # Provenance mode forces npm's OIDC auth exchange; the registry check
-          # keeps reruns idempotent.
+          # keeps reruns idempotent. Order matters: dependencies before dependents.
           node - <<'EOF'
           const fs = require('fs');
           const cp = require('child_process');
           const targets = [
-            process.cwd(),
             'packages/js/core',
             'packages/js/alpine',
             'packages/js/vanilla',
             'packages/js/livewire',
             'packages/js/react',
             'packages/js/vue',
+            process.cwd(),
           ];
           for (const dir of targets) {
             const manifest = JSON.parse(fs.readFileSync(`${dir}/package.json`, 'utf8'));
