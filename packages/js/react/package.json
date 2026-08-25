@@ -19,13 +19,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrpunyapal/laravel-client-validation.git",
+    "url": "git+https://github.com/Mrpunyapal/laravel-client-validation.git",
     "directory": "packages/js/react"
   },
   "bugs": {
-    "url": "https://github.com/mrpunyapal/laravel-client-validation/issues"
+    "url": "https://github.com/Mrpunyapal/laravel-client-validation/issues"
   },
-  "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme",
+  "homepage": "https://github.com/Mrpunyapal/laravel-client-validation#readme",
   "dependencies": {
     "@laravel-client-validation/core": "^0.1.1"
   }
