@@ -1,6 +1,21 @@
 <?php
 
+use Livewire\Attributes\Validate;
+use Livewire\Component;
 use MrPunyapal\ClientValidation\Livewire\WithClientValidation;
+
+/**
+ * Boot Livewire attributes the same way the SupportAttributes lifecycle hook
+ * does during mount, so #[Validate] params land in getRules()/getMessages().
+ */
+function bootLivewireAttributes(Component $component): void
+{
+    foreach ($component->getAttributes() as $attribute) {
+        if (method_exists($attribute, 'boot')) {
+            $attribute->boot();
+        }
+    }
+}
 
 it('can use the WithClientValidation trait with rules property', function () {
     $component = new class
@@ -152,4 +167,123 @@ it('prefixes server rules with ajax in the payload while keeping client rules cl
     expect($rules['email'])->toContain('required')
         ->and($rules['email'])->toContain('ajax:unique:users,email')
         ->and($rules['company'])->toContain('required_if:role,admin');
+});
+
+it('extracts rules from #[Validate] attributes only', function () {
+    $component = new class extends Component
+    {
+        use WithClientValidation;
+
+        #[Validate('required|min:3')]
+        public string $title = '';
+
+        #[Validate('required|email')]
+        public string $email = '';
+
+        public function render()
+        {
+            return view('welcome');
+        }
+    };
+
+    bootLivewireAttributes($component);
+
+    $clientRules = $component->getClientRulesProperty();
+
+    expect($clientRules)->toBeString()
+        ->and($clientRules)->toContain('title')
+        ->and($clientRules)->toContain('email')
+        ->and($clientRules)->toContain('required');
+});
+
+it('merges #[Validate] attributes with the rules property', function () {
+    $component = new class extends Component
+    {
+        use WithClientValidation;
+
+        #[Validate('required|integer')]
+        public string $age = '';
+
+        protected $rules = [
+            'name' => 'required|string|max:100',
+        ];
+
+        public function render()
+        {
+            return view('welcome');
+        }
+    };
+
+    bootLivewireAttributes($component);
+
+    $payload = $component->getClientValidationPayload();
+
+    expect($payload['rules'])->toHaveKey('name')
+        ->and($payload['rules'])->toHaveKey('age')
+        ->and($payload['rules']['age'])->toContain('required');
+});
+
+it('picks up messages and attribute labels from #[Validate] params', function () {
+    $component = new class extends Component
+    {
+        use WithClientValidation;
+
+        #[Validate('required', as: 'Email address', message: 'We need your email.')]
+        public string $email = '';
+
+        public function render()
+        {
+            return view('welcome');
+        }
+    };
+
+    bootLivewireAttributes($component);
+
+    $decodedMessages = json_decode($component->getClientMessagesProperty(), true);
+    $decodedAttributes = json_decode($component->getClientAttributesProperty(), true);
+
+    expect($decodedMessages)->toHaveKey('email.required')
+        ->and($decodedMessages['email.required'])->toBe('We need your email.')
+        ->and($decodedAttributes)->toHaveKey('email')
+        ->and($decodedAttributes['email'])->toBe('Email address');
+});
+
+it('prefixes server rules from #[Validate] attributes with ajax in the payload', function () {
+    $component = new class extends Component
+    {
+        use WithClientValidation;
+
+        #[Validate('required|email|unique:users,email')]
+        public string $email = '';
+
+        public function render()
+        {
+            return view('welcome');
+        }
+    };
+
+    bootLivewireAttributes($component);
+
+    $rules = $component->getClientValidationPayload()['rules'];
+
+    expect($rules['email'])->toContain('required')
+        ->and($rules['email'])->toContain('ajax:unique:users,email');
+});
+
+it('returns empty payload when a Livewire component has no rules or attributes', function () {
+    $component = new class extends Component
+    {
+        use WithClientValidation;
+
+        public string $name = '';
+
+        public function render()
+        {
+            return view('welcome');
+        }
+    };
+
+    bootLivewireAttributes($component);
+
+    expect($component->getClientValidationPayload())->toBe([]);
 });

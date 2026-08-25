@@ -1,6 +1,6 @@
 {
   "name": "mrpunyapal/laravel-client-validation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Laravel validation rules for client-side with Alpine.js integration",
   "type": "library",
   "license": "MIT",

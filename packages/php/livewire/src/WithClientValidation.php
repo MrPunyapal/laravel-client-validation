@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace MrPunyapal\ClientValidation\Livewire;
 
-use MrPunyapal\ClientValidation\Facades\ClientValidation;
+use Illuminate\Contracts\Support\Arrayable;
 use MrPunyapal\ClientValidation\Core\ValidationManager;
+use MrPunyapal\ClientValidation\Facades\ClientValidation;
 
 /**
  * @property-read string $clientRules
@@ -82,46 +83,94 @@ trait WithClientValidation
         );
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * Extract rules from the component.
+     *
+     * Prefers Livewire's getRules(), which aggregates the rules() method, the
+     * $rules property, and any #[Validate] attribute rules. Falls back to
+     * manual extraction for non-Livewire classes using this trait.
+     *
+     * @return array<string, mixed>
+     */
     protected function extractRules(): array
     {
+        if (method_exists($this, 'getRules')) {
+            return $this->toExtractedArray($this->getRules());
+        }
+
         if (method_exists($this, 'rules')) {
-            return $this->rules();
+            return $this->toExtractedArray($this->rules());
         }
 
         if (property_exists($this, 'rules')) {
-            return $this->rules;
+            return $this->toExtractedArray($this->rules);
         }
 
         return [];
     }
 
-    /** @return array<string, string> */
+    /**
+     * Extract custom validation messages.
+     *
+     * Prefers Livewire's getMessages() so #[Validate(message: ...)] params are
+     * included alongside messages()/property definitions.
+     *
+     * @return array<string, string>
+     */
     protected function extractMessages(): array
     {
+        if (method_exists($this, 'getMessages')) {
+            return $this->toExtractedArray($this->getMessages());
+        }
+
         if (method_exists($this, 'messages')) {
-            return $this->messages();
+            return $this->toExtractedArray($this->messages());
         }
 
         if (property_exists($this, 'messages')) {
-            return $this->messages;
+            return $this->toExtractedArray($this->messages);
         }
 
         return [];
     }
 
-    /** @return array<string, string> */
+    /**
+     * Extract custom attribute names.
+     *
+     * Prefers Livewire's getValidationAttributes() so #[Validate(as: ...)]
+     * and #[Validate(attribute: ...)] params are included.
+     *
+     * @return array<string, string>
+     */
     protected function extractValidationAttributes(): array
     {
+        if (method_exists($this, 'getValidationAttributes')) {
+            return $this->toExtractedArray($this->getValidationAttributes());
+        }
+
         if (method_exists($this, 'validationAttributes')) {
-            return $this->validationAttributes();
+            return $this->toExtractedArray($this->validationAttributes());
         }
 
         if (property_exists($this, 'validationAttributes')) {
-            return $this->validationAttributes;
+            return $this->toExtractedArray($this->validationAttributes);
         }
 
         return [];
+    }
+
+    /**
+     * Coerce an extracted value into a plain array payload.
+     *
+     * @return array<string, mixed>
+     */
+    private function toExtractedArray(mixed $value): array
+    {
+        if ($value instanceof Arrayable) {
+            $value = $value->toArray();
+        }
+
+        return is_array($value) ? $value : [];
     }
 
     /** @return array<string, mixed> */
