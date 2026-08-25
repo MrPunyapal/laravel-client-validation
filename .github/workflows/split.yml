@@ -1,0 +1,45 @@
+# Mirrors packages/php/livewire into the Mrpunyapal/client-validation-livewire
+# repo so Packagist can serve the sub-directory package.
+# Requires the SPLIT_TOKEN secret: a fine-grained PAT with Contents read/write
+# on Mrpunyapal/client-validation-livewire ONLY.
+name: split
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+concurrency:
+  group: split-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  split-livewire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Split main branch
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git subtree split -P packages/php/livewire -b split-main
+          git remote add mirror "https://x-access-token:${{ secrets.SPLIT_TOKEN }}@github.com/Mrpunyapal/client-validation-livewire.git"
+          git push --force mirror split-main:main
+
+      - name: Split tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          git subtree split -P packages/php/livewire -b split-tag "${{ github.ref_name }}"
+          git remote add mirror "https://x-access-token:${{ secrets.SPLIT_TOKEN }}@github.com/Mrpunyapal/client-validation-livewire.git"
+          git push --force mirror split-tag:main
+          git push --force mirror split-tag:refs/tags/${{ github.ref_name }}
