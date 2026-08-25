@@ -1,6 +1,6 @@
 {
   "name": "@laravel-client-validation/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React adapter for Laravel Client Validation (works with Inertia): hooks and field prop helpers for Laravel rule strings.",
   "type": "module",
   "main": "./src/index.js",
@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme",
   "dependencies": {
-    "@laravel-client-validation/core": "^0.1.0"
+    "@laravel-client-validation/core": "^0.1.1"
   }
 }

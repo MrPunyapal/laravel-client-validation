@@ -1,5 +1,11 @@
 # @laravel-client-validation/core
 
+## 0.1.1
+
+### Patch Changes
+
+- 2be6f24: Verify the npm trusted publishing (OIDC) release pipeline end-to-end. No product changes.
+
 ## 0.1.0
 
 ### Minor Changes

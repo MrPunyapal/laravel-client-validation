@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.1
+
+### Patch Changes
+
+- 2be6f24: Verify the npm trusted publishing (OIDC) release pipeline end-to-end. No product changes.
+- Updated dependencies [2be6f24]
+    - @laravel-client-validation/core@0.1.1
+    - @laravel-client-validation/alpine@0.1.1
+    - @laravel-client-validation/vanilla@0.1.1
+    - @laravel-client-validation/livewire@0.1.1
+    - @laravel-client-validation/react@0.1.1
+    - @laravel-client-validation/vue@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
