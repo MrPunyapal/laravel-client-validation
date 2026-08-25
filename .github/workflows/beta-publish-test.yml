@@ -37,4 +37,6 @@ jobs:
           npm version "0.0.0-beta.${{ github.run_number }}" --no-git-tag-version
           npm pack --pack-destination "$stage"
           echo "publishing $(ls "$stage")"
-          npm publish "$stage"/*.tgz --provenance --access public --tag beta
+          # leave the repo so npm cannot walk up into the workspace tree
+          cd "$stage"
+          npm publish *.tgz --provenance --access public --tag beta
