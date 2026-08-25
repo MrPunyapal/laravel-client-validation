@@ -1,6 +1,6 @@
 {
   "name": "@laravel-client-validation/core",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Framework-agnostic core for Laravel Client Validation: 100+ Laravel validation rules, rule registry, validator, and remote (AJAX) validation.",
   "type": "module",
   "main": "./src/index.js",

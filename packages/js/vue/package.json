@@ -1,6 +1,6 @@
 {
   "name": "@laravel-client-validation/vue",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Vue 3 adapter for Laravel Client Validation (works with Inertia): v-validate directive, plugin, and validator helpers.",
   "type": "module",
   "main": "./src/index.js",
@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/mrpunyapal/laravel-client-validation#readme",
   "dependencies": {
-    "@laravel-client-validation/core": "^0.0.3"
+    "@laravel-client-validation/core": "^0.1.0"
   }
 }
