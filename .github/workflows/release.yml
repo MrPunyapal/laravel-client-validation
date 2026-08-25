@@ -1,7 +1,10 @@
 # Manual release: Actions tab -> Release -> Run workflow.
 # Consumes pending changesets, pushes version bumps ([skip ci]), publishes changed packages.
-# NPM_TOKEN must be an automation-scoped token covering laravel-client-validation
-# and every @laravel-client-validation/* package.
+#
+# Publishing uses npm Trusted Publishing (OIDC) — there is NO NPM_TOKEN secret.
+# Every published package must have a Trusted Publisher configured on npmjs.com:
+#   Organization/user: Mrpunyapal · Repository: laravel-client-validation
+#   Workflow filename: release.yml · Allowed action: npm publish
 name: Release
 
 on:
@@ -9,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write # mints the short-lived OIDC credential npm exchanges at publish time
 
 concurrency:
   group: release-${{ github.ref }}
@@ -24,11 +28,13 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
-          cache: npm
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Ensure npm supports OIDC publishing
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm ci
@@ -53,5 +59,3 @@ jobs:
 
       - name: Publish changed packages to npm
         run: npm run publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
