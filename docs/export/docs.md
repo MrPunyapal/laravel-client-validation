@@ -4,12 +4,6 @@
 
 Laravel Client Validation brings familiar Laravel validation rules into the browser so forms can respond immediately without maintaining a second rule set by hand.
 
-## Why this package exists
-
-- Keep Laravel-style validation rules close to the UI.
-- Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.
-- Fall back to AJAX when a rule depends on the server, such as `unique` or `exists`.
-
 ## Quick start
 
 Install the package and publish the configuration and browser assets:
@@ -19,7 +13,7 @@ composer require mrpunyapal/laravel-client-validation
 php artisan client-validation:install
 ```
 
-Then render the package assets in a Blade layout:
+Then render the package assets in your Blade layout:
 
 ```php
 <!doctype html>
@@ -33,6 +27,24 @@ Then render the package assets in a Blade layout:
 </body>
 </html>
 ```
+
+Add your first validation field:
+
+```html
+<form data-validate>
+    <input name="email" @validateBlur('email', 'required|email')>
+    <input name="password" @validateSubmit('password', 'required|min:8')>
+    <button type="submit">Create account</button>
+</form>
+```
+
+Tab out of the email field. Invalid values show client-side feedback before the form submits.
+
+## Why this package exists
+
+- Keep Laravel-style validation rules close to the UI.
+- Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.
+- Fall back to AJAX when a rule depends on the server, such as `unique` or `exists`.
 
 ## Documentation map
 
@@ -101,7 +113,7 @@ Install Laravel Client Validation with Composer, publish the package assets, and
 
 ## Requirements
 
-- PHP 8.2 or newer.
+- PHP 8.3 or newer.
 - A Laravel application that can load package service providers.
 - A frontend layout where Blade can render the package assets or your own script tags.
 
@@ -116,15 +128,13 @@ The install command publishes the package configuration and the browser bundle i
 
 ## Laravel Boost
 
-If the Laravel application also uses [Laravel Boost](https://laravel.com/docs/13.x/boost), this package ships a third-party Boost skill.
-
-Use `boost:install` when Boost is being installed for the first time, or refresh third-party skills after package changes with:
+If your Laravel application also uses [Laravel Boost](https://laravel.com/docs/13.x/boost), refresh its discovered third-party skills after installing or updating this package:
 
 ```bash
 php artisan boost:update --discover
 ```
 
-When skills are enabled, Boost can install the `laravel-client-validation-development` skill and give AI agents package-aware guidance for Blade directives, Alpine helpers, Livewire integration, Filament setup, and remote validation.
+Use the Boost installer first when Boost is not installed yet. When the package skill is available in your installed dependencies, Boost can provide AI agents with package-aware guidance for Blade directives, Alpine helpers, Livewire integration, Filament setup, and remote validation.
 
 ## Include the assets
 
@@ -144,21 +154,6 @@ If you prefer to control configuration separately, render the configuration obje
     <script src="{{ asset('vendor/client-validation/client-validation.iife.js') }}"></script>
 </head>
 ```
-
-## Install only what you need
-
-For bundler-based setups, each framework adapter ships as its own scoped npm package. Every adapter pulls in the shared core automatically:
-
-```bash
-npm install @laravel-client-validation/alpine   # Alpine.js adapter
-npm install @laravel-client-validation/vanilla  # vanilla data-rules forms
-npm install @laravel-client-validation/livewire # Livewire JS adapter
-npm install @laravel-client-validation/react    # React / Inertia-React
-npm install @laravel-client-validation/vue      # Vue 3 / Inertia-Vue
-npm install @laravel-client-validation/core     # rules and validator only
-```
-
-The existing `laravel-client-validation` package keeps working unchanged — same subpath imports such as `laravel-client-validation/alpine` — and it is still the bundle that `@clientValidationAssets` serves. Reach for the scoped packages when your bundler should include only one adapter instead of the whole set.
 
 ## First validation field
 
@@ -187,6 +182,21 @@ Remote rules such as `unique` should send requests to the validation endpoint ge
 ```
 
 When AJAX validation is enabled, the request targets `/client-validation/validate` by default.
+
+## Install only what you need (npm)
+
+For bundler-based setups, each framework adapter ships as its own scoped npm package. Every adapter pulls in the shared core automatically:
+
+```bash
+npm install @laravel-client-validation/alpine   # Alpine.js adapter
+npm install @laravel-client-validation/vanilla  # vanilla data-rules forms
+npm install @laravel-client-validation/livewire # Livewire JS adapter
+npm install @laravel-client-validation/react    # React / Inertia-React
+npm install @laravel-client-validation/vue      # Vue 3 / Inertia-Vue
+npm install @laravel-client-validation/core     # rules and validator only
+```
+
+The existing `laravel-client-validation` package keeps working unchanged, including subpath imports such as `laravel-client-validation/alpine`. It is still the bundle that `@clientValidationAssets` serves. Reach for the scoped packages when your bundler should include only one adapter instead of the whole set.
 
 ## Next steps
 
@@ -228,6 +238,16 @@ return [
     'auto_bind_livewire' => true,
 ];
 ```
+
+| Option | Environment variable | Default | Effect |
+| --- | --- | --- | --- |
+| `auto_include_assets` | `CLIENT_VALIDATION_AUTO_INCLUDE` | `true` | Injects the bundle via `@clientValidationAssets` |
+| `enable_ajax_validation` | `CLIENT_VALIDATION_ENABLE_AJAX` | `true` | Allows remote rules (`unique`, `exists`, etc.) to hit the backend |
+| `ajax_timeout` | `CLIENT_VALIDATION_AJAX_TIMEOUT` | `5000` | Milliseconds before an AJAX validation request times out |
+| `route_prefix` | `CLIENT_VALIDATION_ROUTE_PREFIX` | `client-validation` | URL prefix for the validation endpoint |
+| `validation_mode` | `CLIENT_VALIDATION_MODE` | `blur` | Default trigger: `blur`, `input`, `live`, `submit`, or `form` |
+| `debounce_ms` | `CLIENT_VALIDATION_DEBOUNCE` | `300` | Debounce for `input`/`live` modes |
+| `auto_bind_livewire` | `CLIENT_VALIDATION_AUTO_BIND_LIVEWIRE` | `true` | Auto-registers Livewire component hook and field binding |
 
 ### Recommended defaults
 
@@ -328,7 +348,6 @@ CLIENT_VALIDATION_AUTO_BIND_LIVEWIRE=true
 - See [validation rules](./validation-rules.md) for rule behavior and remote fallback.
 - See [troubleshooting](./troubleshooting.md) when configuration and runtime behavior drift apart.
 
-
 ---
 
 # Usage
@@ -420,16 +439,16 @@ const formResult = await validator.validateAll({
 Hook into form lifecycle events when you need analytics, UI transitions, or custom logging.
 
 ```javascript
-const validator = new LaravelClientValidation.Validator({ rules });
+const validator = new LaravelValidator({ rules });
 
 validator
     .beforeValidate(({ data }) => console.log('Validating', data))
     .afterValidate(({ valid, errors }) => console.log('Done', valid, errors));
 
-// Convenience hooks for the two common cases — each fires once per full
+// Convenience hooks for the two common cases. Each fires once per full
 // form validation, only in its respective outcome:
 validator
-    .onPasses(({ data }) => console.log('All good, submitting…'))
+    .onPasses(({ data }) => console.log('All good, submitting.'))
     .onFails((errors) => console.log('Fix these first', errors));
 ```
 
@@ -471,7 +490,7 @@ If you load the browser bundle through `@clientValidationAssets`, the package au
 
 `x-validate` validates on blur by default. `.live` adds debounced input validation and `.submit` blocks form submission until the field passes.
 
-Cross-field rules (`confirmed`, `same:other`, `required_if:role,admin`, …) work in bare-directive mode too: sibling values are read from the enclosing `<form>`, falling back to the surrounding `x-data` root. For full control over the compared state — or fields that live in different forms — use the `validation()` component instead, shown below.
+Cross-field rules (`confirmed`, `same:other`, `required_if:role,admin`, and others) work in bare-directive mode too: sibling values are read from the enclosing `<form>`, falling back to the surrounding `x-data` root. For full control over the compared state, or for fields that live in different forms, use the `validation()` component instead, shown below.
 
 ## Manage a full Alpine form
 
@@ -639,7 +658,7 @@ No directives, no JSON decoding, and no error placeholders are required. That is
 
 When a component uses the trait and `auto_bind_livewire` is enabled (the default):
 
-- A component hook serializes a client-safe payload into the snapshot memo under the `clientValidation` key on every dehydrate. Components without the trait are skipped. The payload contains `{rules, ajax_rules, messages, attributes, config}` built from your rules — whether they come from `#[Validate]` attributes, a `rules()` method/property, or a mix of both — plus your `messages()` and `validationAttributes()`.
+- A component hook serializes a client-safe payload into the snapshot memo under the `clientValidation` key on every dehydrate. Components without the trait are skipped. The payload contains `{rules, ajax_rules, messages, attributes, config}` built from your rules, whether they come from `#[Validate]` attributes, a `rules()` method/property, or a mix of both, plus your `messages()` and `validationAttributes()`.
 - On component init, the browser adapter reads that memo, builds a validator, and binds listeners to every `[wire:model]` field. Fields validate on blur; fields with `.live` modifiers (or components using a `live`/`input` validation mode) also validate while typing, debounced.
 - Error containers (`data-error="field"`) are injected next to failing fields and marked `wire:ignore`, so no markup changes are needed in your view.
 - Forms with `wire:submit` are intercepted in the capture phase before Livewire sees them. Submitting first runs full client-side validation and shows the first error for each failing field. If everything passes, the form's Livewire action is invoked through `$wire`, so your action runs exactly as a native submit would.
@@ -813,7 +832,6 @@ If you call `withClientValidation()` instead of `clientValidation('...')`, the t
 - Review [configuration](./configuration.md) for remote-validation and class defaults.
 - Keep [examples](./examples.md) nearby for quick copyable snippets.
 
-
 ---
 
 # Vanilla JavaScript
@@ -865,7 +883,7 @@ Use the factory when you want to control initialization order or intercept succe
 
 ## Cross-field rules
 
-Cross-field rules such as `confirmed`, `same`, and `required_if` compare against sibling values. The vanilla adapter collects every named `input`, `select`, or `textarea` inside the form — including fields without `data-rules` — so a confirmation input does not need its own rules:
+Cross-field rules such as `confirmed`, `same`, and `required_if` compare against sibling values. The vanilla adapter collects every named `input`, `select`, or `textarea` inside the form, including fields without `data-rules`, so a confirmation input does not need its own rules:
 
 ```html
 <form data-validate>
@@ -961,7 +979,7 @@ The React adapter works unchanged inside Inertia pages. Import the helpers into 
 ```jsx
 import { createReactValidator } from 'laravel-client-validation/react';
 
-// Inside an Inertia page component — identical to any other React page
+// Inside an Inertia page component. This is identical to any other React page.
 const validator = createReactValidator({ rules: { email: 'required|email' } });
 ```
 
@@ -998,7 +1016,7 @@ app.use(VueValidationPlugin, {
 app.mount('#app');
 ```
 
-These options apply to everything the plugin provides — the `v-validate` directive included. They override the window-level `clientValidationConfig` for this app, so multiple Vue apps on one page can use different styling or debounce values.
+These options apply to everything the plugin provides, including the `v-validate` directive. They override the window-level `clientValidationConfig` for this app, so multiple Vue apps on one page can use different styling or debounce values.
 
 ## Use the directive in a component
 
@@ -1051,12 +1069,12 @@ Wrap `getError()`, `hasError()`, and `getAllErrors()` in your own refs or comput
 
 ## Using with Inertia
 
-The Vue adapter works unchanged inside Inertia pages. Register the plugin once during app bootstrap, then use `v-validate` or `createVueValidator()` in page components exactly as shown above. State stays with the Inertia page, so no extra adapter is required — the directive reads sibling values from the rendered DOM as usual:
+The Vue adapter works unchanged inside Inertia pages. Register the plugin once during app bootstrap, then use `v-validate` or `createVueValidator()` in page components exactly as shown above. State stays with the Inertia page, so no extra adapter is required. The directive reads sibling values from the rendered DOM as usual:
 
 ```javascript
 import { VueValidationPlugin } from 'laravel-client-validation/vue';
 
-// app.js — identical for standalone apps and Inertia apps
+// app.js. This is identical for standalone apps and Inertia apps.
 app.use(VueValidationPlugin);
 ```
 
@@ -1162,7 +1180,6 @@ Inertia does not change remote rule behavior. `unique`, `exists`, and other serv
 - Open [troubleshooting](./troubleshooting.md) when remote rules or asset bootstrapping fail.
 - Keep [examples](./examples.md) nearby for package-level snippets.
 
-
 ---
 
 # Validation Rules
@@ -1235,7 +1252,7 @@ If a remote rule never fires, check [troubleshooting](./troubleshooting.md) for 
 
 ### The `ajax:` prefix in generated payloads
 
-When the package generates a client-side payload — the Livewire snapshot memo from `WithClientValidation` magic mode (see [livewire](./livewire.md)), or payloads built by the PHP parser — server-side rules are serialized with an `ajax:` prefix instead of being dropped:
+When the package generates a client-side payload, such as the Livewire snapshot memo from `WithClientValidation` magic mode (see [livewire](./livewire.md)) or a payload built by the PHP parser, server-side rules are serialized with an `ajax:` prefix instead of being dropped:
 
 ```php
 // Your Laravel rule
@@ -1375,7 +1392,6 @@ LaravelClientValidation.extend('sku', (value) => /^[A-Z]{3}-\d{4}$/.test(value))
 - State clearly whether the rule is browser-only, server-only, or shared.
 - Avoid renaming an existing rule unless you are prepared to update every internal link and every rule string that references it.
 
-
 ---
 
 # Testing
@@ -1426,24 +1442,22 @@ composer test
 npm test
 ```
 
-
 ---
 
 # Documentation Workflow
 
-> Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.
+> Build and verify the generated documentation site from the Markdown source using Docsmith.
 
 Use this page when you are changing the documentation source, the docs template, or the docs build process itself.
 
 ## What the builder reads
 
-The docs builder assembles the site from three canonical inputs:
+The docs builder assembles the site from the canonical Markdown source:
 
-- Markdown pages in `docs/md`.
-- The layout and navigation shell in `docs/template.php`.
-- Shared frontend assets in `docs/assets`.
+- Markdown pages in `docs/md/`.
+- Docsmith configuration in `build-docs.php` (site title, description, repository URL, sidebar, etc.).
 
-Each Markdown page should keep its frontmatter accurate so the builder can generate the correct title, description, sidebar label, and navigation order.
+Each Markdown page must keep its frontmatter accurate so the builder can generate the correct title, description, sidebar label, and navigation order.
 
 ## How to rebuild the site
 
@@ -1456,21 +1470,22 @@ composer docs:build
 You can also run the builder directly:
 
 ```bash
-php docs/build.php
+php build-docs.php
 ```
 
-Both commands rebuild the checked-in documentation site.
+Both commands rebuild the checked-in documentation site using Docsmith.
 
 ## What the builder writes
 
-After a successful build, the generated output is refreshed in `docs/`.
+After a successful build, the generated output is refreshed in `docs/`:
 
-- Each Markdown page becomes a matching HTML page such as `docs/usage.html`.
+- Each Markdown page becomes a matching HTML page under `docs/<slug>/index.html` (pretty URLs).
 - The search index is rewritten in `docs/search-index.json`.
 - The sitemap is rewritten in `docs/sitemap.xml`.
+- The LLM export files are rewritten: `docs/llms.txt`, `docs/llms-full.txt`, `docs/export/docs.md`.
 - The GitHub Pages marker file is rewritten in `docs/.nojekyll`.
 
-The builder also rewrites internal Markdown links like `./usage.md` to their generated `.html` targets and rebuilds the sidebar plus previous or next page navigation from frontmatter order.
+The builder also rewrites internal Markdown links like `./usage.md` to their generated pretty URL targets and rebuilds the sidebar plus previous/next page navigation from frontmatter `order`.
 
 ## Practical example
 
@@ -1484,14 +1499,15 @@ composer docs:build
 
 Expected result:
 
-- `docs/usage.html` reflects the Markdown changes.
+- `docs/usage/index.html` reflects the Markdown changes.
 - Navigation and search metadata stay in sync with the updated page.
 
 ## Editing guidelines
 
-- Edit the Markdown source, template, or assets rather than patching generated HTML by hand.
+- Edit the Markdown source in `docs/md/` rather than patching generated HTML by hand.
 - Keep relative Markdown links in the `.md` form so the builder can rewrite them.
 - Rebuild immediately after changing page order, slugs, headings, or internal links.
+- Never edit files in `docs/` directly. They are generated output.
 
 ## Build failures
 
@@ -1502,6 +1518,7 @@ composer install
 ```
 
 Then rerun the docs build command. For broader package validation after documentation changes, continue with the checks in [testing](./testing.md).
+
 
 ---
 
@@ -1585,7 +1602,6 @@ Use form bindings that keep both fields synchronized before the comparison runs.
 
 - Compare the current form markup with the working snippets in [usage](./usage.md) and [examples](./examples.md).
 - Re-run the checks in [testing](./testing.md).
-
 
 ---
 
@@ -1733,4 +1749,3 @@ The package already ships demonstration files under the `examples/` directory.
 - `examples/demo.blade.php`
 
 Use those files when you need a larger end-to-end reference while updating [usage](./usage.md) or [validation rules](./validation-rules.md).
-

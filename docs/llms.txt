@@ -17,6 +17,6 @@
 - https://MrPunyapal.github.io/laravel-client-validation/validation-rules: Understand which Laravel validation rules run fully in the browser, which rules remain server-backed, and how to document edge cases.
 - https://MrPunyapal.github.io/laravel-client-validation/custom-rules: Extend Laravel Client Validation with browser-side JavaScript rules and server-side Laravel validators without losing clarity about where a rule runs.
 - https://MrPunyapal.github.io/laravel-client-validation/testing: Validate package changes with Pest and JavaScript tests before merging updates.
-- https://MrPunyapal.github.io/laravel-client-validation/documentation-workflow: Build and verify the generated documentation site from the Markdown source, template, and shared docs assets.
+- https://MrPunyapal.github.io/laravel-client-validation/documentation-workflow: Build and verify the generated documentation site from the Markdown source using Docsmith.
 - https://MrPunyapal.github.io/laravel-client-validation/troubleshooting: Resolve the most common installation, asset loading, and remote validation issues when Laravel Client Validation does not behave as expected.
 - https://MrPunyapal.github.io/laravel-client-validation/examples: Start from realistic Laravel examples for Blade, Alpine.js, Livewire, Filament, and programmatic validation.
