@@ -71,7 +71,7 @@ If a remote rule never fires, check [troubleshooting](./troubleshooting.md) for 
 
 ### The `ajax:` prefix in generated payloads
 
-When the package generates a client-side payload — the Livewire snapshot memo from `WithClientValidation` magic mode (see [livewire](./livewire.md)), or payloads built by the PHP parser — server-side rules are serialized with an `ajax:` prefix instead of being dropped:
+When the package generates a client-side payload, such as the Livewire snapshot memo from `WithClientValidation` magic mode (see [livewire](./livewire.md)) or a payload built by the PHP parser, server-side rules are serialized with an `ajax:` prefix instead of being dropped:
 
 ```php
 // Your Laravel rule

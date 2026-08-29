@@ -90,16 +90,16 @@ const formResult = await validator.validateAll({
 Hook into form lifecycle events when you need analytics, UI transitions, or custom logging.
 
 ```javascript
-const validator = new LaravelClientValidation.Validator({ rules });
+const validator = new LaravelValidator({ rules });
 
 validator
     .beforeValidate(({ data }) => console.log('Validating', data))
     .afterValidate(({ valid, errors }) => console.log('Done', valid, errors));
 
-// Convenience hooks for the two common cases — each fires once per full
+// Convenience hooks for the two common cases. Each fires once per full
 // form validation, only in its respective outcome:
 validator
-    .onPasses(({ data }) => console.log('All good, submitting…'))
+    .onPasses(({ data }) => console.log('All good, submitting.'))
     .onFails((errors) => console.log('Fix these first', errors));
 ```
 

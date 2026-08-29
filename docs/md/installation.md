@@ -9,7 +9,7 @@ Install Laravel Client Validation with Composer, publish the package assets, and
 
 ## Requirements
 
-- PHP 8.2 or newer.
+- PHP 8.3 or newer.
 - A Laravel application that can load package service providers.
 - A frontend layout where Blade can render the package assets or your own script tags.
 
@@ -24,15 +24,13 @@ The install command publishes the package configuration and the browser bundle i
 
 ## Laravel Boost
 
-If the Laravel application also uses [Laravel Boost](https://laravel.com/docs/13.x/boost), this package ships a third-party Boost skill.
-
-Use `boost:install` when Boost is being installed for the first time, or refresh third-party skills after package changes with:
+If your Laravel application also uses [Laravel Boost](https://laravel.com/docs/13.x/boost), refresh its discovered third-party skills after installing or updating this package:
 
 ```bash
 php artisan boost:update --discover
 ```
 
-When skills are enabled, Boost can install the `laravel-client-validation-development` skill and give AI agents package-aware guidance for Blade directives, Alpine helpers, Livewire integration, Filament setup, and remote validation.
+Use the Boost installer first when Boost is not installed yet. When the package skill is available in your installed dependencies, Boost can provide AI agents with package-aware guidance for Blade directives, Alpine helpers, Livewire integration, Filament setup, and remote validation.
 
 ## Include the assets
 
@@ -52,21 +50,6 @@ If you prefer to control configuration separately, render the configuration obje
     <script src="{{ asset('vendor/client-validation/client-validation.iife.js') }}"></script>
 </head>
 ```
-
-## Install only what you need
-
-For bundler-based setups, each framework adapter ships as its own scoped npm package. Every adapter pulls in the shared core automatically:
-
-```bash
-npm install @laravel-client-validation/alpine   # Alpine.js adapter
-npm install @laravel-client-validation/vanilla  # vanilla data-rules forms
-npm install @laravel-client-validation/livewire # Livewire JS adapter
-npm install @laravel-client-validation/react    # React / Inertia-React
-npm install @laravel-client-validation/vue      # Vue 3 / Inertia-Vue
-npm install @laravel-client-validation/core     # rules and validator only
-```
-
-The existing `laravel-client-validation` package keeps working unchanged — same subpath imports such as `laravel-client-validation/alpine` — and it is still the bundle that `@clientValidationAssets` serves. Reach for the scoped packages when your bundler should include only one adapter instead of the whole set.
 
 ## First validation field
 
@@ -95,6 +78,21 @@ Remote rules such as `unique` should send requests to the validation endpoint ge
 ```
 
 When AJAX validation is enabled, the request targets `/client-validation/validate` by default.
+
+## Install only what you need (npm)
+
+For bundler-based setups, each framework adapter ships as its own scoped npm package. Every adapter pulls in the shared core automatically:
+
+```bash
+npm install @laravel-client-validation/alpine   # Alpine.js adapter
+npm install @laravel-client-validation/vanilla  # vanilla data-rules forms
+npm install @laravel-client-validation/livewire # Livewire JS adapter
+npm install @laravel-client-validation/react    # React / Inertia-React
+npm install @laravel-client-validation/vue      # Vue 3 / Inertia-Vue
+npm install @laravel-client-validation/core     # rules and validator only
+```
+
+The existing `laravel-client-validation` package keeps working unchanged, including subpath imports such as `laravel-client-validation/alpine`. It is still the bundle that `@clientValidationAssets` serves. Reach for the scoped packages when your bundler should include only one adapter instead of the whole set.
 
 ## Next steps
 

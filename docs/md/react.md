@@ -75,7 +75,7 @@ The React adapter works unchanged inside Inertia pages. Import the helpers into 
 ```jsx
 import { createReactValidator } from 'laravel-client-validation/react';
 
-// Inside an Inertia page component — identical to any other React page
+// Inside an Inertia page component. This is identical to any other React page.
 const validator = createReactValidator({ rules: { email: 'required|email' } });
 ```
 

@@ -50,7 +50,7 @@ Use the factory when you want to control initialization order or intercept succe
 
 ## Cross-field rules
 
-Cross-field rules such as `confirmed`, `same`, and `required_if` compare against sibling values. The vanilla adapter collects every named `input`, `select`, or `textarea` inside the form — including fields without `data-rules` — so a confirmation input does not need its own rules:
+Cross-field rules such as `confirmed`, `same`, and `required_if` compare against sibling values. The vanilla adapter collects every named `input`, `select`, or `textarea` inside the form, including fields without `data-rules`, so a confirmation input does not need its own rules:
 
 ```html
 <form data-validate>

@@ -25,7 +25,7 @@ app.use(VueValidationPlugin, {
 app.mount('#app');
 ```
 
-These options apply to everything the plugin provides — the `v-validate` directive included. They override the window-level `clientValidationConfig` for this app, so multiple Vue apps on one page can use different styling or debounce values.
+These options apply to everything the plugin provides, including the `v-validate` directive. They override the window-level `clientValidationConfig` for this app, so multiple Vue apps on one page can use different styling or debounce values.
 
 ## Use the directive in a component
 
@@ -78,12 +78,12 @@ Wrap `getError()`, `hasError()`, and `getAllErrors()` in your own refs or comput
 
 ## Using with Inertia
 
-The Vue adapter works unchanged inside Inertia pages. Register the plugin once during app bootstrap, then use `v-validate` or `createVueValidator()` in page components exactly as shown above. State stays with the Inertia page, so no extra adapter is required — the directive reads sibling values from the rendered DOM as usual:
+The Vue adapter works unchanged inside Inertia pages. Register the plugin once during app bootstrap, then use `v-validate` or `createVueValidator()` in page components exactly as shown above. State stays with the Inertia page, so no extra adapter is required. The directive reads sibling values from the rendered DOM as usual:
 
 ```javascript
 import { VueValidationPlugin } from 'laravel-client-validation/vue';
 
-// app.js — identical for standalone apps and Inertia apps
+// app.js. This is identical for standalone apps and Inertia apps.
 app.use(VueValidationPlugin);
 ```
 

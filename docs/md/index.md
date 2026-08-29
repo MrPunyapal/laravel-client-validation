@@ -8,12 +8,6 @@ sidebar_label: Overview
 
 Laravel Client Validation brings familiar Laravel validation rules into the browser so forms can respond immediately without maintaining a second rule set by hand.
 
-## Why this package exists
-
-- Keep Laravel-style validation rules close to the UI.
-- Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.
-- Fall back to AJAX when a rule depends on the server, such as `unique` or `exists`.
-
 ## Quick start
 
 Install the package and publish the configuration and browser assets:
@@ -23,7 +17,7 @@ composer require mrpunyapal/laravel-client-validation
 php artisan client-validation:install
 ```
 
-Then render the package assets in a Blade layout:
+Then render the package assets in your Blade layout:
 
 ```php
 <!doctype html>
@@ -37,6 +31,24 @@ Then render the package assets in a Blade layout:
 </body>
 </html>
 ```
+
+Add your first validation field:
+
+```html
+<form data-validate>
+    <input name="email" @validateBlur('email', 'required|email')>
+    <input name="password" @validateSubmit('password', 'required|min:8')>
+    <button type="submit">Create account</button>
+</form>
+```
+
+Tab out of the email field. Invalid values show client-side feedback before the form submits.
+
+## Why this package exists
+
+- Keep Laravel-style validation rules close to the UI.
+- Reuse the same package across Alpine.js, Livewire, Filament, or plain JavaScript.
+- Fall back to AJAX when a rule depends on the server, such as `unique` or `exists`.
 
 ## Documentation map
 

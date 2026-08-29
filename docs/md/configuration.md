@@ -33,6 +33,16 @@ return [
 ];
 ```
 
+| Option | Environment variable | Default | Effect |
+| --- | --- | --- | --- |
+| `auto_include_assets` | `CLIENT_VALIDATION_AUTO_INCLUDE` | `true` | Injects the bundle via `@clientValidationAssets` |
+| `enable_ajax_validation` | `CLIENT_VALIDATION_ENABLE_AJAX` | `true` | Allows remote rules (`unique`, `exists`, etc.) to hit the backend |
+| `ajax_timeout` | `CLIENT_VALIDATION_AJAX_TIMEOUT` | `5000` | Milliseconds before an AJAX validation request times out |
+| `route_prefix` | `CLIENT_VALIDATION_ROUTE_PREFIX` | `client-validation` | URL prefix for the validation endpoint |
+| `validation_mode` | `CLIENT_VALIDATION_MODE` | `blur` | Default trigger: `blur`, `input`, `live`, `submit`, or `form` |
+| `debounce_ms` | `CLIENT_VALIDATION_DEBOUNCE` | `300` | Debounce for `input`/`live` modes |
+| `auto_bind_livewire` | `CLIENT_VALIDATION_AUTO_BIND_LIVEWIRE` | `true` | Auto-registers Livewire component hook and field binding |
+
 ### Recommended defaults
 
 - Keep `validation_mode` at `blur` for most text fields.

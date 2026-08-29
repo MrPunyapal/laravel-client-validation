@@ -30,7 +30,7 @@ If you load the browser bundle through `@clientValidationAssets`, the package au
 
 `x-validate` validates on blur by default. `.live` adds debounced input validation and `.submit` blocks form submission until the field passes.
 
-Cross-field rules (`confirmed`, `same:other`, `required_if:role,admin`, …) work in bare-directive mode too: sibling values are read from the enclosing `<form>`, falling back to the surrounding `x-data` root. For full control over the compared state — or fields that live in different forms — use the `validation()` component instead, shown below.
+Cross-field rules (`confirmed`, `same:other`, `required_if:role,admin`, and others) work in bare-directive mode too: sibling values are read from the enclosing `<form>`, falling back to the surrounding `x-data` root. For full control over the compared state, or for fields that live in different forms, use the `validation()` component instead, shown below.
 
 ## Manage a full Alpine form
 

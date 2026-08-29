@@ -125,7 +125,7 @@ No directives, no JSON decoding, and no error placeholders are required. That is
 
 When a component uses the trait and `auto_bind_livewire` is enabled (the default):
 
-- A component hook serializes a client-safe payload into the snapshot memo under the `clientValidation` key on every dehydrate. Components without the trait are skipped. The payload contains `{rules, ajax_rules, messages, attributes, config}` built from your rules — whether they come from `#[Validate]` attributes, a `rules()` method/property, or a mix of both — plus your `messages()` and `validationAttributes()`.
+- A component hook serializes a client-safe payload into the snapshot memo under the `clientValidation` key on every dehydrate. Components without the trait are skipped. The payload contains `{rules, ajax_rules, messages, attributes, config}` built from your rules, whether they come from `#[Validate]` attributes, a `rules()` method/property, or a mix of both, plus your `messages()` and `validationAttributes()`.
 - On component init, the browser adapter reads that memo, builds a validator, and binds listeners to every `[wire:model]` field. Fields validate on blur; fields with `.live` modifiers (or components using a `live`/`input` validation mode) also validate while typing, debounced.
 - Error containers (`data-error="field"`) are injected next to failing fields and marked `wire:ignore`, so no markup changes are needed in your view.
 - Forms with `wire:submit` are intercepted in the capture phase before Livewire sees them. Submitting first runs full client-side validation and shows the first error for each failing field. If everything passes, the form's Livewire action is invoked through `$wire`, so your action runs exactly as a native submit would.
