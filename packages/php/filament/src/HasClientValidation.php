@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace MrPunyapal\ClientValidation\Filament;
 
 use Closure;
+use Filament\Forms\Components\Field;
 
-/** @phpstan-require-extends \Filament\Forms\Components\Field */
+/** @phpstan-require-extends Field */
 trait HasClientValidation
 {
     protected string|Closure|null $clientValidationRules = null;

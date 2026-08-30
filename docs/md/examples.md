@@ -107,6 +107,8 @@ class CreateUser extends Component
 
 ## Filament panel plugin
 
+> Filament integration ships as `mrpunyapal/client-validation-filament`, so install it before using the plugin in a panel ([filament](./filament.md)).
+
 ```php
 use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;
 

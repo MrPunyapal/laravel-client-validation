@@ -9,6 +9,7 @@
 - Alpine adapter: once any validated field lives inside a `<form>`, the form is guarded on submit — every bound field in that form is re-validated and submission is blocked until all pass. Blur/live fields now participate in form saves, not just fields marked `x-validate.submit`.
 - Forms containing `x-validate` fields now disable native browser constraint popups so package validation messages are shown consistently.
 - Native Filament fields now forward evaluated `validationMessages()` and `validationAttribute()` values to the Alpine validator for consistent client-side messages.
+- Filament integration has been extracted into its own package, `mrpunyapal/client-validation-filament` (`packages/php/filament/`), mirroring the Livewire split. The core package is now framework-agnostic again; the subtree-split workflow pushes the sub-directory to the dedicated repo on `main` pushes and tags.
 
 ## 0.1.1
 

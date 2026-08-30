@@ -11,7 +11,7 @@ class ClientValidatedField extends Field
 {
     use HasClientValidation;
 
-    protected string $view = 'client-validation::filament.client-validated-field';
+    protected string $view = 'client-validation-filament::filament.client-validated-field';
 
     protected function setUp(): void
     {

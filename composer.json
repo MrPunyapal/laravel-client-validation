@@ -32,7 +32,6 @@
     "spatie/laravel-package-tools": "^1.16"
   },
   "require-dev": {
-    "filament/filament": "5.7.6",
     "larastan/larastan": "^3.0",
     "laravel/pint": "^1.0",
     "league/commonmark": "^2.7",
@@ -46,7 +45,7 @@
     "symfony/yaml": "^7.3"
   },
   "suggest": {
-    "filament/filament": "Required for Filament panel integration (^3.0|^5.0)",
+    "mrpunyapal/client-validation-filament": "Required for the Filament integration (panel plugin, native-field macros, custom validation messages and attributes)",
     "mrpunyapal/client-validation-livewire": "Required for the Livewire integration (WithClientValidation trait, works with livewire ^3.0|^4.0)"
   },
   "autoload": {

@@ -51,6 +51,27 @@ jobs:
         working-directory: packages/php/livewire
         run: vendor/bin/pest
 
+  php-filament-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, sqlite3
+          coverage: none
+
+      - name: Install dependencies
+        working-directory: packages/php/filament
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run tests
+        working-directory: packages/php/filament
+        run: vendor/bin/pest
+
   js:
     runs-on: ubuntu-latest
     steps:

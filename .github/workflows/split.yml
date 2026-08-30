@@ -4,6 +4,9 @@
 # Auth: an SSH deploy key that never expires, scoped to the mirror repo only.
 # Requires the SPLIT_DEPLOY_KEY secret: the PRIVATE half of a deploy key
 # registered on Mrpunyapal/client-validation-livewire with write access.
+# The split-filament job mirrors packages/php/filament into the
+# Mrpunyapal/client-validation-filament repo using the SPLIT_FILAMENT_DEPLOY_KEY
+# secret, registered the same way on that repo.
 name: split
 
 on:
@@ -53,5 +56,42 @@ jobs:
         run: |
           git subtree split -P packages/php/livewire -b split-tag "${{ github.ref_name }}"
           git remote add mirror git@github.com:Mrpunyapal/client-validation-livewire.git
+          git push --force mirror split-tag:main
+          git push --force mirror split-tag:refs/tags/${{ github.ref_name }}
+
+  split-filament:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Install deploy key
+        env:
+          SPLIT_FILAMENT_DEPLOY_KEY: ${{ secrets.SPLIT_FILAMENT_DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SPLIT_FILAMENT_DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+
+      - name: Split main branch
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git subtree split -P packages/php/filament -b split-main
+          git remote add mirror git@github.com:Mrpunyapal/client-validation-filament.git
+          git push --force mirror split-main:main
+
+      - name: Split tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          git subtree split -P packages/php/filament -b split-tag "${{ github.ref_name }}"
+          git remote add mirror git@github.com:Mrpunyapal/client-validation-filament.git
           git push --force mirror split-tag:main
           git push --force mirror split-tag:refs/tags/${{ github.ref_name }}

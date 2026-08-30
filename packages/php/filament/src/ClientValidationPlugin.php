@@ -137,12 +137,23 @@ class ClientValidationPlugin implements Plugin
 
     protected function registerAssets(): void
     {
-        $distPath = __DIR__.'/../../resources/js/dist';
+        // The browser bundle ships with the core package; resolve it from the
+        // installed vendor path, falling back to the monorepo layout.
+        $candidates = [
+            base_path('vendor/mrpunyapal/laravel-client-validation/resources/js/dist/client-validation.iife.js'),
+            __DIR__.'/../../../..'.'/resources/js/dist/client-validation.iife.js',
+        ];
 
-        if (file_exists($distPath.'/client-validation.iife.js')) {
+        foreach (array_unique($candidates) as $path) {
+            if (! file_exists($path)) {
+                continue;
+            }
+
             FilamentAsset::register([
-                Js::make('client-validation', $distPath.'/client-validation.iife.js'),
+                Js::make('client-validation', $path),
             ], 'mrpunyapal/laravel-client-validation');
+
+            return;
         }
     }
 }

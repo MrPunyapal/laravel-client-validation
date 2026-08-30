@@ -766,6 +766,14 @@ Livewire morphs the DOM after every request, which would normally wipe injected 
 
 Filament support builds on the same browser runtime as the other adapters. The panel plugin wires everything up so **standard Filament fields** (`TextInput`, `Select`, `Textarea`, ...) can validate in the browser before Livewire ever round-trips.
 
+## Install
+
+```bash
+composer require mrpunyapal/client-validation-filament
+```
+
+The Filament integration ships as a dedicated package (`mrpunyapal/client-validation-filament`), split from the core so the core package stays framework-agnostic. It depends on `mrpunyapal/laravel-client-validation`, which is installed automatically.
+
 ## Register the panel plugin
 
 ```php
@@ -1800,6 +1808,8 @@ class CreateUser extends Component
 ```
 
 ## Filament panel plugin
+
+> Filament integration ships as `mrpunyapal/client-validation-filament`, so install it before using the plugin in a panel ([filament](./filament.md)).
 
 ```php
 use MrPunyapal\ClientValidation\Filament\ClientValidationPlugin;

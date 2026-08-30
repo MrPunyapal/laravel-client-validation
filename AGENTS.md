@@ -57,7 +57,7 @@ Laravel Client Validation converts Laravel validation rules into client-side beh
 - `src/Contracts/` defines the service-layer interfaces.
 - `src/Http/Controllers/` handles AJAX validation endpoints.
 - `src/Livewire/` Livewire integration has moved to `packages/php/livewire/` (`mrpunyapal/client-validation-livewire`); its snapshot hook is auto-registered by the core service provider when installed.
-- `src/Filament/` contains Filament integration.
+- `packages/php/filament/` contains the Filament integration (`mrpunyapal/client-validation-filament`): panel plugin, native-field macros, and the render-time attribute resolver moved out of the core package. On pushes/tags to `main` it is subtree-split into the `Mrpunyapal/client-validation-filament` repo.
 
 ### JavaScript
 
@@ -104,6 +104,8 @@ export default function ruleName(value, params, field, context = {}) {
 ## Testing and validation commands
 
 ### PHP
+
+Run the core suite from the repository root with `composer test`. Each split PHP package (`packages/php/livewire`, `packages/php/filament`) has its own `composer.json` and runs its own `composer test` in CI (`tests.yml` jobs `php-livewire-package` / `php-filament-package`).
 
 ```bash
 composer test
