@@ -20,6 +20,26 @@ function getConfig() {
   return defaults;
 }
 
+function getFieldValidationMetadata(el, fieldName) {
+  const messagesValue = el.getAttribute('data-client-validation-messages');
+  let messages = {};
+
+  if (messagesValue) {
+    try {
+      messages = JSON.parse(messagesValue);
+    } catch (error) {
+      console.warn('x-validate: Invalid validation messages metadata', error);
+    }
+  }
+
+  const attribute = el.getAttribute('data-client-validation-attribute');
+
+  return {
+    messages,
+    attributes: attribute ? { [fieldName]: attribute } : {},
+  };
+}
+
 /**
  * Register Alpine.js integration
  */
@@ -53,6 +73,7 @@ export default function registerAlpine(Alpine) {
 
       validator = new LaravelValidator({
         rules: { [fieldName]: rules },
+        ...getFieldValidationMetadata(el, fieldName),
         ...config
       });
 
@@ -248,6 +269,39 @@ function collectSiblingData(el) {
   return data;
 }
 
+const submitGuardedForms = new WeakSet();
+
+/**
+ * Let any validated field inside a `<form>` participate in form submission:
+ * on submit every bound field in the form is re-validated, and the submission
+ * is blocked until all of them pass. This makes `x-validate` / `.live` fields
+ * gate the form too, not just fields explicitly using the `.submit` modifier.
+ */
+function ensureFormSubmitGuard(form) {
+  if (submitGuardedForms.has(form)) return;
+  submitGuardedForms.add(form);
+
+  // Let the package render validation feedback instead of the browser's
+  // native constraint popup before the submit event reaches this guard.
+  form.setAttribute('novalidate', 'novalidate');
+
+  const submitHandler = async (e) => {
+    const fields = Array.from(form.querySelectorAll('input, select, textarea'))
+      .filter((field) => field._validator && typeof field.validate === 'function');
+
+    if (fields.length === 0) return;
+
+    const results = await Promise.all(fields.map((field) => field.validate()));
+
+    if (results.some((valid) => !valid)) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  form.addEventListener('submit', submitHandler, true);
+}
+
 function setupFieldHandlers(el, validator, fieldName, mode, config) {
   const unsubscribers = [];
 
@@ -265,6 +319,11 @@ function setupFieldHandlers(el, validator, fieldName, mode, config) {
     return result.valid;
   };
 
+  const form = el.closest('form');
+  if (form) {
+    ensureFormSubmitGuard(form);
+  }
+
   switch (mode) {
     case 'live':
       el.addEventListener('input', validateFieldDebounced);
@@ -275,20 +334,10 @@ function setupFieldHandlers(el, validator, fieldName, mode, config) {
       });
       break;
 
-    case 'submit': {
-      const form = el.closest('form');
-      if (form) {
-        const submitHandler = async (e) => {
-          if (!(await validateField())) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        };
-        form.addEventListener('submit', submitHandler, true);
-        unsubscribers.push(() => form.removeEventListener('submit', submitHandler, true));
-      }
+    // The .submit modifier needs no per-field listener: the shared form guard
+    // already blocks submission until every bound field in the form passes.
+    case 'submit':
       break;
-    }
 
     case 'blur':
     default:

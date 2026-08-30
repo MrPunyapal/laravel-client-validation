@@ -1,11 +1,11 @@
 ---
 title: Filament
-description: Register the Filament plugin and attach client-side Laravel rules to panel fields or custom field components.
+description: Attach client-side Laravel rules to native Filament fields on the fly, or opt fields in explicitly through the plugin macros.
 order: 7
 slug: filament
 ---
 
-Filament support builds on the same browser runtime, but gives you a package-specific plugin and field helpers so panel forms can emit client feedback before submit.
+Filament support builds on the same browser runtime as the other adapters. The panel plugin wires everything up so **standard Filament fields** (`TextInput`, `Select`, `Textarea`, ...) can validate in the browser before Livewire ever round-trips.
 
 ## Register the panel plugin
 
@@ -27,9 +27,96 @@ class AdminPanelProvider extends PanelProvider
 }
 ```
 
-`validationMode('live')` makes generated `x-validate.live` bindings the default for fields handled through the package helper.
+`validationMode('live')` sets the default validation trigger (`live`, `blur`, or `submit`) for every field handled by the plugin.
 
-## Use the built-in field wrapper
+## Validate native fields on the fly
+
+Once the plugin is registered, every field has a `clientValidation()` method:
+
+```php
+use Filament\Forms\Components\TextInput;
+
+TextInput::make('email')
+    ->email()
+    ->clientValidation('required|email');
+
+Select::make('country')
+    ->options(Countries::list())
+    ->clientValidation(['required', 'exists:countries,code']);
+```
+
+Rules may also be a closure, evaluated when the field renders:
+
+```php
+TextInput::make('username')
+    ->clientValidation(fn () => $this->isReserved ? 'required|min:3' : 'required|min:3|not_reserved');
+```
+
+### Call it with no rules to reuse the field's own configuration
+
+Passing nothing tells the plugin to derive the client-side rules from the field itself instead of restating them:
+
+```php
+TextInput::make('email')
+    ->required()
+    ->minLength(3)
+    ->email()
+    ->clientValidation();
+```
+
+The resolver first builds the rule string from the field's required state and its own validation rules, filters out server-only and unsupported rules (`unique`, `exists`, ...), and then emits the same `x-validate` attribute. A field with no meaningful rules (for example, only the implicit `nullable` Filament adds) is left alone — no `x-validate` is attached.
+
+> **Tip:** Use `->clientValidation()` (no rules) when the field already declares real rules. Use explicit rules when the client-side rules should differ from what Filament validates server-side.
+
+To remove client validation again, call `withoutClientValidation()`.
+
+The plugin injects `x-validate` attributes onto the real input element, so there is no wrapper field and no custom view to maintain. Because Filament v5 inputs render without an HTML `name` attribute, the plugin also emits a `name` attribute (the field's state path, matching its `wire:model` binding) so the browser runtime can address the field — including sibling-field rules such as `confirmed` or `same:`.
+
+### Saving validates every field in the form
+
+The browser runtime disables native browser constraint popups and installs a form-level guard as soon as at least one validated field lives inside a `<form>`: when you hit the submit button, every bound field in that form is re-validated, and the submission is blocked until all of them pass. This means fields the plugin validates on blur or live still participate when the form is saved — you do not need to mark every field `.submit`.
+
+Custom Filament validation metadata is forwarded to the browser too. `validationMessages()` supplies rule-specific client messages, and `validationAttribute()` supplies the `:attribute` value used in those messages:
+
+```php
+TextInput::make('email')
+    ->required()
+    ->email()
+    ->validationAttribute('email address')
+    ->validationMessages([
+        'required' => 'Please provide your :attribute.',
+        'email' => 'Please provide a valid :attribute.',
+    ])
+    ->clientValidation();
+```
+
+The same evaluated messages and attribute are still used by Filament during server-side validation.
+
+### Automatic inference
+
+Enable auto mode and fields derive their client-side rules from what they already declare:
+
+```php
+ClientValidationPlugin::make()
+    ->enableAutoValidation();
+```
+
+```php
+TextInput::make('email')          // no client-specific code at all
+    ->required()
+    ->rules(['max:255'])
+    ->email();
+```
+
+Inference is conservative:
+
+- Only rules the browser can execute are attached; server-only rules such as `unique` or `exists` are filtered out through the same parser that powers the Blade directives.
+- Fields whose primary element carries no name attribute (file uploads, rich/markdown editors) are skipped.
+- A field configured with an explicit `clientValidation()` call always wins over inference.
+
+If you also pass your own `extraInputAttributes()`, call `clientValidation()` after it — Filament replaces attribute arrays by default unless you pass `merge: true`.
+
+## Use the built-in field wrapper (optional)
 
 ```php
 use MrPunyapal\ClientValidation\Filament\ClientValidatedField;
@@ -39,9 +126,11 @@ ClientValidatedField::make('email')
     ->clientValidationMode('live');
 ```
 
-Use `ClientValidatedField` when you want a drop-in field that already renders the validation wrapper view shipped with the package.
+`ClientValidatedField` renders a package view around its child input. It predates the macro support above and still works, but for most forms a native field plus the macro is simpler.
 
 ## Add client validation to a custom Filament field
+
+For fully custom field classes, use the trait and render the attributes yourself:
 
 ```php
 use Filament\Forms\Components\Field;
@@ -53,7 +142,7 @@ class PhoneField extends Field
 }
 ```
 
-In the Blade view for that field, render the generated attributes on the wrapper that owns the input:
+In the Blade view for that field, render the generated attributes on the element that owns the input:
 
 ```blade
 <div
@@ -65,9 +154,7 @@ In the Blade view for that field, render the generated attributes on the wrapper
 </div>
 ```
 
-## Let Filament infer rules from the field
-
-If you call `withClientValidation()` instead of `clientValidation('...')`, the trait falls back to the field's existing required state and validation rules where possible.
+Calling `withClientValidation()` instead of `clientValidation('...')` falls back to the field's existing required state and validation rules where possible.
 
 ## Related pages
 
