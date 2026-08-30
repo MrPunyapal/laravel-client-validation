@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Filament: `clientValidation()` / `withoutClientValidation()` now work on **native** fields (`TextInput`, `Select`, ...) through macros registered by the panel plugin — no wrapper field or custom view required. `clientValidation()` with no rules automatically derives client-side rules from the field's own required state and validation rules; the plugin also injects an HTML `name` attribute (the field's state path) onto native inputs, which Filament v5 renders without — required for the browser runtime to bind `x-validate` and for sibling rules like `confirmed`. Existing `ClientValidatedField` and `HasClientValidation` remain fully supported.
+- Optional `ClientValidationPlugin::make()->enableAutoValidation()` infers client-side rules from each field's own required state and rules, filtering out server-only rules via the rule parser.
+- Alpine adapter: once any validated field lives inside a `<form>`, the form is guarded on submit — every bound field in that form is re-validated and submission is blocked until all pass. Blur/live fields now participate in form saves, not just fields marked `x-validate.submit`.
+- Forms containing `x-validate` fields now disable native browser constraint popups so package validation messages are shown consistently.
+- Native Filament fields now forward evaluated `validationMessages()` and `validationAttribute()` values to the Alpine validator for consistent client-side messages.
+
 ## 0.1.1
 
 ### Patch Changes

@@ -169,6 +169,126 @@ describe('alpine adapter', () => {
         expect(input.classList.contains('border-green-500')).toBe(false);
     });
 
+    it('binds to Filament-style dotted state paths and resolves confirmed siblings', async () => {
+        // Filament v5 renders name-less inputs; the plugin now injects a name
+        // attribute carrying the absolute state path (e.g. "data.password"),
+        // which is what the Alpine runtime addresses the field with.
+        document.body.innerHTML = `
+            <form>
+                <input type="password" name="data.password" value="supersecret">
+                <input type="password" name="data.password_confirmation" value="different">
+            </form>`;
+        const password = document.querySelector('input[name="data.password"]');
+        const confirmation = document.querySelector('input[name="data.password_confirmation"]');
+        const alpine = createFakeAlpine();
+        registerAlpine(alpine);
+
+        const ctx = createDirectiveContext('required|min:8|confirmed');
+        alpine.directives.validate(password, { expression: "'required|min:8|confirmed'", modifiers: [] }, ctx);
+
+        password.dispatchEvent(new Event('blur'));
+        await tick();
+        expect(password.classList.contains('border-red-500')).toBe(true);
+
+        confirmation.value = 'supersecret';
+        password.dispatchEvent(new Event('blur'));
+        await tick();
+        expect(password.classList.contains('border-green-500')).toBe(true);
+    });
+
+    it('x-validate .submit blocks invalid Filament-style dotted path form', async () => {
+        document.body.innerHTML = '<form><input name="data.email" value="nope"></form>';
+        const form = document.querySelector('form');
+        const input = form.querySelector('input');
+        const alpine = createFakeAlpine();
+        registerAlpine(alpine);
+
+        const ctx = createDirectiveContext('required|email');
+        alpine.directives.validate(input, { expression: "'required|email'", modifiers: ['submit'] }, ctx);
+
+        let lastEvent = null;
+        form.addEventListener('submit', e => { lastEvent = e; });
+
+        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        await tick();
+        expect(lastEvent.defaultPrevented).toBe(true);
+        expect(form.querySelector('[data-error-for="data.email"]')).not.toBeNull();
+
+        input.value = 'test@example.com';
+        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        await tick();
+        expect(lastEvent.defaultPrevented).toBe(false);
+    });
+
+    it('blocks form submit when any bound field is invalid, not only .submit ones', async () => {
+        document.body.innerHTML = `
+            <form>
+                <input name="email" value="not-an-email">
+                <input name="username" value="">
+            </form>`;
+        const form = document.querySelector('form');
+        const email = form.querySelector('[name="email"]');
+        const username = form.querySelector('[name="username"]');
+        const alpine = createFakeAlpine();
+        registerAlpine(alpine);
+
+        // Email uses blur (no modifier), username uses .submit — the blur field
+        // must still participate in the submit gate through the form guard.
+        const ctxEmail = createDirectiveContext('required|email');
+        alpine.directives.validate(email, { expression: "'required|email'", modifiers: [] }, ctxEmail);
+        const ctxUsername = createDirectiveContext('required|min:3');
+        alpine.directives.validate(username, { expression: "'required|min:3'", modifiers: ['submit'] }, ctxUsername);
+
+        let lastEvent = null;
+        form.addEventListener('submit', e => { lastEvent = e; });
+
+        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        await tick();
+        expect(lastEvent.defaultPrevented).toBe(true);
+        expect(form.querySelector('[data-error-for="email"]')).not.toBeNull();
+
+        email.value = 'test@example.com';
+        username.value = 'abc';
+        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        await tick();
+        expect(lastEvent.defaultPrevented).toBe(false);
+        expect(form.querySelector('[data-error-for="email"]')).toBeNull();
+    });
+
+    it('disables native form validation when x-validate fields are present', async () => {
+        document.body.innerHTML = '<form><input name="email" required></form>';
+        const form = document.querySelector('form');
+        const input = form.querySelector('input');
+        const alpine = createFakeAlpine();
+        registerAlpine(alpine);
+
+        const ctx = createDirectiveContext('required|email');
+        alpine.directives.validate(input, { expression: "'required|email'", modifiers: [] }, ctx);
+
+        expect(form.noValidate).toBe(true);
+    });
+
+    it('uses field validation messages and attributes from metadata', async () => {
+        document.body.innerHTML = `
+            <form>
+                <input name="data.email" value="not-an-email"
+                    data-client-validation-messages='{"email":"Enter a valid :attribute."}'
+                    data-client-validation-attribute="email address">
+            </form>`;
+        const input = document.querySelector('input');
+        const alpine = createFakeAlpine();
+        registerAlpine(alpine);
+
+        const ctx = createDirectiveContext('required|email');
+        alpine.directives.validate(input, { expression: "'required|email'", modifiers: [] }, ctx);
+
+        input.dispatchEvent(new Event('blur'));
+        await tick();
+
+        expect(input.parentNode.querySelector('[data-error-for="data.email"]')?.textContent)
+            .toBe('Enter a valid email address.');
+    });
+
     it('validation() data component tracks state through validate/validateAll/submit/reset', async () => {
         const alpine = createFakeAlpine();
         registerAlpine(alpine);
