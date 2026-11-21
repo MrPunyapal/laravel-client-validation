@@ -13,6 +13,9 @@ concurrency:
 jobs:
   php:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.6']
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -20,7 +23,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: ${{ matrix.php }}
           extensions: mbstring, sqlite3
           coverage: none
 
@@ -32,6 +35,9 @@ jobs:
 
   php-livewire-package:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.6']
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -39,7 +45,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: ${{ matrix.php }}
           extensions: mbstring, sqlite3
           coverage: none
 
@@ -53,6 +59,9 @@ jobs:
 
   php-filament-package:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.6']
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -60,7 +69,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: ${{ matrix.php }}
           extensions: mbstring, sqlite3
           coverage: none
 
