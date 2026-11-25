@@ -28,7 +28,14 @@ jobs:
           coverage: none
 
       - name: Install dependencies
+        if: matrix.php != '8.6'
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Install PHP 8.6 dependencies
+        if: matrix.php == '8.6'
+        run: |
+          composer require --dev "pestphp/pest:^5.0" "pestphp/pest-plugin-laravel:^5.0" "pestphp/pest-plugin-arch:^5.0" "phpunit/phpunit:^13.0" --no-interaction --no-update
+          composer update --with-all-dependencies --prefer-dist --no-interaction --no-progress
 
       - name: Run tests
         run: vendor/bin/pest
@@ -51,7 +58,15 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/php/livewire
+        if: matrix.php != '8.6'
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Install PHP 8.6 dependencies
+        if: matrix.php == '8.6'
+        working-directory: packages/php/livewire
+        run: |
+          composer require --dev "pestphp/pest:^5.0" "pestphp/pest-plugin-laravel:^5.0" --no-interaction --no-update
+          composer update --with-all-dependencies --prefer-dist --no-interaction --no-progress
 
       - name: Run tests
         working-directory: packages/php/livewire
@@ -75,7 +90,15 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/php/filament
+        if: matrix.php != '8.6'
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Install PHP 8.6 dependencies
+        if: matrix.php == '8.6'
+        working-directory: packages/php/filament
+        run: |
+          composer require --dev "pestphp/pest:^5.0" "pestphp/pest-plugin-laravel:^5.0" --no-interaction --no-update
+          composer update --with-all-dependencies --prefer-dist --no-interaction --no-progress
 
       - name: Run tests
         working-directory: packages/php/filament
