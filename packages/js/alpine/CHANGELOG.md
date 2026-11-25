@@ -1,5 +1,11 @@
 # @laravel-client-validation/alpine
 
+## 0.2.0
+
+### Minor Changes
+
+- Validate every bound field on form submit and show package validation messages consistently.
+
 ## 0.1.1
 
 ### Patch Changes

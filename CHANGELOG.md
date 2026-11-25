@@ -1,6 +1,15 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
+
+### Minor Changes
+
+- Validate every bound field on form submit and show package validation messages consistently.
+
+### Patch Changes
+
+- Updated dependencies
+    - @laravel-client-validation/alpine@0.2.0
 
 ### Added
 
@@ -45,8 +54,6 @@
     - @laravel-client-validation/vue@0.1.0
 
 All notable changes to `laravel-client-validation` will be documented in this file.
-
-## Unreleased
 
 ### Added
 
