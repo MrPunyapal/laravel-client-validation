@@ -44,7 +44,7 @@
     "prepublishOnly": "npm run build && npm test -- --run",
     "changeset": "changeset",
     "version": "changeset version",
-    "publish": "npm run build && changeset publish"
+    "release:publish": "npm run build && changeset publish"
   },
   "keywords": [
     "laravel",
